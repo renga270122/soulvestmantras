@@ -13,6 +13,7 @@ A simple web app to explore gods, planets (Navagraha), and gurus with famous man
 - Mantra of the Day suggestion based on weekday tradition
 - Favorites list with one-click reopen
 - Persistent chant history with per-mantra total counts and last chanted time
+- Offline mode with service worker (caches core app files and visited images)
 - Devanagari + transliteration display toggle
 - Search by name/mantra/purpose
 - Select God/Planet/Guru and view image + purpose/history brief
@@ -39,3 +40,4 @@ No frontend build tools needed.
 ## Notes
 - This app includes a curated list of commonly used forms.
 - Different traditions may use variant recitations; verify with your sampradaya/guru for strict liturgical use.
+- For offline usage, open the app once while online so core assets can be cached by the browser.
