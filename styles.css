@@ -560,6 +560,87 @@ button:active {
   font-weight: 600;
 }
 
+.breath-cue {
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.breath-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 rgba(177, 77, 0, 0.28);
+  animation: inhalePulse 4s ease-in-out infinite;
+}
+
+.breath-dot.exhale {
+  animation-name: exhalePulse;
+}
+
+.mala-wrap {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.mala-ring {
+  --mala-progress: 0%;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: conic-gradient(var(--accent) var(--mala-progress), var(--accent-soft) var(--mala-progress));
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+}
+
+.mala-ring span {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+#malaProgressText {
+  margin: 0;
+}
+
+@keyframes inhalePulse {
+  0%,
+  100% {
+    transform: scale(0.85);
+    box-shadow: 0 0 0 0 rgba(177, 77, 0, 0.28);
+  }
+  50% {
+    transform: scale(1.25);
+    box-shadow: 0 0 0 10px rgba(177, 77, 0, 0);
+  }
+}
+
+@keyframes exhalePulse {
+  0%,
+  100% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 8px rgba(177, 77, 0, 0);
+  }
+  50% {
+    transform: scale(0.8);
+    box-shadow: 0 0 0 0 rgba(177, 77, 0, 0.24);
+  }
+}
+
 #templeList {
   margin: 0;
   padding-left: 18px;
@@ -655,6 +736,10 @@ button:active {
   .chant-controls {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .mala-wrap {
+    align-items: flex-start;
   }
 
 }

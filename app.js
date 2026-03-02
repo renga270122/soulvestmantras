@@ -454,6 +454,12 @@ const chantTargetSelect = document.getElementById("chantTargetSelect");
 const chantPlusBtn = document.getElementById("chantPlusBtn");
 const chantResetBtn = document.getElementById("chantResetBtn");
 const chantProgress = document.getElementById("chantProgress");
+const sessionSoundToggle = document.getElementById("sessionSoundToggle");
+const breathCueDot = document.getElementById("breathCueDot");
+const breathCueText = document.getElementById("breathCueText");
+const malaRing = document.getElementById("malaRing");
+const malaRingCount = document.getElementById("malaRingCount");
+const malaProgressText = document.getElementById("malaProgressText");
 const youShouldKnow = document.getElementById("youShouldKnow");
 const knowList = document.getElementById("knowList");
 const templeInfo = document.getElementById("templeInfo");
@@ -510,12 +516,18 @@ let reminderSettings = {
   lastTriggeredKey: "",
 };
 let reminderIntervalId = null;
+let soundSettings = {
+  enabled: true,
+};
+let audioContextRef = null;
+let breathIntervalId = null;
 
 const PREF_KEY = "chant_helper_prefs_v1";
 const FAVORITES_KEY = "chant_helper_favorites_v1";
 const CHANT_HISTORY_KEY = "chant_helper_history_v1";
 const SANKALPA_KEY = "chant_helper_sankalpa_v1";
 const REMINDER_KEY = "chant_helper_reminder_v1";
+const SOUND_PREF_KEY = "chant_helper_sound_pref_v1";
 
 const mantraOfDayByWeekday = {
   0: "Surya (Sun)",
@@ -1032,6 +1044,184 @@ function startRotatingMessages() {
     didYouKnowCard.addEventListener("mouseenter", pause);
     didYouKnowCard.addEventListener("mouseleave", resume);
   }
+}
+
+function saveSoundPrefs() {
+  localStorage.setItem(SOUND_PREF_KEY, JSON.stringify(soundSettings));
+}
+
+function loadSoundPrefs() {
+  try {
+    const raw = localStorage.getItem(SOUND_PREF_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (typeof parsed?.enabled === "boolean") {
+      soundSettings.enabled = parsed.enabled;
+    }
+  } catch {
+  }
+}
+
+function renderSoundToggle() {
+  if (!sessionSoundToggle) return;
+  sessionSoundToggle.checked = Boolean(soundSettings.enabled);
+}
+
+function getAudioContext() {
+  if (audioContextRef) {
+    return audioContextRef;
+  }
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) {
+    return null;
+  }
+  audioContextRef = new Ctx();
+  return audioContextRef;
+}
+
+function playTone(frequency, durationMs, volume = 0.08, waveType = "sine", startDelayMs = 0) {
+  const audioCtx = getAudioContext();
+  if (!audioCtx) return;
+
+  const now = audioCtx.currentTime + startDelayMs / 1000;
+  const oscillator = audioCtx.createOscillator();
+  const gainNode = audioCtx.createGain();
+  oscillator.type = waveType;
+  oscillator.frequency.setValueAtTime(frequency, now);
+  gainNode.gain.setValueAtTime(0.0001, now);
+  gainNode.gain.exponentialRampToValueAtTime(volume, now + 0.03);
+  gainNode.gain.exponentialRampToValueAtTime(0.0001, now + durationMs / 1000);
+
+  oscillator.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+  oscillator.start(now);
+  oscillator.stop(now + durationMs / 1000 + 0.03);
+}
+
+function playSessionStartSound() {
+  if (!soundSettings.enabled) return;
+  playTone(523.25, 260, 0.08, "sine", 0);
+  playTone(659.25, 220, 0.06, "triangle", 120);
+}
+
+function playSessionEndSound() {
+  if (!soundSettings.enabled) return;
+  playTone(784, 240, 0.07, "sine", 0);
+  playTone(587.33, 300, 0.05, "triangle", 150);
+}
+
+function setBreathPhase(isInhale) {
+  if (!breathCueText || !breathCueDot) return;
+  breathCueText.textContent = isInhale ? "Inhale" : "Exhale";
+  breathCueDot.classList.toggle("exhale", !isInhale);
+}
+
+function startBreathCue() {
+  if (!breathCueText || !breathCueDot) return;
+  if (breathIntervalId) {
+    clearInterval(breathIntervalId);
+  }
+  let inhale = true;
+  setBreathPhase(inhale);
+  breathIntervalId = setInterval(() => {
+    inhale = !inhale;
+    setBreathPhase(inhale);
+  }, 4000);
+}
+
+function stopBreathCue() {
+  if (breathIntervalId) {
+    clearInterval(breathIntervalId);
+    breathIntervalId = null;
+  }
+}
+
+function renderMalaProgress() {
+  if (!malaRing || !malaRingCount || !malaProgressText) return;
+  const count = chantCount > 0 && chantCount % 108 === 0 ? 108 : chantCount % 108;
+  const percent = Math.round((count / 108) * 100);
+  malaRing.style.setProperty("--mala-progress", `${percent}%`);
+  malaRingCount.textContent = String(count);
+  malaProgressText.textContent = `Mala Progress: ${count} / 108`;
+}
+
+function wrapCanvasText(context, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(" ");
+  let line = "";
+  let lineY = y;
+  for (const word of words) {
+    const test = line ? `${line} ${word}` : word;
+    if (context.measureText(test).width > maxWidth) {
+      context.fillText(line, x, lineY);
+      line = word;
+      lineY += lineHeight;
+    } else {
+      line = test;
+    }
+  }
+  if (line) {
+    context.fillText(line, x, lineY);
+    lineY += lineHeight;
+  }
+  return lineY;
+}
+
+function blessingMessageForToday() {
+  const message = rotatingMessage?.textContent || rotatingMessages[new Date().getDay() % rotatingMessages.length];
+  return (message || "May peace and strength guide your day.").trim();
+}
+
+function createBlessingCard(item) {
+  const mantra = selectedMantraData(item);
+  const canvas = document.createElement("canvas");
+  canvas.width = 1080;
+  canvas.height = 1350;
+  const context = canvas.getContext("2d");
+  if (!context) {
+    showToast("Blessing card not supported");
+    return;
+  }
+
+  const gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height);
+  gradient.addColorStop(0, "#fff8ef");
+  gradient.addColorStop(1, "#ffe9d6");
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  context.fillStyle = "#b14d00";
+  context.font = "bold 52px 'Segoe UI'";
+  context.fillText("ॐ Soulvest Blessing", 80, 110);
+
+  context.fillStyle = "#24201a";
+  context.font = "bold 60px 'Segoe UI'";
+  context.fillText(item.name, 80, 210);
+
+  context.fillStyle = "#625949";
+  context.font = "32px 'Segoe UI'";
+  let cursorY = wrapCanvasText(context, mantra.title, 80, 270, 920, 46);
+  cursorY = wrapCanvasText(context, mantra.iast, 80, cursorY + 14, 920, 44);
+
+  context.fillStyle = "#b14d00";
+  context.font = "bold 34px 'Segoe UI'";
+  context.fillText("Today's Message", 80, cursorY + 34);
+
+  context.fillStyle = "#625949";
+  context.font = "30px 'Segoe UI'";
+  cursorY = wrapCanvasText(context, blessingMessageForToday(), 80, cursorY + 84, 920, 42);
+
+  context.fillStyle = "#625949";
+  context.font = "28px 'Segoe UI'";
+  wrapCanvasText(context, `Purpose: ${item.purpose}`, 80, cursorY + 42, 920, 40);
+
+  context.fillStyle = "#b14d00";
+  context.font = "24px 'Segoe UI'";
+  context.fillText(`Generated on ${new Date().toLocaleDateString()} · Soulvest Mantra`, 80, 1280);
+
+  const link = document.createElement("a");
+  link.download = `${item.name.toLowerCase().replace(/\s+/g, "-")}-blessing-card.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+  showToast("Blessing card downloaded");
 }
 
 function typeLabel(value) {
@@ -1618,6 +1808,7 @@ function selectedMantraData(item) {
 function renderChantAssistant(item) {
   if (!item) {
     chantAssistant.classList.add("hidden");
+    stopBreathCue();
     return;
   }
 
@@ -1632,6 +1823,8 @@ function renderChantAssistant(item) {
   chantTextIast.textContent = (mode === "both" || mode === "iast") ? mantra.iast : "";
   const totalForEntity = Number(chantHistory[item.name]?.total || 0);
   chantProgress.textContent = `Count: ${chantCount} / ${chantTarget} · Total chanted: ${totalForEntity}`;
+  startBreathCue();
+  renderMalaProgress();
 }
 
 function renderMantraInfo(item) {
@@ -1666,6 +1859,7 @@ function buildCard(item, mode) {
         <button data-action="toggle-favorite" data-name="${item.name}">${isFavorite ? "Remove Favorite" : "Add to Favorites"}</button>
         <button data-action="copy-selected" data-name="${item.name}">Copy Selected</button>
         <button data-action="copy-all" data-name="${item.name}">Copy All</button>
+        <button data-action="blessing-card" data-name="${item.name}">Blessing Card</button>
       </div>
     </article>
   `;
@@ -1839,6 +2033,10 @@ grid.addEventListener("click", (event) => {
       `${item.name} full text`
     );
   }
+
+  if (button.dataset.action === "blessing-card") {
+    createBlessingCard(item);
+  }
 });
 
 searchInput.addEventListener("input", () => {
@@ -1875,6 +2073,9 @@ chantTargetSelect.addEventListener("change", () => {
 });
 chantPlusBtn.addEventListener("click", () => {
   chantCount += 1;
+  if (chantCount === 1) {
+    playSessionStartSound();
+  }
   recordChant(selectedEntity, 1);
   const completedSankalpa = incrementSankalpaProgress(1);
   const item = mantras.find((entry) => entry.name === selectedEntity);
@@ -1883,6 +2084,9 @@ chantPlusBtn.addEventListener("click", () => {
   renderSankalpaTracker();
   if (chantCount >= chantTarget) {
     showToast(`Completed ${chantTarget} chants`);
+    if (chantCount === chantTarget) {
+      playSessionEndSound();
+    }
   }
   if (completedSankalpa) {
     showToast("Sankalpa complete for today");
@@ -1890,11 +2094,23 @@ chantPlusBtn.addEventListener("click", () => {
   savePrefs();
 });
 chantResetBtn.addEventListener("click", () => {
+  const hadProgress = chantCount > 0;
   chantCount = 0;
   const item = mantras.find((entry) => entry.name === selectedEntity);
   renderChantAssistant(item || null);
+  if (hadProgress) {
+    playSessionEndSound();
+  }
   savePrefs();
 });
+
+if (sessionSoundToggle) {
+  sessionSoundToggle.addEventListener("change", () => {
+    soundSettings.enabled = sessionSoundToggle.checked;
+    saveSoundPrefs();
+    showToast(soundSettings.enabled ? "Temple sounds enabled" : "Temple sounds disabled");
+  });
+}
 
 mantraOfDayOpenBtn.addEventListener("click", () => {
   const suggestion = todaySuggestedItem();
@@ -1989,11 +2205,13 @@ loadFavorites();
 loadChantHistory();
 loadSankalpa();
 loadReminderSettings();
+loadSoundPrefs();
 populateEntityOptions();
 render();
 startRotatingMessages();
 renderReminderSettings();
 startReminderScheduler();
+renderSoundToggle();
 
 if (footerYear) {
   footerYear.textContent = String(new Date().getFullYear());
