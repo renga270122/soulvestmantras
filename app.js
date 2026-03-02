@@ -471,6 +471,7 @@ const historyList = document.getElementById("historyList");
 const historyEmpty = document.getElementById("historyEmpty");
 const rotatingMessage = document.getElementById("rotatingMessage");
 const didYouKnowMessage = document.getElementById("didYouKnowMessage");
+const footerYear = document.getElementById("footerYear");
 
 const imageCache = new Map();
 let selectedEntity = "";
@@ -1693,3 +1694,7 @@ loadChantHistory();
 populateEntityOptions();
 render();
 startRotatingMessages();
+
+if (footerYear) {
+  footerYear.textContent = String(new Date().getFullYear());
+}
