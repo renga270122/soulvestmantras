@@ -958,19 +958,48 @@ function startRotatingMessages() {
 
   let rotatingIndex = 0;
   let didYouKnowIndex = 0;
+  let isPaused = false;
+  const didYouKnowCard = didYouKnowMessage.closest(".did-you-know");
 
   const renderMessageSet = () => {
     rotatingMessage.textContent = rotatingMessages[rotatingIndex];
     didYouKnowMessage.textContent = didYouKnowMessages[didYouKnowIndex];
   };
 
+  const transitionMessageSet = () => {
+    rotatingMessage.classList.add("message-fade");
+    didYouKnowMessage.classList.add("message-fade");
+    setTimeout(() => {
+      renderMessageSet();
+      rotatingMessage.classList.remove("message-fade");
+      didYouKnowMessage.classList.remove("message-fade");
+    }, 260);
+  };
+
   renderMessageSet();
 
   setInterval(() => {
+    if (isPaused) {
+      return;
+    }
     rotatingIndex = (rotatingIndex + 1) % rotatingMessages.length;
     didYouKnowIndex = (didYouKnowIndex + 1) % didYouKnowMessages.length;
-    renderMessageSet();
+    transitionMessageSet();
   }, 6000);
+
+  const pause = () => {
+    isPaused = true;
+  };
+  const resume = () => {
+    isPaused = false;
+  };
+
+  rotatingMessage.addEventListener("mouseenter", pause);
+  rotatingMessage.addEventListener("mouseleave", resume);
+  if (didYouKnowCard) {
+    didYouKnowCard.addEventListener("mouseenter", pause);
+    didYouKnowCard.addEventListener("mouseleave", resume);
+  }
 }
 
 function typeLabel(value) {
