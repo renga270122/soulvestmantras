@@ -472,6 +472,12 @@ const historyEmpty = document.getElementById("historyEmpty");
 const rotatingMessage = document.getElementById("rotatingMessage");
 const didYouKnowMessage = document.getElementById("didYouKnowMessage");
 const footerYear = document.getElementById("footerYear");
+const sankalpaInput = document.getElementById("sankalpaInput");
+const sankalpaTargetSelect = document.getElementById("sankalpaTargetSelect");
+const sankalpaSaveBtn = document.getElementById("sankalpaSaveBtn");
+const sankalpaCompleteBtn = document.getElementById("sankalpaCompleteBtn");
+const sankalpaSummary = document.getElementById("sankalpaSummary");
+const sankalpaStreak = document.getElementById("sankalpaStreak");
 
 const imageCache = new Map();
 let selectedEntity = "";
@@ -481,10 +487,20 @@ let chantCount = 0;
 let chantTarget = 11;
 let favorites = new Set();
 let chantHistory = {};
+let sankalpaState = {
+  text: "Chant with devotion and clarity.",
+  target: 21,
+  dailyCount: 0,
+  dailyDate: "",
+  lastCompletedDate: "",
+  streak: 0,
+  maxStreak: 0,
+};
 
 const PREF_KEY = "chant_helper_prefs_v1";
 const FAVORITES_KEY = "chant_helper_favorites_v1";
 const CHANT_HISTORY_KEY = "chant_helper_history_v1";
+const SANKALPA_KEY = "chant_helper_sankalpa_v1";
 
 const mantraOfDayByWeekday = {
   0: "Surya (Sun)",
@@ -1144,6 +1160,101 @@ function renderPersonalHub() {
   historyEmpty.classList.toggle("hidden", historyItems.length > 0);
 }
 
+function formatDateKey(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function todayDateKey() {
+  return formatDateKey(new Date());
+}
+
+function yesterdayDateKey() {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  return formatDateKey(yesterday);
+}
+
+function resetSankalpaDailyIfNeeded() {
+  const today = todayDateKey();
+  if (sankalpaState.dailyDate !== today) {
+    sankalpaState.dailyDate = today;
+    sankalpaState.dailyCount = 0;
+  }
+}
+
+function saveSankalpa() {
+  localStorage.setItem(SANKALPA_KEY, JSON.stringify(sankalpaState));
+}
+
+function loadSankalpa() {
+  try {
+    const raw = localStorage.getItem(SANKALPA_KEY);
+    if (!raw) {
+      resetSankalpaDailyIfNeeded();
+      return;
+    }
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === "object") {
+      sankalpaState = {
+        ...sankalpaState,
+        ...parsed,
+      };
+    }
+    resetSankalpaDailyIfNeeded();
+  } catch {
+    resetSankalpaDailyIfNeeded();
+  }
+}
+
+function markSankalpaComplete() {
+  resetSankalpaDailyIfNeeded();
+  const today = todayDateKey();
+  if (sankalpaState.lastCompletedDate === today) {
+    return false;
+  }
+
+  const yesterday = yesterdayDateKey();
+  if (sankalpaState.lastCompletedDate === yesterday) {
+    sankalpaState.streak += 1;
+  } else {
+    sankalpaState.streak = 1;
+  }
+
+  sankalpaState.lastCompletedDate = today;
+  sankalpaState.maxStreak = Math.max(sankalpaState.maxStreak, sankalpaState.streak);
+  return true;
+}
+
+function incrementSankalpaProgress(step = 1) {
+  resetSankalpaDailyIfNeeded();
+  sankalpaState.dailyCount = Math.max(0, Number(sankalpaState.dailyCount || 0) + step);
+  let newlyCompleted = false;
+  if (sankalpaState.dailyCount >= sankalpaState.target) {
+    newlyCompleted = markSankalpaComplete();
+  }
+  saveSankalpa();
+  return newlyCompleted;
+}
+
+function renderSankalpaTracker() {
+  if (!sankalpaInput || !sankalpaTargetSelect || !sankalpaSummary || !sankalpaStreak) {
+    return;
+  }
+
+  resetSankalpaDailyIfNeeded();
+  sankalpaInput.value = sankalpaState.text || "";
+  sankalpaTargetSelect.value = String(sankalpaState.target || 21);
+
+  const completedToday = sankalpaState.lastCompletedDate === todayDateKey();
+  sankalpaSummary.textContent = `Today: ${sankalpaState.dailyCount}/${sankalpaState.target} chants · Sankalpa: ${sankalpaState.text}`;
+  sankalpaStreak.textContent = completedToday
+    ? `Completed today · Current streak: ${sankalpaState.streak} day(s) · Best: ${sankalpaState.maxStreak}`
+    : `Current streak: ${sankalpaState.streak} day(s) · Best: ${sankalpaState.maxStreak}`;
+}
+
 function deityTempleKey(name) {
   if (name.includes("Ganesha")) return "Ganesha";
   if (name.includes("Shiva")) return "Shiva";
@@ -1548,6 +1659,7 @@ function render() {
   renderFeatured();
   renderMantraOfDay();
   renderPersonalHub();
+  renderSankalpaTracker();
   savePrefs();
 }
 
@@ -1629,11 +1741,16 @@ chantTargetSelect.addEventListener("change", () => {
 chantPlusBtn.addEventListener("click", () => {
   chantCount += 1;
   recordChant(selectedEntity, 1);
+  const completedSankalpa = incrementSankalpaProgress(1);
   const item = mantras.find((entry) => entry.name === selectedEntity);
   renderChantAssistant(item || null);
   renderPersonalHub();
+  renderSankalpaTracker();
   if (chantCount >= chantTarget) {
     showToast(`Completed ${chantTarget} chants`);
+  }
+  if (completedSankalpa) {
+    showToast("Sankalpa complete for today");
   }
   savePrefs();
 });
@@ -1681,6 +1798,32 @@ favoritesList.addEventListener("click", (event) => {
   render();
 });
 
+if (sankalpaSaveBtn) {
+  sankalpaSaveBtn.addEventListener("click", () => {
+    const nextText = (sankalpaInput.value || "").trim();
+    sankalpaState.text = nextText || "Chant with devotion and clarity.";
+    sankalpaState.target = Number(sankalpaTargetSelect.value) || 21;
+    resetSankalpaDailyIfNeeded();
+    saveSankalpa();
+    renderSankalpaTracker();
+    showToast("Sankalpa saved");
+  });
+}
+
+if (sankalpaCompleteBtn) {
+  sankalpaCompleteBtn.addEventListener("click", () => {
+    const completedNow = markSankalpaComplete();
+    if (!completedNow) {
+      showToast("Sankalpa already completed today");
+    } else {
+      sankalpaState.dailyCount = Math.max(sankalpaState.dailyCount, sankalpaState.target);
+      saveSankalpa();
+      showToast("Sankalpa complete for today");
+    }
+    renderSankalpaTracker();
+  });
+}
+
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("sw.js").catch(() => {
@@ -1691,6 +1834,7 @@ if ("serviceWorker" in navigator) {
 loadPrefs();
 loadFavorites();
 loadChantHistory();
+loadSankalpa();
 populateEntityOptions();
 render();
 startRotatingMessages();

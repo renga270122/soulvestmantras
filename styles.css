@@ -231,6 +231,21 @@ body::before {
   transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
+.sankalpa-controls {
+  display: grid;
+  grid-template-columns: 1.2fr 180px auto auto;
+  gap: 8px;
+  align-items: center;
+}
+
+#sankalpaSummary {
+  margin-top: 10px;
+}
+
+#sankalpaStreak {
+  margin-top: 6px;
+}
+
 .message-fade {
   opacity: 0.2;
   transform: translateY(2px);
@@ -593,6 +608,10 @@ button:active {
   }
 
   .controls {
+    grid-template-columns: 1fr;
+  }
+
+  .sankalpa-controls {
     grid-template-columns: 1fr;
   }
 
