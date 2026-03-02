@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soulvest Mantra app</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="hero">
+      <h1>Soulvest Mantra app</h1>
+      <p>Explore gods, planets, and gurus with famous slokas/mantras, Gayatri mantras, and brief purpose/history notes.</p>
+    </header>
+
+    <section class="controls" aria-label="Filters">
+      <input id="searchInput" type="text" placeholder="Search deity, mantra, or meaning..." />
+      <select id="typeSelect" aria-label="Type selector">
+        <option value="all">All (Gods + Planets + Gurus)</option>
+        <option value="god">Gods</option>
+        <option value="planet">Planets (Navagraha)</option>
+        <option value="guru">Gurus</option>
+      </select>
+      <select id="entitySelect" aria-label="God, planet, or guru selector"></select>
+      <select id="mantraSelect" aria-label="Mantra selector">
+        <option value="famous">Famous Mantra / Sloka</option>
+        <option value="gayatri">Gayatri Mantra</option>
+        <option value="beej">Beej Mantra</option>
+      </select>
+      <select id="scriptSelect" aria-label="Script selector">
+        <option value="both">Show Devanagari + Tamil + Transliteration</option>
+        <option value="devanagari">Show Devanagari only</option>
+        <option value="tamil">Show Tamil only</option>
+        <option value="iast">Show Transliteration only</option>
+      </select>
+    </section>
+
+    <section id="featured" class="featured hidden" aria-live="polite">
+      <img id="featuredImage" alt="Selected deity or planet" loading="lazy" />
+      <div class="featured-content">
+        <h2 id="featuredTitle"></h2>
+        <p id="featuredType" class="featured-type"></p>
+        <p id="featuredPurpose" class="featured-purpose"></p>
+        <p id="featuredHistory" class="featured-history"></p>
+        <p id="featuredMeaning" class="meaning"></p>
+      </div>
+    </section>
+
+    <p id="resultCount" class="result-count"></p>
+
+    <section id="mantraGrid" class="grid" aria-live="polite"></section>
+
+    <section id="youShouldKnow" class="mantra-info hidden" aria-live="polite">
+      <h3>You Should Know</h3>
+      <ul id="knowList"></ul>
+    </section>
+
+    <section id="mantraInfo" class="mantra-info hidden" aria-live="polite">
+      <h3 id="mantraInfoTitle"></h3>
+      <p id="scriptModeLabel" class="script-mode"></p>
+      <p id="mantraInfoTextDevanagari" class="mantra devanagari"></p>
+      <p id="mantraInfoTextTamil" class="mantra tamil-text"></p>
+      <p id="mantraInfoTextIast" class="mantra"></p>
+      <p id="mantraInfoMeaning" class="meaning"></p>
+      <p id="mantraInfoUsage" class="meaning"></p>
+    </section>
+
+    <section id="chantAssistant" class="mantra-info hidden" aria-live="polite">
+      <h3>Quick Chant Mode</h3>
+      <p id="chantTitle" class="featured-type"></p>
+      <p id="chantScriptModeLabel" class="script-mode"></p>
+      <p id="chantTextDevanagari" class="chant-text devanagari"></p>
+      <p id="chantTextTamil" class="chant-text tamil-text"></p>
+      <p id="chantTextIast" class="chant-text"></p>
+      <div class="chant-controls">
+        <label for="chantTargetSelect">Target</label>
+        <select id="chantTargetSelect" aria-label="Chant target">
+          <option value="11">11</option>
+          <option value="21">21</option>
+          <option value="51">51</option>
+          <option value="108">108</option>
+        </select>
+        <button id="chantPlusBtn" type="button">+1 Chant</button>
+        <button id="chantResetBtn" type="button">Reset</button>
+      </div>
+      <p id="chantProgress" class="meaning"></p>
+    </section>
+
+    <section id="templeInfo" class="mantra-info hidden" aria-live="polite">
+      <h3 id="templeInfoTitle">Famous Temples in Tamil Nadu</h3>
+      <ul id="templeList"></ul>
+      <p id="templeFallback" class="meaning hidden"></p>
+      <details id="muruganAruDetails" class="hidden">
+        <summary>Aru Padai Veedu (6 Abodes of Murugan)</summary>
+        <ul id="muruganAruList"></ul>
+      </details>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

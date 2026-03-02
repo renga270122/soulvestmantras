@@ -1,0 +1,321 @@
+:root {
+  --bg: #f6f2e8;
+  --surface: #fffdf8;
+  --text: #24201a;
+  --muted: #625949;
+  --accent: #b14d00;
+  --accent-soft: #ffe9d6;
+  --border: #eadcc9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Noto Sans", "Segoe UI", Arial, sans-serif;
+  color: var(--text);
+  background: radial-gradient(circle at top, #fff8ef 0, var(--bg) 50%);
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.hero p {
+  margin: 8px 0 20px;
+  color: var(--muted);
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 220px 240px 220px 260px;
+  gap: 12px;
+}
+
+input,
+select,
+button {
+  font: inherit;
+  min-height: 44px;
+}
+
+input,
+select {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.result-count {
+  margin: 14px 2px;
+  color: var(--muted);
+}
+
+.featured {
+  display: grid;
+  grid-template-columns: minmax(220px, 320px) 1fr;
+  gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px;
+  margin-top: 12px;
+}
+
+.featured img {
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+  object-position: center top;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #f0e5d4;
+}
+
+.featured-content h2 {
+  margin: 4px 0 8px;
+}
+
+.featured-type {
+  margin: 0;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.featured-purpose {
+  margin: 8px 0 0;
+  font-weight: 600;
+}
+
+.featured-history {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.grid {
+  display: block;
+  margin-top: 6px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 2px 8px rgba(48, 40, 30, 0.06);
+}
+
+.grid .card {
+  width: 100%;
+}
+
+.card h2 {
+  margin: 0 0 10px;
+  font-size: 1.1rem;
+}
+
+.mantra {
+  margin: 8px 0;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.section-title {
+  margin: 12px 0 4px;
+  font-size: 0.9rem;
+  color: var(--accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.devanagari {
+  font-size: 1.03rem;
+}
+
+.tamil-text {
+  font-size: 1.06rem;
+}
+
+.meaning {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+button {
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+button:hover {
+  filter: brightness(0.98);
+}
+
+.toast {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  background: #232018;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.empty {
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 18px;
+  color: var(--muted);
+}
+
+.hidden {
+  display: none;
+}
+
+.mantra-info {
+  margin-top: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.mantra-info h3 {
+  margin: 0 0 8px;
+}
+
+.script-mode {
+  margin: 0 0 6px;
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+#knowList {
+  margin: 0;
+  padding-left: 18px;
+}
+
+#knowList li {
+  margin: 6px 0;
+  color: var(--muted);
+}
+
+.chant-text {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  margin: 8px 0;
+}
+
+.chant-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.chant-controls label {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+#templeList {
+  margin: 0;
+  padding-left: 18px;
+}
+
+#templeList li {
+  margin: 6px 0;
+}
+
+#templeList a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+#templeList a:hover {
+  text-decoration: underline;
+}
+
+#muruganAruDetails {
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: #fffaf2;
+}
+
+#muruganAruDetails summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+#muruganAruList {
+  margin: 8px 0 0;
+  padding-left: 18px;
+}
+
+#muruganAruList li {
+  margin: 6px 0;
+}
+
+@media (max-width: 760px) {
+  .container {
+    padding: 16px 12px 28px;
+  }
+
+  .controls {
+    grid-template-columns: 1fr;
+  }
+
+  .featured {
+    grid-template-columns: 1fr;
+  }
+
+  .featured img {
+    height: auto;
+    max-height: 280px;
+  }
+
+  .chant-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+}
