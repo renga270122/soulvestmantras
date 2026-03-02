@@ -103,7 +103,7 @@ body::before {
   text-transform: uppercase;
   letter-spacing: 0.14em;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-  background: linear-gradient(120deg, #7a4300 0, #c98a17 48%, #7a4300 100%);
+  background: linear-gradient(120deg, #8c1300 0, #d4a11c 46%, #8c1300 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -129,7 +129,7 @@ body::before {
   line-height: 1;
   font-weight: 800;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.62), 0 0 10px rgba(177, 77, 0, 0.22);
-  background: linear-gradient(145deg, #7d4700 0, #d89a23 52%, #7d4700 100%);
+  background: linear-gradient(145deg, #9c1700 0, #e1ad2f 52%, #9c1700 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
