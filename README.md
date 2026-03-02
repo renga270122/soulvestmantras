@@ -17,7 +17,7 @@ A simple web app to explore gods, planets (Navagraha), and gurus with famous man
 - Day/time reminders with optional browser notifications
 - Temple bell + soft chime on chant session start/end (toggleable)
 - Breath-led chant cue and 108 mala progress ring in Quick Chant Mode
-- Blessing card generator for sharing/download
+- Blessing card generator for download + Web Share API sharing (with fallback)
 - Offline mode with service worker (caches core app files and visited images)
 - Devanagari + transliteration display toggle
 - Search by name/mantra/purpose

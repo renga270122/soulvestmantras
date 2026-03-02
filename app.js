@@ -1171,7 +1171,11 @@ function blessingMessageForToday() {
   return (message || "May peace and strength guide your day.").trim();
 }
 
-function createBlessingCard(item) {
+function blessingCardFilename(item) {
+  return `${item.name.toLowerCase().replace(/\s+/g, "-")}-blessing-card.png`;
+}
+
+function buildBlessingCardCanvas(item) {
   const mantra = selectedMantraData(item);
   const canvas = document.createElement("canvas");
   canvas.width = 1080;
@@ -1179,7 +1183,7 @@ function createBlessingCard(item) {
   const context = canvas.getContext("2d");
   if (!context) {
     showToast("Blessing card not supported");
-    return;
+    return null;
   }
 
   const gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height);
@@ -1217,11 +1221,75 @@ function createBlessingCard(item) {
   context.font = "24px 'Segoe UI'";
   context.fillText(`Generated on ${new Date().toLocaleDateString()} · Soulvest Mantra`, 80, 1280);
 
+  context.save();
+  context.translate(930, 180);
+  context.rotate(-Math.PI / 12);
+  context.fillStyle = "rgba(177, 77, 0, 0.12)";
+  context.font = "bold 48px 'Segoe UI'";
+  context.fillText("ॐ Soulvest", -140, 0);
+  context.restore();
+
+  return canvas;
+}
+
+async function canvasToBlob(canvas) {
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => resolve(blob || null), "image/png");
+  });
+}
+
+async function createBlessingCard(item) {
+  const canvas = buildBlessingCardCanvas(item);
+  if (!canvas) {
+    return;
+  }
+
   const link = document.createElement("a");
-  link.download = `${item.name.toLowerCase().replace(/\s+/g, "-")}-blessing-card.png`;
+  link.download = blessingCardFilename(item);
   link.href = canvas.toDataURL("image/png");
   link.click();
   showToast("Blessing card downloaded");
+}
+
+async function shareBlessingCard(item) {
+  if (!navigator.share || typeof File === "undefined") {
+    await createBlessingCard(item);
+    return;
+  }
+
+  const canvas = buildBlessingCardCanvas(item);
+  if (!canvas) {
+    return;
+  }
+
+  const blob = await canvasToBlob(canvas);
+  if (!blob) {
+    await createBlessingCard(item);
+    return;
+  }
+
+  const file = new File([blob], blessingCardFilename(item), { type: "image/png" });
+  const sharePayload = {
+    title: `${item.name} Blessing Card`,
+    text: blessingMessageForToday(),
+    files: [file],
+  };
+
+  const canShareFiles = typeof navigator.canShare === "function" ? navigator.canShare({ files: [file] }) : true;
+  if (!canShareFiles) {
+    await createBlessingCard(item);
+    return;
+  }
+
+  try {
+    await navigator.share(sharePayload);
+    showToast("Blessing card shared");
+  } catch (error) {
+    const message = String(error?.message || "").toLowerCase();
+    if (!message.includes("abort")) {
+      await createBlessingCard(item);
+    }
+  }
 }
 
 function typeLabel(value) {
@@ -1860,6 +1928,7 @@ function buildCard(item, mode) {
         <button data-action="copy-selected" data-name="${item.name}">Copy Selected</button>
         <button data-action="copy-all" data-name="${item.name}">Copy All</button>
         <button data-action="blessing-card" data-name="${item.name}">Blessing Card</button>
+        <button data-action="share-card" data-name="${item.name}">Share Card</button>
       </div>
     </article>
   `;
@@ -2036,6 +2105,10 @@ grid.addEventListener("click", (event) => {
 
   if (button.dataset.action === "blessing-card") {
     createBlessingCard(item);
+  }
+
+  if (button.dataset.action === "share-card") {
+    shareBlessingCard(item);
   }
 });
 
