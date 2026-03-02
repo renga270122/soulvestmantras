@@ -14,6 +14,7 @@ A simple web app to explore gods, planets (Navagraha), and gurus with famous man
 - Favorites list with one-click reopen
 - Persistent chant history with per-mantra total counts and last chanted time
 - Daily Sankalpa Tracker with target, completion, and streak tracking
+- Day/time reminders with optional browser notifications
 - Offline mode with service worker (caches core app files and visited images)
 - Devanagari + transliteration display toggle
 - Search by name/mantra/purpose

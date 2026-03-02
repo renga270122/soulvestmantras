@@ -106,6 +106,27 @@
       <p id="sankalpaStreak" class="featured-type"></p>
     </section>
 
+    <section id="reminderSettings" class="mantra-info" aria-live="polite">
+      <h3>Reminder Settings</h3>
+      <div class="reminder-controls">
+        <label class="reminder-toggle"><input id="reminderEnabled" type="checkbox" /> Enable reminder</label>
+        <select id="reminderDaySelect" aria-label="Reminder day">
+          <option value="daily">Every day</option>
+          <option value="0">Sunday</option>
+          <option value="1">Monday</option>
+          <option value="2">Tuesday</option>
+          <option value="3">Wednesday</option>
+          <option value="4">Thursday</option>
+          <option value="5">Friday</option>
+          <option value="6">Saturday</option>
+        </select>
+        <input id="reminderTimeInput" type="time" value="06:00" aria-label="Reminder time" />
+        <input id="reminderMessageInput" type="text" placeholder="Reminder message" value="Time for your mantra practice." />
+        <button id="saveReminderBtn" type="button">Save Reminder</button>
+      </div>
+      <p id="reminderStatus" class="meaning"></p>
+    </section>
+
     <p id="resultCount" class="result-count"></p>
 
     <section id="mantraGrid" class="grid" aria-live="polite"></section>

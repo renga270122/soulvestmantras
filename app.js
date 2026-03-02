@@ -478,6 +478,12 @@ const sankalpaSaveBtn = document.getElementById("sankalpaSaveBtn");
 const sankalpaCompleteBtn = document.getElementById("sankalpaCompleteBtn");
 const sankalpaSummary = document.getElementById("sankalpaSummary");
 const sankalpaStreak = document.getElementById("sankalpaStreak");
+const reminderEnabled = document.getElementById("reminderEnabled");
+const reminderDaySelect = document.getElementById("reminderDaySelect");
+const reminderTimeInput = document.getElementById("reminderTimeInput");
+const reminderMessageInput = document.getElementById("reminderMessageInput");
+const saveReminderBtn = document.getElementById("saveReminderBtn");
+const reminderStatus = document.getElementById("reminderStatus");
 
 const imageCache = new Map();
 let selectedEntity = "";
@@ -496,11 +502,20 @@ let sankalpaState = {
   streak: 0,
   maxStreak: 0,
 };
+let reminderSettings = {
+  enabled: false,
+  day: "daily",
+  time: "06:00",
+  message: "Time for your mantra practice.",
+  lastTriggeredKey: "",
+};
+let reminderIntervalId = null;
 
 const PREF_KEY = "chant_helper_prefs_v1";
 const FAVORITES_KEY = "chant_helper_favorites_v1";
 const CHANT_HISTORY_KEY = "chant_helper_history_v1";
 const SANKALPA_KEY = "chant_helper_sankalpa_v1";
+const REMINDER_KEY = "chant_helper_reminder_v1";
 
 const mantraOfDayByWeekday = {
   0: "Surya (Sun)",
@@ -1255,6 +1270,126 @@ function renderSankalpaTracker() {
     : `Current streak: ${sankalpaState.streak} day(s) · Best: ${sankalpaState.maxStreak}`;
 }
 
+function saveReminderSettings() {
+  localStorage.setItem(REMINDER_KEY, JSON.stringify(reminderSettings));
+}
+
+function loadReminderSettings() {
+  try {
+    const raw = localStorage.getItem(REMINDER_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === "object") {
+      reminderSettings = {
+        ...reminderSettings,
+        ...parsed,
+      };
+    }
+  } catch {
+  }
+}
+
+function reminderDayLabel(dayValue) {
+  if (dayValue === "daily") return "Every day";
+  return weekdayLabel(Number(dayValue));
+}
+
+async function ensureNotificationPermission() {
+  if (!("Notification" in window)) {
+    return false;
+  }
+  if (Notification.permission === "granted") {
+    return true;
+  }
+  if (Notification.permission === "denied") {
+    return false;
+  }
+  const permission = await Notification.requestPermission();
+  return permission === "granted";
+}
+
+function renderReminderSettings() {
+  if (!reminderEnabled || !reminderDaySelect || !reminderTimeInput || !reminderMessageInput || !reminderStatus) {
+    return;
+  }
+
+  reminderEnabled.checked = Boolean(reminderSettings.enabled);
+  reminderDaySelect.value = reminderSettings.day || "daily";
+  reminderTimeInput.value = reminderSettings.time || "06:00";
+  reminderMessageInput.value = reminderSettings.message || "Time for your mantra practice.";
+
+  const baseStatus = reminderSettings.enabled
+    ? `Reminder active: ${reminderDayLabel(reminderSettings.day)} at ${reminderSettings.time}`
+    : "Reminder disabled.";
+
+  if (!("Notification" in window)) {
+    reminderStatus.textContent = `${baseStatus} Browser notifications are not supported.`;
+    return;
+  }
+
+  if (Notification.permission === "granted") {
+    reminderStatus.textContent = `${baseStatus} Browser notifications enabled.`;
+  } else if (Notification.permission === "denied") {
+    reminderStatus.textContent = `${baseStatus} Notification permission is blocked in browser settings.`;
+  } else {
+    reminderStatus.textContent = `${baseStatus} Notification permission not granted yet.`;
+  }
+}
+
+function reminderShouldTrigger(now = new Date()) {
+  if (!reminderSettings.enabled) {
+    return false;
+  }
+
+  const day = reminderSettings.day;
+  if (day !== "daily" && Number(day) !== now.getDay()) {
+    return false;
+  }
+
+  const [hourText, minuteText] = String(reminderSettings.time || "06:00").split(":");
+  const hour = Number(hourText);
+  const minute = Number(minuteText);
+  if (Number.isNaN(hour) || Number.isNaN(minute)) {
+    return false;
+  }
+
+  if (now.getHours() !== hour || now.getMinutes() !== minute) {
+    return false;
+  }
+
+  const triggerKey = `${formatDateKey(now)}-${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+  if (reminderSettings.lastTriggeredKey === triggerKey) {
+    return false;
+  }
+
+  reminderSettings.lastTriggeredKey = triggerKey;
+  saveReminderSettings();
+  return true;
+}
+
+function triggerReminder() {
+  const message = (reminderSettings.message || "Time for your mantra practice.").trim();
+  showToast(message);
+
+  if ("Notification" in window && Notification.permission === "granted") {
+    new Notification("Soulvest Mantra Reminder", { body: message });
+  }
+}
+
+function checkReminders() {
+  if (reminderShouldTrigger(new Date())) {
+    triggerReminder();
+  }
+}
+
+function startReminderScheduler() {
+  if (reminderIntervalId) {
+    clearInterval(reminderIntervalId);
+  }
+  reminderIntervalId = setInterval(checkReminders, 30000);
+  checkReminders();
+}
+
 function deityTempleKey(name) {
   if (name.includes("Ganesha")) return "Ganesha";
   if (name.includes("Shiva")) return "Shiva";
@@ -1798,6 +1933,24 @@ favoritesList.addEventListener("click", (event) => {
   render();
 });
 
+if (saveReminderBtn) {
+  saveReminderBtn.addEventListener("click", async () => {
+    reminderSettings.enabled = reminderEnabled.checked;
+    reminderSettings.day = reminderDaySelect.value;
+    reminderSettings.time = reminderTimeInput.value || "06:00";
+    reminderSettings.message = (reminderMessageInput.value || "").trim() || "Time for your mantra practice.";
+
+    if (reminderSettings.enabled) {
+      await ensureNotificationPermission();
+    }
+
+    saveReminderSettings();
+    renderReminderSettings();
+    startReminderScheduler();
+    showToast("Reminder settings saved");
+  });
+}
+
 if (sankalpaSaveBtn) {
   sankalpaSaveBtn.addEventListener("click", () => {
     const nextText = (sankalpaInput.value || "").trim();
@@ -1835,9 +1988,12 @@ loadPrefs();
 loadFavorites();
 loadChantHistory();
 loadSankalpa();
+loadReminderSettings();
 populateEntityOptions();
 render();
 startRotatingMessages();
+renderReminderSettings();
+startReminderScheduler();
 
 if (footerYear) {
   footerYear.textContent = String(new Date().getFullYear());
