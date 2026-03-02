@@ -32,13 +32,19 @@ body {
 
 .hero {
   position: relative;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--surface), var(--accent-soft));
+  padding: 14px;
+  box-shadow: 0 4px 16px rgba(48, 40, 30, 0.08);
+  margin-bottom: 12px;
 }
 
 .hero::after {
   content: "✦";
   position: absolute;
-  top: -8px;
-  right: 6px;
+  top: 10px;
+  right: 10px;
   color: var(--accent);
   opacity: 0.45;
   font-size: 1.1rem;
@@ -46,8 +52,21 @@ body {
 
 .hero-head {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 14px;
+}
+
+.hero-copy {
+  flex: 1;
+}
+
+.hero-kicker {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .divine-logo {
@@ -71,21 +90,40 @@ body {
 }
 
 .hero h1 {
-  margin: 0;
+  margin: 4px 0 0;
   font-size: 2rem;
+  line-height: 1.15;
 }
 
 .hero p {
-  margin: 8px 0 20px;
+  margin: 8px 0 0;
   color: var(--muted);
 }
 
-.welcome-banner {
-  margin-bottom: 14px;
-  background: linear-gradient(120deg, var(--surface), #fff8ee);
+.hero-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.hero-chips span {
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 14px;
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: var(--surface);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.welcome-banner {
+  margin-bottom: 16px;
+  background: linear-gradient(120deg, var(--surface), var(--accent-soft));
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 3px 12px rgba(48, 40, 30, 0.07);
 }
 
 .welcome-kicker {
@@ -98,8 +136,9 @@ body {
 }
 
 .welcome-banner h2 {
-  margin: 8px 0 8px;
-  font-size: 1.2rem;
+  margin: 8px 0 6px;
+  font-size: 1.35rem;
+  line-height: 1.25;
 }
 
 .welcome-banner p {
@@ -115,7 +154,7 @@ body {
 }
 
 .did-you-know {
-  margin-top: 10px;
+  margin-top: 12px;
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 10px 12px;
@@ -426,6 +465,18 @@ button:hover {
 
   .hero-head {
     align-items: flex-start;
+  }
+
+  .hero {
+    padding: 12px;
+  }
+
+  .hero h1 {
+    font-size: 1.7rem;
+  }
+
+  .welcome-banner h2 {
+    font-size: 1.15rem;
   }
 
   .divine-logo {
