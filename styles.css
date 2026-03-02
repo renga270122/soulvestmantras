@@ -6,6 +6,8 @@
   --accent: #b14d00;
   --accent-soft: #ffe9d6;
   --border: #eadcc9;
+  --font-body: "Inter", "Segoe UI", Arial, sans-serif;
+  --font-display: "Cinzel", "Times New Roman", serif;
 }
 
 * {
@@ -14,12 +16,13 @@
 
 body {
   margin: 0;
-  font-family: "Noto Sans", "Segoe UI", Arial, sans-serif;
+  font-family: var(--font-body);
   color: var(--text);
   background:
-    radial-gradient(circle at top, #fff8ef 0, var(--bg) 45%),
+    radial-gradient(circle at top, #fff8ef 0, var(--bg) 44%),
     radial-gradient(circle at 88% 8%, var(--accent-soft) 0, transparent 34%),
-    radial-gradient(circle at 12% 20%, #fffaf2 0, transparent 28%);
+    radial-gradient(circle at 12% 20%, #fffaf2 0, transparent 28%),
+    linear-gradient(160deg, #fffaf3 0, #f9f2e7 100%);
   overflow-x: hidden;
 }
 
@@ -45,8 +48,8 @@ body::before {
   position: relative;
   border: 1px solid var(--border);
   border-radius: 18px;
-  background: linear-gradient(135deg, var(--surface), var(--accent-soft));
-  padding: 14px;
+  background: linear-gradient(135deg, #fffdf8 0, #fff5e7 48%, #ffefdb 100%);
+  padding: 16px;
   box-shadow: 0 4px 16px rgba(48, 40, 30, 0.08);
   margin-bottom: 12px;
   overflow: hidden;
@@ -86,10 +89,10 @@ body::before {
 .hero-kicker {
   margin: 0;
   color: var(--accent);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.12em;
 }
 
 .divine-logo {
@@ -115,13 +118,19 @@ body::before {
 
 .hero h1 {
   margin: 4px 0 0;
-  font-size: 2rem;
+  font-size: 2.2rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.01em;
   line-height: 1.15;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .hero p {
-  margin: 8px 0 0;
+  margin: 10px 0 0;
   color: var(--muted);
+  font-size: 0.98rem;
+  max-width: 800px;
 }
 
 .hero-chips {
@@ -134,10 +143,11 @@ body::before {
 .hero-chips span {
   border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 6px 10px;
-  background: var(--surface);
+  padding: 6px 12px;
+  background: rgba(255, 253, 248, 0.95);
   color: var(--accent);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
   font-weight: 600;
   transition: transform 0.2s ease, background 0.2s ease;
 }
@@ -151,18 +161,20 @@ body::before {
   text-align: center;
   margin: 8px 0 14px;
   color: var(--accent);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.2em;
+  font-family: var(--font-display);
+  font-size: 1.02rem;
   font-weight: 700;
-  opacity: 0.72;
+  opacity: 0.82;
 }
 
 .welcome-banner {
   position: relative;
   margin-bottom: 16px;
-  background: linear-gradient(120deg, var(--surface), var(--accent-soft));
+  background: linear-gradient(120deg, #fffdfa 0, #fff5e8 55%, #ffebd2 100%);
   border: 1px solid var(--border);
   border-radius: 18px;
-  padding: 16px;
+  padding: 18px;
   box-shadow: 0 3px 12px rgba(48, 40, 30, 0.07);
   overflow: hidden;
 }
@@ -183,20 +195,23 @@ body::before {
   margin: 0;
   color: var(--accent);
   font-weight: 700;
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.12em;
 }
 
 .welcome-banner h2 {
   margin: 8px 0 6px;
-  font-size: 1.35rem;
+  font-size: 1.5rem;
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
   line-height: 1.25;
 }
 
 .welcome-banner p {
   margin: 0;
   color: var(--muted);
+  line-height: 1.6;
 }
 
 .rotating-message {
@@ -221,7 +236,7 @@ body::before {
   font-size: 0.82rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.08em;
 }
 
 .did-you-know-text {
