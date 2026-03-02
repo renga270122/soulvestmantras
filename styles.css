@@ -97,12 +97,16 @@ body::before {
 
 .hero-kicker {
   margin: 0;
-  color: #7f2f00;
+  color: #9a5f00;
   font-size: 0.92rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  background: linear-gradient(120deg, #7a4300 0, #c98a17 48%, #7a4300 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .divine-logo {
@@ -120,11 +124,15 @@ body::before {
 }
 
 .divine-logo-mark {
-  color: #7a2d00;
+  color: #9a5f00;
   font-size: 2.35rem;
   line-height: 1;
   font-weight: 800;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.62), 0 0 10px rgba(177, 77, 0, 0.22);
+  background: linear-gradient(145deg, #7d4700 0, #d89a23 52%, #7d4700 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .hero h1 {
