@@ -462,6 +462,13 @@ const templeList = document.getElementById("templeList");
 const templeFallback = document.getElementById("templeFallback");
 const muruganAruDetails = document.getElementById("muruganAruDetails");
 const muruganAruList = document.getElementById("muruganAruList");
+const mantraOfDayTitle = document.getElementById("mantraOfDayTitle");
+const mantraOfDayText = document.getElementById("mantraOfDayText");
+const mantraOfDayOpenBtn = document.getElementById("mantraOfDayOpenBtn");
+const favoritesList = document.getElementById("favoritesList");
+const favoritesEmpty = document.getElementById("favoritesEmpty");
+const historyList = document.getElementById("historyList");
+const historyEmpty = document.getElementById("historyEmpty");
 
 const imageCache = new Map();
 let selectedEntity = "";
@@ -469,8 +476,22 @@ let selectedMantraKey = "famous";
 let latestImageRequestId = 0;
 let chantCount = 0;
 let chantTarget = 11;
+let favorites = new Set();
+let chantHistory = {};
 
 const PREF_KEY = "chant_helper_prefs_v1";
+const FAVORITES_KEY = "chant_helper_favorites_v1";
+const CHANT_HISTORY_KEY = "chant_helper_history_v1";
+
+const mantraOfDayByWeekday = {
+  0: "Surya (Sun)",
+  1: "Shiva",
+  2: "Hanuman",
+  3: "Budha (Mercury)",
+  4: "Brihaspati (Jupiter)",
+  5: "Lakshmi",
+  6: "Shani (Saturn)",
+};
 
 const tnTemplesByDeity = {
   Ganesha: [
@@ -887,6 +908,31 @@ function showToast(message) {
   setTimeout(() => toast.classList.remove("show"), 1800);
 }
 
+function weekdayLabel(index) {
+  return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][index] || "Today";
+}
+
+function todaySuggestedItem() {
+  const dayIndex = new Date().getDay();
+  const name = mantraOfDayByWeekday[dayIndex];
+  const item = mantras.find((entry) => entry.name === name) || mantras[0] || null;
+  return { item, dayIndex };
+}
+
+function renderMantraOfDay() {
+  const suggestion = todaySuggestedItem();
+  if (!suggestion.item) {
+    mantraOfDayTitle.textContent = "";
+    mantraOfDayText.textContent = "No mantra suggestion available right now.";
+    mantraOfDayOpenBtn.disabled = true;
+    return;
+  }
+
+  mantraOfDayOpenBtn.disabled = false;
+  mantraOfDayTitle.textContent = `${weekdayLabel(suggestion.dayIndex)} — ${suggestion.item.name}`;
+  mantraOfDayText.textContent = `${suggestion.item.famousTitle}: ${suggestion.item.purpose}`;
+}
+
 function typeLabel(value) {
   if (value === "planet") {
     return "Planet (Navagraha)";
@@ -914,6 +960,14 @@ function savePrefs() {
     chantTarget,
   };
   localStorage.setItem(PREF_KEY, JSON.stringify(payload));
+}
+
+function saveFavorites() {
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify(Array.from(favorites)));
+}
+
+function saveChantHistory() {
+  localStorage.setItem(CHANT_HISTORY_KEY, JSON.stringify(chantHistory));
 }
 
 function loadPrefs() {
@@ -945,6 +999,79 @@ function loadPrefs() {
     }
   } catch {
   }
+}
+
+function loadFavorites() {
+  try {
+    const raw = localStorage.getItem(FAVORITES_KEY);
+    if (!raw) return;
+    const list = JSON.parse(raw);
+    if (Array.isArray(list)) {
+      favorites = new Set(list.filter((name) => typeof name === "string"));
+    }
+  } catch {
+  }
+}
+
+function loadChantHistory() {
+  try {
+    const raw = localStorage.getItem(CHANT_HISTORY_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === "object") {
+      chantHistory = parsed;
+    }
+  } catch {
+  }
+}
+
+function toggleFavorite(name) {
+  if (!name) return;
+  if (favorites.has(name)) {
+    favorites.delete(name);
+    showToast(`${name} removed from favorites`);
+  } else {
+    favorites.add(name);
+    showToast(`${name} added to favorites`);
+  }
+  saveFavorites();
+  renderPersonalHub();
+  render();
+}
+
+function recordChant(name, increment = 1) {
+  if (!name || increment <= 0) return;
+  const previous = chantHistory[name] || { total: 0, lastChantedAt: "" };
+  chantHistory[name] = {
+    total: Math.max(0, Number(previous.total || 0) + increment),
+    lastChantedAt: new Date().toISOString()
+  };
+  saveChantHistory();
+}
+
+function formatLastChanted(isoTime) {
+  if (!isoTime) return "just now";
+  const date = new Date(isoTime);
+  if (Number.isNaN(date.getTime())) return "recently";
+  return date.toLocaleString();
+}
+
+function renderPersonalHub() {
+  const sortedFavorites = Array.from(favorites).sort((a, b) => a.localeCompare(b));
+  favoritesList.innerHTML = sortedFavorites
+    .map((name) => `<button type="button" class="pill-btn" data-action="open-favorite" data-name="${name}">${name}</button>`)
+    .join("");
+  favoritesEmpty.classList.toggle("hidden", sortedFavorites.length > 0);
+
+  const historyItems = Object.entries(chantHistory)
+    .filter(([, value]) => value && typeof value.total === "number" && value.total > 0)
+    .sort((a, b) => b[1].total - a[1].total)
+    .slice(0, 8);
+
+  historyList.innerHTML = historyItems
+    .map(([name, value]) => `<li><strong>${name}</strong>: ${value.total} chants · Last: ${formatLastChanted(value.lastChantedAt)}</li>`)
+    .join("");
+  historyEmpty.classList.toggle("hidden", historyItems.length > 0);
 }
 
 function deityTempleKey(name) {
@@ -1187,7 +1314,8 @@ function renderChantAssistant(item) {
   chantTextDevanagari.textContent = (mode === "both" || mode === "devanagari") ? (mantra.devanagari || mantra.iast) : "";
   chantTextTamil.textContent = (mode === "both" || mode === "tamil") ? (mantra.isEnglishOnlyFallback ? "" : mantra.tamil) : "";
   chantTextIast.textContent = (mode === "both" || mode === "iast") ? mantra.iast : "";
-  chantProgress.textContent = `Count: ${chantCount} / ${chantTarget}`;
+  const totalForEntity = Number(chantHistory[item.name]?.total || 0);
+  chantProgress.textContent = `Count: ${chantCount} / ${chantTarget} · Total chanted: ${totalForEntity}`;
 }
 
 function renderMantraInfo(item) {
@@ -1211,6 +1339,7 @@ function renderMantraInfo(item) {
 
 function buildCard(item, mode) {
   const mantra = selectedMantraData(item);
+  const isFavorite = favorites.has(item.name);
   return `
     <article class="card" data-entity="${item.name}">
       <h2>${item.name}</h2>
@@ -1218,6 +1347,7 @@ function buildCard(item, mode) {
       ${mantraBlock(mantra.title, mantra.devanagari, { iast: mantra.iast, tamil: mantra.tamil }, mode)}
       <p class="meaning">${item.purpose}</p>
       <div class="actions">
+        <button data-action="toggle-favorite" data-name="${item.name}">${isFavorite ? "Remove Favorite" : "Add to Favorites"}</button>
         <button data-action="copy-selected" data-name="${item.name}">Copy Selected</button>
         <button data-action="copy-all" data-name="${item.name}">Copy All</button>
       </div>
@@ -1346,6 +1476,8 @@ function render() {
   }
 
   renderFeatured();
+  renderMantraOfDay();
+  renderPersonalHub();
   savePrefs();
 }
 
@@ -1368,6 +1500,11 @@ grid.addEventListener("click", (event) => {
   const name = button.dataset.name;
   const item = mantras.find((entry) => entry.name === name);
   if (!item) {
+    return;
+  }
+
+  if (button.dataset.action === "toggle-favorite") {
+    toggleFavorite(item.name);
     return;
   }
 
@@ -1421,8 +1558,10 @@ chantTargetSelect.addEventListener("change", () => {
 });
 chantPlusBtn.addEventListener("click", () => {
   chantCount += 1;
+  recordChant(selectedEntity, 1);
   const item = mantras.find((entry) => entry.name === selectedEntity);
   renderChantAssistant(item || null);
+  renderPersonalHub();
   if (chantCount >= chantTarget) {
     showToast(`Completed ${chantTarget} chants`);
   }
@@ -1435,6 +1574,45 @@ chantResetBtn.addEventListener("click", () => {
   savePrefs();
 });
 
+mantraOfDayOpenBtn.addEventListener("click", () => {
+  const suggestion = todaySuggestedItem();
+  if (!suggestion.item) return;
+  const targetType = suggestion.item.type;
+  if (typeSelect.value !== "all" && typeSelect.value !== targetType) {
+    typeSelect.value = targetType;
+    populateEntityOptions();
+  }
+  selectedEntity = suggestion.item.name;
+  selectedMantraKey = "famous";
+  mantraSelect.value = selectedMantraKey;
+  if (entitySelect.querySelector(`option[value="${selectedEntity}"]`)) {
+    entitySelect.value = selectedEntity;
+  }
+  chantCount = 0;
+  render();
+});
+
+favoritesList.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-action='open-favorite']");
+  if (!button) return;
+  const name = button.dataset.name;
+  if (!name) return;
+  const item = mantras.find((entry) => entry.name === name);
+  if (!item) return;
+
+  if (typeSelect.value !== "all" && typeSelect.value !== item.type) {
+    typeSelect.value = item.type;
+    populateEntityOptions();
+  }
+  selectedEntity = item.name;
+  if (entitySelect.querySelector(`option[value="${selectedEntity}"]`)) {
+    entitySelect.value = selectedEntity;
+  }
+  render();
+});
+
 loadPrefs();
+loadFavorites();
+loadChantHistory();
 populateEntityOptions();
 render();

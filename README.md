@@ -10,6 +10,9 @@ A simple web app to explore gods, planets (Navagraha), and gurus with famous man
 - Supports Beej Mantra mode for applicable deities
 - Tamil mantra display mode (where available, with fallback)
 - Quick Chant mode with large mantra text and japa counter (11/21/51/108)
+- Mantra of the Day suggestion based on weekday tradition
+- Favorites list with one-click reopen
+- Persistent chant history with per-mantra total counts and last chanted time
 - Devanagari + transliteration display toggle
 - Search by name/mantra/purpose
 - Select God/Planet/Guru and view image + purpose/history brief
