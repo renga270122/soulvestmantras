@@ -469,6 +469,8 @@ const favoritesList = document.getElementById("favoritesList");
 const favoritesEmpty = document.getElementById("favoritesEmpty");
 const historyList = document.getElementById("historyList");
 const historyEmpty = document.getElementById("historyEmpty");
+const rotatingMessage = document.getElementById("rotatingMessage");
+const didYouKnowMessage = document.getElementById("didYouKnowMessage");
 
 const imageCache = new Map();
 let selectedEntity = "";
@@ -492,6 +494,22 @@ const mantraOfDayByWeekday = {
   5: "Lakshmi",
   6: "Shani (Saturn)",
 };
+
+const rotatingMessages = [
+  "One focused chant is stronger than many distracted chants.",
+  "Breathe deeply, chant clearly, and keep your sankalpa steady.",
+  "Consistency in 11 chants daily builds inner strength over time.",
+  "Start with gratitude; end with silence for deeper absorption.",
+  "Pronunciation with devotion matters more than speed."
+];
+
+const didYouKnowMessages = [
+  "Many practitioners choose 108 because it is considered a spiritually complete count.",
+  "Planet mantras are often aligned with specific weekdays for disciplined practice.",
+  "Gayatri mantras traditionally focus on illumination of the intellect.",
+  "Short beej mantras are commonly used for concentrated japa sessions.",
+  "Daily chanting at a fixed time helps build a stable spiritual routine."
+];
 
 const tnTemplesByDeity = {
   Ganesha: [
@@ -931,6 +949,28 @@ function renderMantraOfDay() {
   mantraOfDayOpenBtn.disabled = false;
   mantraOfDayTitle.textContent = `${weekdayLabel(suggestion.dayIndex)} — ${suggestion.item.name}`;
   mantraOfDayText.textContent = `${suggestion.item.famousTitle}: ${suggestion.item.purpose}`;
+}
+
+function startRotatingMessages() {
+  if (!rotatingMessage || !didYouKnowMessage) {
+    return;
+  }
+
+  let rotatingIndex = 0;
+  let didYouKnowIndex = 0;
+
+  const renderMessageSet = () => {
+    rotatingMessage.textContent = rotatingMessages[rotatingIndex];
+    didYouKnowMessage.textContent = didYouKnowMessages[didYouKnowIndex];
+  };
+
+  renderMessageSet();
+
+  setInterval(() => {
+    rotatingIndex = (rotatingIndex + 1) % rotatingMessages.length;
+    didYouKnowIndex = (didYouKnowIndex + 1) % didYouKnowMessages.length;
+    renderMessageSet();
+  }, 6000);
 }
 
 function typeLabel(value) {
@@ -1623,3 +1663,4 @@ loadFavorites();
 loadChantHistory();
 populateEntityOptions();
 render();
+startRotatingMessages();
