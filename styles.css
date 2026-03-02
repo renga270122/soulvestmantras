@@ -67,7 +67,7 @@ body::before {
   width: 340px;
   height: 340px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 233, 214, 0.95) 0, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 233, 214, 0.68) 0, transparent 70%);
 }
 
 .hero::after {
@@ -76,7 +76,7 @@ body::before {
   top: 12px;
   right: 14px;
   color: var(--accent);
-  opacity: 0.5;
+  opacity: 0.8;
   font-size: 1rem;
   letter-spacing: 0.24em;
 }
@@ -89,12 +89,16 @@ body::before {
 
 .hero-copy {
   flex: 1;
+  background: rgba(255, 253, 248, 0.72);
+  border: 1px solid rgba(234, 220, 201, 0.9);
+  border-radius: 14px;
+  padding: 10px 12px;
 }
 
 .hero-kicker {
   margin: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
+  color: #9f4100;
+  font-size: 0.84rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -126,15 +130,17 @@ body::before {
   font-size: 2.45rem;
   font-family: var(--font-display);
   font-weight: 700;
+  color: #1f1a12;
   letter-spacing: 0.015em;
   line-height: 1.15;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.56);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .hero p {
   margin: 12px 0 0;
-  color: #5a4f3f;
+  color: #3f362a;
   font-size: 1.02rem;
+  font-weight: 500;
   max-width: 800px;
 }
 
@@ -146,14 +152,14 @@ body::before {
 }
 
 .hero-chips span {
-  border: 1px solid var(--border);
+  border: 1px solid #d5b895;
   border-radius: 999px;
   padding: 7px 13px;
-  background: rgba(255, 253, 248, 0.96);
-  color: var(--accent);
+  background: #fff9f0;
+  color: #8e3a00;
   font-size: 0.76rem;
   letter-spacing: 0.06em;
-  font-weight: 600;
+  font-weight: 700;
   transition: transform 0.2s ease, background 0.2s ease;
 }
 
@@ -170,7 +176,8 @@ body::before {
   font-family: var(--font-display);
   font-size: 1.06rem;
   font-weight: 700;
-  opacity: 0.86;
+  opacity: 1;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.52);
 }
 
 .welcome-banner {
