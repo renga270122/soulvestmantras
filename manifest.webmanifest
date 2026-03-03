@@ -1,0 +1,19 @@
+{
+  "name": "Soulvest Mantras",
+  "short_name": "Soulvest",
+  "description": "Your sacred library of slokas and chants.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fffaf3",
+  "theme_color": "#b14d00",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "768x768",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

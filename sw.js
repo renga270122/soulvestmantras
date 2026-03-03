@@ -1,4 +1,4 @@
-const CACHE_VERSION = "soulvest-core-v5";
+const CACHE_VERSION = "soulvest-core-v6";
 const IMAGE_CACHE_VERSION = "soulvest-images-v1";
 
 function appBasePath() {
@@ -14,7 +14,7 @@ function appUrl(relativePath) {
   return `${base}${relativePath}`;
 }
 
-const CORE_ASSETS = ["/", "/index.html", "/styles.css", "/app.js"];
+const CORE_ASSETS = ["/", "/index.html", "/styles.css", "/app.js", "/manifest.webmanifest", "/logo.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
