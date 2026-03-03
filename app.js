@@ -586,7 +586,7 @@ let shouldKeepSpeaking = false;
 let selectedMood = "auto";
 let spiritualIntensity = 2;
 let visualMinimalMode = false;
-let manualTimeTheme = "auto";
+let manualTimeTheme = "morning";
 let ambientOscillatorRef = null;
 let ambientGainRef = null;
 let templeRenderRequestId = 0;
@@ -1597,11 +1597,12 @@ function deriveTimeThemeFromClock() {
   const hour = new Date().getHours();
   if (hour >= 5 && hour < 12) return "morning";
   if (hour >= 12 && hour < 19) return "evening";
-  return "night";
+  return "evening";
 }
 
 function applyTimeTheme(theme = "auto") {
-  const nextTheme = theme === "auto" ? deriveTimeThemeFromClock() : theme;
+  const resolved = theme === "auto" ? deriveTimeThemeFromClock() : theme;
+  const nextTheme = resolved === "night" ? "evening" : resolved;
   document.body.dataset.timeTheme = nextTheme;
 }
 

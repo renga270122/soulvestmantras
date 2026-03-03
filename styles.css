@@ -24,6 +24,8 @@ body {
     radial-gradient(circle at 12% 20%, #fffaf2 0, transparent 30%),
     linear-gradient(160deg, #fffaf3 0, #f9f2e7 100%);
   overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
 }
 
 body::before {
@@ -579,6 +581,21 @@ select {
   background: var(--surface);
   border-radius: 12px;
   padding: 10px 12px;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+textarea {
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: color-mix(in srgb, var(--muted) 86%, #000 14%);
+  opacity: 1;
 }
 
 input:focus,
@@ -689,7 +706,8 @@ button:focus-visible {
 .meaning {
   margin-top: 10px;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: 1rem;
+  line-height: 1.55;
 }
 
 textarea {
@@ -870,9 +888,40 @@ button:active {
 }
 
 .sloka-library-table {
-  width: 100%;
+  color: var(--text);
   border-collapse: collapse;
+  font-size: 0.96rem;
   min-width: 760px;
+
+body[data-time-theme="night"] .sloka-library-table th {
+  background: rgba(45, 34, 28, 0.92);
+}
+
+@media (max-width: 1024px) {
+  .hero-head {
+    gap: 12px;
+  }
+
+  .hero-symbols {
+    display: none;
+  }
+
+  .hero-brand {
+    min-width: 96px;
+  }
+
+  .hero-copy {
+    padding: 14px;
+  }
+
+  .hero p,
+  .welcome-banner p,
+  .meaning,
+  .script-mode,
+  .sloka-library-table td {
+    font-size: 1rem;
+  }
+}
 }
 
 .sloka-library-table th,
@@ -1147,6 +1196,11 @@ button:active {
     padding: 12px;
   }
 
+  .hero::after {
+    font-size: 0.78rem;
+    right: 10px;
+  }
+
   .hero h1 {
     font-size: 1.9rem;
   }
@@ -1186,7 +1240,7 @@ button:active {
   }
 
   .brand-logo-below-om {
-    width: 108px;
+    width: 118px;
     max-width: 34vw;
   }
 
@@ -1196,6 +1250,20 @@ button:active {
 
   .controls {
     grid-template-columns: 1fr;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    font-size: 16px;
+  }
+
+  .result-count,
+  .script-mode,
+  .featured-type,
+  .meaning {
+    font-size: 1rem;
   }
 
   .quick-paths,
