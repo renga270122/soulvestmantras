@@ -1,4 +1,4 @@
-const CACHE_VERSION = "soulvest-core-v6";
+const CACHE_VERSION = "soulvest-core-v7";
 const IMAGE_CACHE_VERSION = "soulvest-images-v1";
 
 function appBasePath() {
