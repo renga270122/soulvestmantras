@@ -26,6 +26,10 @@
             <span>Guru Guidance</span>
           </div>
         </div>
+        <div class="hero-symbols" aria-hidden="true">
+          <span class="lamp-icon">🪔</span>
+          <span class="moon-icon">🌙</span>
+        </div>
       </div>
     </header>
 
@@ -55,7 +59,7 @@
     <section class="controls" aria-label="Filters">
       <input id="searchInput" type="text" placeholder="Search deity, mantra, or meaning..." />
       <select id="typeSelect" aria-label="Type selector">
-        <option value="all">All (Gods + Planets + Gurus)</option>
+        <option value="all">All</option>
         <option value="god">Gods</option>
         <option value="planet">Planets (Navagraha)</option>
         <option value="guru">Gurus</option>
@@ -66,17 +70,11 @@
         <option value="gayatri">Gayatri Mantra</option>
         <option value="beej">Beej Mantra</option>
       </select>
-      <select id="famousVariantSelect" aria-label="Famous and traditional mantra variant selector"></select>
       <select id="scriptSelect" aria-label="Script selector">
         <option value="both">Show Devanagari + Tamil + Transliteration</option>
         <option value="devanagari">Show Devanagari only</option>
         <option value="tamil">Show Tamil only</option>
         <option value="iast">Show Transliteration only</option>
-      </select>
-      <select id="experienceModeSelect" aria-label="Experience mode selector">
-        <option value="chant">Chant mode</option>
-        <option value="meditation">Meditation mode</option>
-        <option value="learning">Learning mode</option>
       </select>
     </section>
 
@@ -114,7 +112,25 @@
             <option value="devotional">Devotional</option>
             <option value="festive">Festive</option>
           </select>
+          <div id="moodIconography" class="mood-iconography" aria-live="polite">🕉️ Calm</div>
+          <label class="script-mode subtle" for="spiritualIntensityRange">Spiritual intensity</label>
+          <div class="intensity-wrap">
+            <input id="spiritualIntensityRange" type="range" min="1" max="3" step="1" value="2" aria-label="Spiritual intensity" />
+            <span id="spiritualIntensityValue" class="meaning">Medium</span>
+          </div>
           <input id="emotionInput" type="text" placeholder="How do you feel? (e.g. calm, stressed, joyful)" />
+          <label class="reminder-toggle"><input id="visualModeToggle" type="checkbox" /> Minimal visual mode</label>
+          <div class="time-theme-controls" aria-label="Time-based visual themes">
+            <button id="morningThemeBtn" type="button">🌅 Morning</button>
+            <button id="eveningThemeBtn" type="button">🌇 Evening</button>
+            <button id="nightThemeBtn" type="button">🌌 Night</button>
+            <button id="autoThemeBtn" type="button">🕒 Auto</button>
+          </div>
+          <div class="ambient-controls">
+            <button id="ambientPlayBtn" type="button">Play Ambient</button>
+            <button id="ambientStopBtn" type="button">Stop Ambient</button>
+          </div>
+          <p id="ambientStatus" class="meaning"></p>
           <div class="ai-actions">
             <button id="applyMoodBtn" type="button">Apply mood</button>
           </div>
@@ -265,6 +281,17 @@
         <summary>Aru Padai Veedu (6 Abodes of Murugan)</summary>
         <ul id="muruganAruList"></ul>
       </details>
+    </section>
+
+    <section id="ritualJournal" class="mantra-info" aria-live="polite">
+      <h3>Daily Ritual Journal</h3>
+      <p id="ritualJournalQuote" class="meaning">“Mantra aligns breath, thought, and intention.”</p>
+      <label class="script-mode subtle" for="ritualJournalEntry">Today’s prompt</label>
+      <textarea id="ritualJournalEntry" rows="3" placeholder="Today I will chant with..." aria-label="Ritual journal entry"></textarea>
+      <div class="ai-actions">
+        <button id="saveJournalBtn" type="button">Save Entry</button>
+      </div>
+      <p id="journalStatus" class="meaning"></p>
     </section>
   </main>
 

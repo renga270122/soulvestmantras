@@ -426,7 +426,6 @@ const searchInput = document.getElementById("searchInput");
 const typeSelect = document.getElementById("typeSelect");
 const entitySelect = document.getElementById("entitySelect");
 const mantraSelect = document.getElementById("mantraSelect");
-const famousVariantSelect = document.getElementById("famousVariantSelect");
 const scriptSelect = document.getElementById("scriptSelect");
 const resultCount = document.getElementById("resultCount");
 const toast = document.getElementById("toast");
@@ -514,11 +513,25 @@ const moodSelect = document.getElementById("moodSelect");
 const emotionInput = document.getElementById("emotionInput");
 const applyMoodBtn = document.getElementById("applyMoodBtn");
 const moodStatus = document.getElementById("moodStatus");
+const moodIconography = document.getElementById("moodIconography");
+const spiritualIntensityRange = document.getElementById("spiritualIntensityRange");
+const spiritualIntensityValue = document.getElementById("spiritualIntensityValue");
+const visualModeToggle = document.getElementById("visualModeToggle");
+const morningThemeBtn = document.getElementById("morningThemeBtn");
+const eveningThemeBtn = document.getElementById("eveningThemeBtn");
+const nightThemeBtn = document.getElementById("nightThemeBtn");
+const autoThemeBtn = document.getElementById("autoThemeBtn");
+const ambientPlayBtn = document.getElementById("ambientPlayBtn");
+const ambientStopBtn = document.getElementById("ambientStopBtn");
+const ambientStatus = document.getElementById("ambientStatus");
+const ritualJournalQuote = document.getElementById("ritualJournalQuote");
+const ritualJournalEntry = document.getElementById("ritualJournalEntry");
+const saveJournalBtn = document.getElementById("saveJournalBtn");
+const journalStatus = document.getElementById("journalStatus");
 
 const imageCache = new Map();
 let selectedEntity = "";
 let selectedMantraKey = "famous";
-let famousVariantByEntity = {};
 let latestImageRequestId = 0;
 let chantCount = 0;
 let chantTarget = 11;
@@ -554,6 +567,11 @@ let voiceAccent = "tamil";
 let voiceLoop = true;
 let shouldKeepSpeaking = false;
 let selectedMood = "auto";
+let spiritualIntensity = 2;
+let visualMinimalMode = false;
+let manualTimeTheme = "auto";
+let ambientOscillatorRef = null;
+let ambientGainRef = null;
 let templeRenderRequestId = 0;
 const templeMetaCache = new Map();
 
@@ -564,6 +582,7 @@ const SANKALPA_KEY = "chant_helper_sankalpa_v1";
 const REMINDER_KEY = "chant_helper_reminder_v1";
 const SOUND_PREF_KEY = "chant_helper_sound_pref_v1";
 const AI_PREF_KEY = "chant_helper_ai_pref_v1";
+const JOURNAL_KEY = "chant_helper_ritual_journal_v1";
 
 const mantraOfDayByWeekday = {
   0: "Surya (Sun)",
@@ -752,6 +771,16 @@ const didYouKnowMessages = [
   "In practice, many devotees start with a famous mantra and then continue with beej japa for focused inner absorption.",
   "Gayatri mantras invoke illumination of intellect, while beej mantras emphasize concentrated divine vibration.",
   "A fixed daily count such as 11, 21, 51, or 108 helps beej mantra practice become stable and disciplined."
+];
+
+const dailyRitualQuotes = [
+  "Steady repetition purifies thought and strengthens intention.",
+  "One mindful round is better than many distracted rounds.",
+  "Silence after mantra lets the prayer settle within.",
+  "Discipline in small daily steps builds deep spiritual momentum.",
+  "Breath, mantra, and awareness together create inner balance.",
+  "A humble sankalpa makes every chant meaningful.",
+  "Devotion grows when practice is regular, calm, and sincere."
 ];
 
 const ritualGuidanceByName = {
@@ -1535,12 +1564,179 @@ function moodFromEmotionInput(rawText) {
   return "";
 }
 
+function moodGlyphAndLabel(mood) {
+  if (mood === "festive") return { glyph: "🔔", label: "Festive" };
+  if (mood === "devotional") return { glyph: "🪔", label: "Devotional" };
+  return { glyph: "🕉️", label: "Calm" };
+}
+
+function renderMoodIconography(mood) {
+  if (!moodIconography) return;
+  const { glyph, label } = moodGlyphAndLabel(mood);
+  moodIconography.textContent = `${glyph} ${label}`;
+}
+
+function deriveTimeThemeFromClock() {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) return "morning";
+  if (hour >= 12 && hour < 19) return "evening";
+  return "night";
+}
+
+function applyTimeTheme(theme = "auto") {
+  const nextTheme = theme === "auto" ? deriveTimeThemeFromClock() : theme;
+  document.body.dataset.timeTheme = nextTheme;
+}
+
+function intensityLabel(level) {
+  if (level <= 1) return "Light";
+  if (level >= 3) return "Deep";
+  return "Medium";
+}
+
+function renderSpiritualIntensity() {
+  if (spiritualIntensityRange) {
+    spiritualIntensityRange.value = String(spiritualIntensity);
+  }
+  if (spiritualIntensityValue) {
+    spiritualIntensityValue.textContent = intensityLabel(spiritualIntensity);
+  }
+}
+
+function speechRateForIntensity() {
+  if (spiritualIntensity <= 1) return 0.95;
+  if (spiritualIntensity >= 3) return 0.75;
+  return 0.85;
+}
+
+function speechPitchForIntensity() {
+  if (spiritualIntensity <= 1) return 1.02;
+  if (spiritualIntensity >= 3) return 0.9;
+  return 0.96;
+}
+
 function applyMoodTheme(mood, reasonText = "") {
   const nextMood = mood === "auto" ? deriveAutoMood() : mood;
   document.body.dataset.mood = nextMood;
+  renderMoodIconography(nextMood);
+  applyTimeTheme(manualTimeTheme);
   if (moodStatus) {
     const reason = reasonText ? ` ${reasonText}` : "";
     moodStatus.textContent = `Mood active: ${nextMood}.${reason}`;
+  }
+}
+
+function setMinimalVisualMode(enabled) {
+  visualMinimalMode = Boolean(enabled);
+  document.body.classList.toggle("minimal-visual-mode", visualMinimalMode);
+  if (visualModeToggle) {
+    visualModeToggle.checked = visualMinimalMode;
+  }
+}
+
+function startAmbientPad() {
+  const audioCtx = getAudioContext();
+  if (!audioCtx) {
+    if (ambientStatus) {
+      ambientStatus.textContent = "Ambient audio is not supported in this browser.";
+    }
+    return;
+  }
+
+  if (ambientOscillatorRef && ambientGainRef) {
+    if (ambientStatus) {
+      ambientStatus.textContent = "Ambient audio is already playing.";
+    }
+    return;
+  }
+
+  const baseSa = 146.83;
+  const pa = baseSa * 1.5;
+
+  const gainNode = audioCtx.createGain();
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = "lowpass";
+  filter.frequency.setValueAtTime(1900, audioCtx.currentTime);
+  gainNode.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.018, audioCtx.currentTime + 1.2);
+
+  const makeDroneOsc = (frequency, detuneCents = 0) => {
+    const osc = audioCtx.createOscillator();
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+    osc.detune.setValueAtTime(detuneCents, audioCtx.currentTime);
+    osc.connect(filter);
+    osc.start();
+    return osc;
+  };
+
+  const oscillators = [
+    makeDroneOsc(baseSa, -2),
+    makeDroneOsc(pa, 1),
+    makeDroneOsc(baseSa * 2, 0),
+  ];
+
+  filter.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  ambientOscillatorRef = oscillators;
+  ambientGainRef = gainNode;
+  if (ambientStatus) {
+    ambientStatus.textContent = "Ambient tanpura-style drone playing.";
+  }
+}
+
+function stopAmbientPad() {
+  if (ambientGainRef && audioContextRef) {
+    ambientGainRef.gain.cancelScheduledValues(audioContextRef.currentTime);
+    ambientGainRef.gain.setValueAtTime(Math.max(ambientGainRef.gain.value, 0.0001), audioContextRef.currentTime);
+    ambientGainRef.gain.exponentialRampToValueAtTime(0.0001, audioContextRef.currentTime + 0.35);
+  }
+
+  const oscillators = Array.isArray(ambientOscillatorRef)
+    ? ambientOscillatorRef
+    : ambientOscillatorRef
+      ? [ambientOscillatorRef]
+      : [];
+  setTimeout(() => {
+    oscillators.forEach((oscillator) => {
+      try {
+        oscillator?.stop();
+      } catch {
+      }
+    });
+  }, 380);
+
+  ambientOscillatorRef = null;
+  ambientGainRef = null;
+  if (ambientStatus) {
+    ambientStatus.textContent = "Ambient audio stopped.";
+  }
+}
+
+function quoteOfTheDay() {
+  return dailyRitualQuotes[new Date().getDay() % dailyRitualQuotes.length];
+}
+
+function journalPromptForItem(item) {
+  if (!item) {
+    return "Today I will chant with steadiness and gratitude.";
+  }
+  if (item.type === "planet") {
+    return `Today I will align my practice with ${item.name} discipline by chanting with fixed count and calm breath.`;
+  }
+  if (item.type === "guru") {
+    return `Today I will honor ${item.name} through humility, clear chanting, and silent reflection.`;
+  }
+  return `Today I will invoke ${item.name} with devotion, clear pronunciation, and consistent mantra count.`;
+}
+
+function renderRitualJournal(item) {
+  if (ritualJournalQuote) {
+    ritualJournalQuote.textContent = `“${quoteOfTheDay()}”`;
+  }
+  if (ritualJournalEntry && !ritualJournalEntry.value.trim()) {
+    ritualJournalEntry.value = journalPromptForItem(item);
   }
 }
 
@@ -1548,10 +1744,23 @@ function pickVoiceForAccent(accent) {
   if (!("speechSynthesis" in window)) return { voice: null, lang: "en-IN" };
   const profile = voiceProfiles[accent] || voiceProfiles.tamil;
   const voices = window.speechSynthesis.getVoices();
+
+  const devotionalHint = /(india|tamil|hindi|sanskrit|bharat|devanagari)/i;
   for (const lang of profile.langs) {
     const matched = voices.find((voice) => voice.lang && voice.lang.toLowerCase().startsWith(lang.toLowerCase()));
     if (matched) return { voice: matched, lang: matched.lang };
   }
+
+  const indiaPreferred = voices.find((voice) => devotionalHint.test(`${voice.name || ""} ${voice.lang || ""}`));
+  if (indiaPreferred) {
+    return { voice: indiaPreferred, lang: indiaPreferred.lang || profile.langs[0] || "en-IN" };
+  }
+
+  const enIndia = voices.find((voice) => (voice.lang || "").toLowerCase().startsWith("en-in"));
+  if (enIndia) {
+    return { voice: enIndia, lang: enIndia.lang || "en-IN" };
+  }
+
   return { voice: voices[0] || null, lang: profile.langs[0] || "en-IN" };
 }
 
@@ -1594,8 +1803,8 @@ function speakCurrentMantra() {
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.voice = voice;
   utterance.lang = lang;
-  utterance.rate = 0.9;
-  utterance.pitch = 1;
+  utterance.rate = speechRateForIntensity();
+  utterance.pitch = speechPitchForIntensity();
   utterance.onend = () => {
     if (shouldKeepSpeaking && voiceLoop) {
       setTimeout(() => {
@@ -1606,7 +1815,7 @@ function speakCurrentMantra() {
 
   const label = voiceProfiles[voiceAccent]?.label || "Selected";
   if (voiceStatus) {
-    voiceStatus.textContent = `Playing ${label} voice chant${voiceLoop ? " on loop" : ""}.`;
+    voiceStatus.textContent = `Playing ${label} voice chant${voiceLoop ? " on loop" : ""} at ${intensityLabel(spiritualIntensity)} intensity.`;
   }
   window.speechSynthesis.speak(utterance);
 }
@@ -1857,16 +2066,38 @@ function playTone(frequency, durationMs, volume = 0.08, waveType = "sine", start
   oscillator.stop(now + durationMs / 1000 + 0.03);
 }
 
+function playTempleBellStrike(baseFrequency = 432, startDelayMs = 0, totalDurationMs = 900, volume = 0.05) {
+  const audioCtx = getAudioContext();
+  if (!audioCtx) return;
+
+  const now = audioCtx.currentTime + startDelayMs / 1000;
+  const harmonicRatios = [1, 2.7, 4.1];
+  const gain = audioCtx.createGain();
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(volume, now + 0.015);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + totalDurationMs / 1000);
+  gain.connect(audioCtx.destination);
+
+  harmonicRatios.forEach((ratio, index) => {
+    const oscillator = audioCtx.createOscillator();
+    oscillator.type = index === 0 ? "sine" : "triangle";
+    oscillator.frequency.setValueAtTime(baseFrequency * ratio, now);
+    oscillator.connect(gain);
+    oscillator.start(now);
+    oscillator.stop(now + totalDurationMs / 1000 + 0.03);
+  });
+}
+
 function playSessionStartSound() {
   if (!soundSettings.enabled) return;
-  playTone(523.25, 260, 0.08, "sine", 0);
-  playTone(659.25, 220, 0.06, "triangle", 120);
+  playTempleBellStrike(392, 0, 900, 0.05);
+  playTempleBellStrike(588, 140, 760, 0.04);
 }
 
 function playSessionEndSound() {
   if (!soundSettings.enabled) return;
-  playTone(784, 240, 0.07, "sine", 0);
-  playTone(587.33, 300, 0.05, "triangle", 150);
+  playTempleBellStrike(588, 0, 760, 0.04);
+  playTempleBellStrike(392, 130, 920, 0.05);
 }
 
 function setBreathPhase(isInhale) {
@@ -2113,34 +2344,11 @@ function famousVariantsForItem(item) {
 
 function currentFamousVariant(item) {
   const variants = famousVariantsForItem(item);
-  const savedIndex = Number(famousVariantByEntity[item.name] || 0);
-  const index = Number.isNaN(savedIndex) ? 0 : Math.min(Math.max(savedIndex, 0), Math.max(variants.length - 1, 0));
-  famousVariantByEntity[item.name] = index;
   return {
-    variant: variants[index] || variants[0] || null,
-    index,
+    variant: variants[0] || null,
+    index: 0,
     total: variants.length,
   };
-}
-
-function renderFamousVariantOptions(item) {
-  if (!famousVariantSelect) return;
-  if (!item || selectedMantraKey !== "famous") {
-    famousVariantSelect.classList.add("hidden");
-    famousVariantSelect.innerHTML = "";
-    return;
-  }
-
-  const variants = famousVariantsForItem(item);
-  famousVariantSelect.classList.remove("hidden");
-  famousVariantSelect.innerHTML = variants
-    .map((variant, index) => `<option value="${index}">${variant.title || `Famous Mantra ${index + 1}`}</option>`)
-    .join("");
-
-  const savedIndex = Number(famousVariantByEntity[item.name] || 0);
-  const safeIndex = Number.isNaN(savedIndex) ? 0 : Math.min(Math.max(savedIndex, 0), Math.max(variants.length - 1, 0));
-  famousVariantByEntity[item.name] = safeIndex;
-  famousVariantSelect.value = String(safeIndex);
 }
 
 function savePrefs() {
@@ -2155,7 +2363,9 @@ function savePrefs() {
     voiceAccent,
     voiceLoop,
     selectedMood,
-    famousVariantByEntity,
+    spiritualIntensity,
+    visualMinimalMode,
+    manualTimeTheme,
   };
   localStorage.setItem(PREF_KEY, JSON.stringify(payload));
 }
@@ -2213,8 +2423,14 @@ function loadPrefs() {
       selectedMood = prefs.selectedMood;
       moodSelect.value = selectedMood;
     }
-    if (prefs?.famousVariantByEntity && typeof prefs.famousVariantByEntity === "object") {
-      famousVariantByEntity = prefs.famousVariantByEntity;
+    if (typeof prefs?.spiritualIntensity === "number") {
+      spiritualIntensity = Math.min(3, Math.max(1, Math.floor(prefs.spiritualIntensity)));
+    }
+    if (typeof prefs?.visualMinimalMode === "boolean") {
+      visualMinimalMode = prefs.visualMinimalMode;
+    }
+    if (typeof prefs?.manualTimeTheme === "string") {
+      manualTimeTheme = prefs.manualTimeTheme;
     }
   } catch {
   }
@@ -2474,6 +2690,29 @@ function loadAiPrefs() {
     }
     if (emotionInput && typeof parsed?.emotion === "string") {
       emotionInput.value = parsed.emotion;
+    }
+  } catch {
+  }
+}
+
+function saveJournalEntry() {
+  if (!ritualJournalEntry) return;
+  const payload = {
+    text: ritualJournalEntry.value || "",
+    date: formatDateKey(new Date()),
+  };
+  localStorage.setItem(JOURNAL_KEY, JSON.stringify(payload));
+}
+
+function loadJournalEntry() {
+  if (!ritualJournalEntry) return;
+  try {
+    const raw = localStorage.getItem(JOURNAL_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return;
+    if (parsed.date === formatDateKey(new Date()) && typeof parsed.text === "string") {
+      ritualJournalEntry.value = parsed.text;
     }
   } catch {
   }
@@ -2958,6 +3197,7 @@ function render() {
     renderChantAssistant(null);
     renderExperienceMode(null);
     renderYouShouldKnow(null);
+    renderRitualJournal(null);
   } else {
     let selectedItem = list.find((item) => item.name === selectedEntity);
     if (!selectedItem) {
@@ -2968,8 +3208,6 @@ function render() {
       }
     }
 
-    renderFamousVariantOptions(selectedItem);
-
     grid.innerHTML = buildCard(selectedItem, mode);
     resultCount.textContent = "Full page view for selected entry";
     renderExperienceMode(selectedItem);
@@ -2977,10 +3215,7 @@ function render() {
     renderChantAssistant(selectedItem);
     renderYouShouldKnow(selectedItem);
     renderTempleInfo(selectedItem);
-  }
-
-  if (!list.length) {
-    renderFamousVariantOptions(null);
+    renderRitualJournal(selectedItem);
   }
 
   renderFeatured();
@@ -3059,6 +3294,9 @@ typeSelect.addEventListener("change", () => {
   render();
 });
 entitySelect.addEventListener("change", () => {
+  if (searchInput.value) {
+    searchInput.value = "";
+  }
   selectedEntity = entitySelect.value;
   chantCount = 0;
   render();
@@ -3068,16 +3306,6 @@ mantraSelect.addEventListener("change", () => {
   chantCount = 0;
   render();
 });
-if (famousVariantSelect) {
-  famousVariantSelect.addEventListener("change", () => {
-    const item = activeItem();
-    if (!item) return;
-    const nextIndex = Number(famousVariantSelect.value);
-    famousVariantByEntity[item.name] = Number.isNaN(nextIndex) ? 0 : nextIndex;
-    chantCount = 0;
-    render();
-  });
-}
 scriptSelect.addEventListener("change", render);
 if (experienceModeSelect) {
   experienceModeSelect.addEventListener("change", () => {
@@ -3198,6 +3426,65 @@ if (moodSelect) {
   });
 }
 
+if (spiritualIntensityRange) {
+  spiritualIntensityRange.addEventListener("input", () => {
+    spiritualIntensity = Number(spiritualIntensityRange.value) || 2;
+    renderSpiritualIntensity();
+    savePrefs();
+  });
+}
+
+if (visualModeToggle) {
+  visualModeToggle.addEventListener("change", () => {
+    setMinimalVisualMode(visualModeToggle.checked);
+    savePrefs();
+  });
+}
+
+if (morningThemeBtn) {
+  morningThemeBtn.addEventListener("click", () => {
+    manualTimeTheme = "morning";
+    applyTimeTheme(manualTimeTheme);
+    savePrefs();
+  });
+}
+
+if (eveningThemeBtn) {
+  eveningThemeBtn.addEventListener("click", () => {
+    manualTimeTheme = "evening";
+    applyTimeTheme(manualTimeTheme);
+    savePrefs();
+  });
+}
+
+if (nightThemeBtn) {
+  nightThemeBtn.addEventListener("click", () => {
+    manualTimeTheme = "night";
+    applyTimeTheme(manualTimeTheme);
+    savePrefs();
+  });
+}
+
+if (autoThemeBtn) {
+  autoThemeBtn.addEventListener("click", () => {
+    manualTimeTheme = "auto";
+    applyTimeTheme(manualTimeTheme);
+    savePrefs();
+  });
+}
+
+if (ambientPlayBtn) {
+  ambientPlayBtn.addEventListener("click", () => {
+    startAmbientPad();
+  });
+}
+
+if (ambientStopBtn) {
+  ambientStopBtn.addEventListener("click", () => {
+    stopAmbientPad();
+  });
+}
+
 if (applyMoodBtn) {
   applyMoodBtn.addEventListener("click", () => {
     const emotionMood = moodFromEmotionInput(emotionInput?.value || "");
@@ -3210,6 +3497,16 @@ if (applyMoodBtn) {
     applyMoodTheme(targetMood, reason);
     saveAiPrefs();
     savePrefs();
+  });
+}
+
+if (saveJournalBtn) {
+  saveJournalBtn.addEventListener("click", () => {
+    saveJournalEntry();
+    if (journalStatus) {
+      journalStatus.textContent = "Journal entry saved for today.";
+    }
+    showToast("Ritual journal saved");
   });
 }
 
@@ -3324,13 +3621,27 @@ loadReminderSettings();
 loadSoundPrefs();
 populateAiDeityOptions();
 loadAiPrefs();
+loadJournalEntry();
 populateEntityOptions();
+renderSpiritualIntensity();
+setMinimalVisualMode(visualMinimalMode);
 applyMoodTheme(selectedMood);
+applyTimeTheme(manualTimeTheme);
 render();
 startRotatingMessages();
 renderReminderSettings();
 startReminderScheduler();
 renderSoundToggle();
+
+setInterval(() => {
+  if (manualTimeTheme === "auto") {
+    applyTimeTheme("auto");
+  }
+}, 60000);
+
+window.addEventListener("beforeunload", () => {
+  stopAmbientPad();
+});
 
 if (footerYear) {
   footerYear.textContent = String(new Date().getFullYear());

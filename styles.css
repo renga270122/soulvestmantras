@@ -59,6 +59,46 @@ body[data-mood="festive"] {
   --accent-soft: #ffe4d6;
 }
 
+body[data-time-theme="morning"] {
+  background:
+    radial-gradient(circle at 12% 0%, #fff8e4 0, #fff5d6 24%, transparent 58%),
+    radial-gradient(circle at 88% 10%, #ffe7bc 0, transparent 42%),
+    linear-gradient(160deg, #fffaf0 0, #f8edd6 100%);
+}
+
+body[data-time-theme="evening"] {
+  background:
+    radial-gradient(circle at 18% -4%, #ffe9d8 0, #ffd9ba 28%, transparent 58%),
+    radial-gradient(circle at 86% 8%, #ffd2b8 0, transparent 44%),
+    linear-gradient(165deg, #fff2e8 0, #efd9cb 100%);
+}
+
+body[data-time-theme="night"] {
+  --text: #f5f0e8;
+  --muted: #dbcdb8;
+  --surface: #221d18;
+  --border: #4f4032;
+  background:
+    radial-gradient(circle at 16% 0%, #352f4f 0, #25213a 30%, transparent 62%),
+    radial-gradient(circle at 85% 12%, #2a2540 0, transparent 44%),
+    linear-gradient(170deg, #1a1727 0, #141220 100%);
+}
+
+body.minimal-visual-mode::before,
+body.minimal-visual-mode .hero::before,
+body.minimal-visual-mode .hero::after,
+body.minimal-visual-mode .welcome-banner::after {
+  opacity: 0.08;
+}
+
+body.minimal-visual-mode .card,
+body.minimal-visual-mode .mantra-info,
+body.minimal-visual-mode .featured,
+body.minimal-visual-mode .hero,
+body.minimal-visual-mode .welcome-banner {
+  box-shadow: none;
+}
+
 .hero {
   position: relative;
   border: 1px solid var(--border);
@@ -100,6 +140,22 @@ body[data-mood="festive"] {
   display: flex;
   align-items: flex-start;
   gap: 18px;
+}
+
+.hero-symbols {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding-top: 6px;
+}
+
+.lamp-icon,
+.moon-icon {
+  font-size: 1.45rem;
+}
+
+.lamp-icon {
+  animation: lampFlicker 2.3s ease-in-out infinite;
 }
 
 .hero-copy {
@@ -347,12 +403,8 @@ body[data-mood="festive"] {
 
 .controls {
   display: grid;
-  grid-template-columns: 1fr 170px 220px 210px 220px 250px 180px;
+  grid-template-columns: 1fr 170px 220px 210px 220px 250px;
   gap: 12px;
-}
-
-#famousVariantSelect.hidden {
-  display: none;
 }
 
 .quick-paths {
@@ -387,6 +439,54 @@ body[data-mood="festive"] {
   background: #fffdf9;
   display: grid;
   gap: 8px;
+}
+
+body[data-time-theme="night"] .ai-card,
+body[data-time-theme="night"] .hero-copy,
+body[data-time-theme="night"] .did-you-know,
+body[data-time-theme="night"] .rotating-message,
+body[data-time-theme="night"] #meditationOverlay,
+body[data-time-theme="night"] .temple-card {
+  background: #2a221b;
+  color: var(--text);
+}
+
+.subtle {
+  opacity: 0.9;
+}
+
+.mood-iconography {
+  font-weight: 700;
+  color: var(--accent);
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.intensity-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#spiritualIntensityRange {
+  min-height: auto;
+  width: 100%;
+}
+
+.time-theme-controls,
+.ambient-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.time-theme-controls button,
+.ambient-controls button {
+  border-radius: 10px;
+  min-height: 38px;
+  padding: 6px 10px;
 }
 
 .ai-actions {
@@ -521,6 +621,17 @@ button:focus-visible {
   font-size: 0.95rem;
 }
 
+textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--text);
+  resize: vertical;
+}
+
 .actions {
   margin-top: 12px;
   display: flex;
@@ -552,6 +663,18 @@ button:active {
   }
   50% {
     box-shadow: 0 3px 14px rgba(177, 77, 0, 0.22);
+  }
+}
+
+@keyframes lampFlicker {
+  0%,
+  100% {
+    transform: scale(1) rotate(-2deg);
+    filter: drop-shadow(0 0 4px rgba(255, 180, 64, 0.45));
+  }
+  50% {
+    transform: scale(1.06) rotate(2deg);
+    filter: drop-shadow(0 0 8px rgba(255, 180, 64, 0.75));
   }
 }
 
