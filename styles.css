@@ -738,6 +738,43 @@ button:active {
   margin: 0 0 8px;
 }
 
+.sloka-library-wrap {
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: auto;
+  background: var(--surface);
+}
+
+.sloka-library-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+.sloka-library-table th,
+.sloka-library-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.sloka-library-table th {
+  color: var(--accent);
+  font-weight: 700;
+  background: rgba(255, 249, 240, 0.85);
+}
+
+.sloka-library-table td {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.sloka-library-table tr:last-child td {
+  border-bottom: none;
+}
+
 .pill-list {
   display: flex;
   gap: 8px;

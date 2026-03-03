@@ -442,6 +442,9 @@ const entitySelect = document.getElementById("entitySelect");
 const mantraSelect = document.getElementById("mantraSelect");
 const scriptSelect = document.getElementById("scriptSelect");
 const resultCount = document.getElementById("resultCount");
+const slokaLibrarySearch = document.getElementById("slokaLibrarySearch");
+const slokaLibraryBody = document.getElementById("slokaLibraryBody");
+const slokaLibraryCount = document.getElementById("slokaLibraryCount");
 const toast = document.getElementById("toast");
 const featured = document.getElementById("featured");
 const featuredImage = document.getElementById("featuredImage");
@@ -2750,6 +2753,33 @@ function renderQuickPaths() {
   });
 }
 
+function renderSlokaLibrary() {
+  if (!slokaLibraryBody) return;
+
+  const query = String(slokaLibrarySearch?.value || "").trim().toLowerCase();
+  const rows = mantras.filter((item) => {
+    if (!query) return true;
+    const haystack = `${item.name} ${item.type} ${item.famousIast || ""} ${item.purpose || ""}`.toLowerCase();
+    return haystack.includes(query);
+  });
+
+  slokaLibraryBody.innerHTML = rows.map((item) => {
+    const typeText = item.type === "planet" ? "Planet" : item.type === "guru" ? "Guru" : "God";
+    return `
+      <tr>
+        <td>${item.name}</td>
+        <td>${typeText}</td>
+        <td>${item.famousIast || "-"}</td>
+        <td>${item.purpose || "-"}</td>
+      </tr>
+    `;
+  }).join("");
+
+  if (slokaLibraryCount) {
+    slokaLibraryCount.textContent = `${rows.length} slokas shown`;
+  }
+}
+
 function reminderShouldTrigger(now = new Date()) {
   if (!reminderSettings.enabled) {
     return false;
@@ -3238,6 +3268,7 @@ function render() {
   renderSankalpaTracker();
   renderAiSuggestion();
   renderQuickPaths();
+  renderSlokaLibrary();
   savePrefs();
 }
 
@@ -3302,6 +3333,11 @@ searchInput.addEventListener("input", () => {
   }
   render();
 });
+if (slokaLibrarySearch) {
+  slokaLibrarySearch.addEventListener("input", () => {
+    renderSlokaLibrary();
+  });
+}
 typeSelect.addEventListener("change", () => {
   populateEntityOptions();
   chantCount = 0;
