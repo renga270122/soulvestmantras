@@ -101,11 +101,14 @@ body.minimal-visual-mode .welcome-banner {
 
 .hero {
   position: relative;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(200, 157, 112, 0.55);
   border-radius: 22px;
-  background: linear-gradient(140deg, #fffefb 0, #fff6ea 48%, #ffedd8 100%);
-  padding: 20px;
-  box-shadow: 0 10px 28px rgba(48, 40, 30, 0.12);
+  background:
+    radial-gradient(circle at 10% 6%, rgba(255, 249, 235, 0.95) 0, rgba(255, 249, 235, 0) 36%),
+    radial-gradient(circle at 88% 10%, rgba(255, 213, 163, 0.42) 0, rgba(255, 213, 163, 0) 42%),
+    linear-gradient(132deg, #fffdf8 0, #fff2df 50%, #ffe3c3 100%);
+  padding: 22px;
+  box-shadow: 0 14px 34px rgba(48, 40, 30, 0.16);
   margin-bottom: 14px;
   overflow: hidden;
 }
@@ -118,22 +121,22 @@ body.minimal-visual-mode .welcome-banner {
 .hero::before {
   content: "";
   position: absolute;
-  inset: -55% auto auto -10%;
-  width: 340px;
-  height: 340px;
+  inset: -52% auto auto -8%;
+  width: 380px;
+  height: 380px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 233, 214, 0.68) 0, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 241, 218, 0.88) 0, transparent 70%);
 }
 
 .hero::after {
-  content: "✦ ✦";
+  content: "✦ ॐ ✦";
   position: absolute;
-  top: 12px;
-  right: 14px;
+  top: 11px;
+  right: 16px;
   color: var(--accent);
-  opacity: 0.8;
-  font-size: 1rem;
-  letter-spacing: 0.24em;
+  opacity: 0.88;
+  font-size: 0.95rem;
+  letter-spacing: 0.2em;
 }
 
 .hero-head {
@@ -142,82 +145,131 @@ body.minimal-visual-mode .welcome-banner {
   gap: 18px;
 }
 
+.hero-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 128px;
+}
+
 .hero-symbols {
-  display: grid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   justify-items: center;
-  gap: 8px;
+  gap: 0;
   padding-top: 6px;
-}
-
-.lamp-icon,
-.moon-icon {
-  font-size: 1.45rem;
-}
-
-.lamp-icon {
-  animation: lampFlicker 2.3s ease-in-out infinite;
 }
 
 .hero-copy {
   flex: 1;
-  background: rgba(255, 253, 248, 0.72);
-  border: 1px solid rgba(234, 220, 201, 0.9);
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.78), rgba(255, 247, 234, 0.7));
+  border: 1px solid rgba(218, 186, 152, 0.72);
   border-radius: 14px;
-  padding: 10px 12px;
+  padding: 12px 14px;
+  backdrop-filter: blur(1.2px);
 }
 
 .hero-kicker {
   margin: 0;
-  color: #0b3ea8;
-  font-size: 0.98rem;
-  font-weight: 900;
+  color: #8f3f08;
+  font-size: 0.86rem;
+  font-weight: 700;
+  font-family: var(--font-display);
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  text-shadow: none;
+  letter-spacing: 0.2em;
 }
 
 .divine-logo {
-  width: 66px;
-  height: 66px;
+  width: 78px;
+  height: 78px;
   border-radius: 50%;
-  border: 2px solid #ffd84a;
-  background: radial-gradient(circle at 35% 30%, #0f3272 0, #072057 45%, #031137 100%);
+  border: 3px solid #ffefad;
+  background:
+    radial-gradient(circle at 34% 26%, #3b78e0 0, #1a4fa8 40%, #0b2b73 75%, #06184a 100%);
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: visible;
   box-shadow:
-    0 0 10px rgba(255, 207, 64, 0.9),
-    0 0 24px rgba(255, 207, 64, 0.55),
-    inset 0 0 8px rgba(255, 223, 107, 0.45);
+    0 0 16px rgba(255, 219, 104, 0.95),
+    0 0 34px rgba(255, 219, 104, 0.75),
+    0 0 66px rgba(255, 219, 104, 0.5),
+    inset 0 0 12px rgba(255, 244, 194, 0.7);
   flex-shrink: 0;
-  animation: divinePulse 4.8s ease-in-out infinite;
+  animation: divinePulse 2.8s ease-in-out infinite;
+}
+
+.brand-logo-below-om {
+  width: 146px;
+  max-width: 26vw;
+  height: auto;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 0 8px rgba(255, 188, 96, 0.72))
+    drop-shadow(0 0 22px rgba(255, 160, 64, 0.58))
+    drop-shadow(0 8px 18px rgba(58, 32, 10, 0.35));
+  animation: brandLogoGlow 2.4s ease-in-out infinite;
+}
+
+.divine-logo::before,
+.divine-logo::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.divine-logo::before {
+  inset: -8px;
+  border: 2px solid rgba(255, 236, 161, 0.88);
+  box-shadow:
+    0 0 18px rgba(255, 230, 142, 0.9),
+    0 0 34px rgba(255, 211, 104, 0.72);
+  opacity: 0.95;
+  animation: logoAuraPulse 2.4s ease-in-out infinite;
+}
+
+.divine-logo::after {
+  inset: -13px;
+  border: 2px dashed rgba(255, 239, 188, 0.55);
+  transform-origin: center;
+  animation: logoOrbit 12s linear infinite;
 }
 
 .divine-logo-mark {
-  color: #ffd84a;
-  font-size: 2.85rem;
+  color: #fff4be;
+  font-size: 3.35rem;
   line-height: 1;
   font-weight: 900;
-  text-shadow: 0 0 6px rgba(255, 219, 107, 0.85), 0 0 16px rgba(255, 191, 43, 0.7);
+  text-shadow:
+    0 0 9px rgba(255, 245, 189, 0.95),
+    0 0 20px rgba(255, 217, 114, 0.95),
+    0 0 34px rgba(255, 193, 77, 0.8),
+    0 0 52px rgba(255, 176, 66, 0.54);
+  transform: translateY(-1px) scale(1.03);
 }
 
 .hero h1 {
-  margin: 6px 0 0;
-  font-size: 2.45rem;
+  margin: 8px 0 0;
+  font-size: clamp(2rem, 4vw, 2.85rem);
   font-family: var(--font-display);
   font-weight: 700;
-  color: #1f1a12;
-  letter-spacing: 0.015em;
-  line-height: 1.15;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+  color: #26170f;
+  letter-spacing: 0.03em;
+  line-height: 1.12;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .hero p {
-  margin: 12px 0 0;
-  color: #3f362a;
-  font-size: 1.02rem;
+  margin: 11px 0 0;
+  color: #4b3623;
+  font-size: 1.04rem;
   font-weight: 500;
-  max-width: 800px;
+  max-width: 780px;
+  line-height: 1.62;
 }
 
 .hero-chips {
@@ -228,20 +280,39 @@ body.minimal-visual-mode .welcome-banner {
 }
 
 .hero-chips span {
-  border: 1px solid #d5b895;
+  border: 1px solid rgba(177, 102, 39, 0.35);
   border-radius: 999px;
   padding: 7px 13px;
-  background: #fff9f0;
-  color: #8e3a00;
-  font-size: 0.76rem;
-  letter-spacing: 0.06em;
+  background: rgba(255, 250, 242, 0.92);
+  color: #9b4e0d;
+  font-size: 0.74rem;
+  letter-spacing: 0.085em;
   font-weight: 700;
   transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .hero-chips span:hover {
   transform: translateY(-1px);
-  background: #fff6ea;
+  background: #fff1df;
+}
+
+body[data-time-theme="night"] .hero {
+  border-color: rgba(154, 130, 104, 0.55);
+  background:
+    radial-gradient(circle at 12% 8%, rgba(77, 63, 106, 0.48) 0, rgba(77, 63, 106, 0) 42%),
+    radial-gradient(circle at 86% 14%, rgba(83, 62, 42, 0.38) 0, rgba(83, 62, 42, 0) 46%),
+    linear-gradient(135deg, #2b2236 0, #241f30 52%, #2a1f1a 100%);
+}
+
+body[data-time-theme="night"] .hero-copy {
+  background: rgba(36, 29, 24, 0.74);
+  border-color: rgba(141, 118, 93, 0.6);
+}
+
+body[data-time-theme="night"] .hero-kicker,
+body[data-time-theme="night"] .hero p,
+body[data-time-theme="night"] .hero h1 {
+  color: #f4e9d8;
 }
 
 .sacred-divider {
@@ -659,10 +730,62 @@ button:active {
 @keyframes divinePulse {
   0%,
   100% {
-    box-shadow: 0 2px 10px rgba(48, 40, 30, 0.08);
+    box-shadow:
+      0 0 10px rgba(255, 214, 94, 0.56),
+      0 0 24px rgba(255, 214, 94, 0.28),
+      inset 0 0 8px rgba(255, 240, 182, 0.38);
   }
   50% {
-    box-shadow: 0 3px 14px rgba(177, 77, 0, 0.22);
+    box-shadow:
+      0 0 15px rgba(255, 224, 126, 0.95),
+      0 0 34px rgba(255, 214, 94, 0.72),
+      0 0 56px rgba(255, 214, 94, 0.35),
+      inset 0 0 12px rgba(255, 245, 200, 0.66);
+  }
+}
+
+@keyframes logoAuraPulse {
+  0%,
+  100% {
+    opacity: 0.78;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes logoOrbit {
+  0% {
+    transform: rotate(0deg);
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: rotate(360deg);
+    opacity: 0.55;
+  }
+}
+
+@keyframes brandLogoGlow {
+  0%,
+  100% {
+    filter:
+      drop-shadow(0 0 8px rgba(255, 188, 96, 0.62))
+      drop-shadow(0 0 18px rgba(255, 160, 64, 0.44))
+      drop-shadow(0 8px 16px rgba(58, 32, 10, 0.3));
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 12px rgba(255, 206, 132, 0.92))
+      drop-shadow(0 0 28px rgba(255, 176, 75, 0.82))
+      drop-shadow(0 0 44px rgba(255, 142, 48, 0.46))
+      drop-shadow(0 10px 20px rgba(58, 32, 10, 0.4));
+    transform: translateY(-1px) scale(1.02);
   }
 }
 
@@ -1056,6 +1179,15 @@ button:active {
   .divine-logo {
     width: 54px;
     height: 54px;
+  }
+
+  .hero-brand {
+    min-width: 86px;
+  }
+
+  .brand-logo-below-om {
+    width: 108px;
+    max-width: 34vw;
   }
 
   .divine-logo-mark {
