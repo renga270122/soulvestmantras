@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Soulvest Mantra app</title>
+  <title>Soulvest Mantras</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -18,8 +18,8 @@
         </div>
         <div class="hero-copy">
           <p class="hero-kicker">Soulvest Sacred Space</p>
-          <h1>Soulvest Mantra app</h1>
-          <p>Explore gods, planets, and gurus with famous slokas/mantras, Gayatri mantras, and brief purpose/history notes.</p>
+          <h1>Soulvest Mantras</h1>
+          <p>Explore gods, planets, and gurus with famous slokas/mantras, Gayatri mantras and Beej Mantras</p>
           <div class="hero-chips" aria-hidden="true">
             <span>Daily Practice</span>
             <span>Navagraha Wisdom</span>
@@ -42,6 +42,16 @@
       </div>
     </section>
 
+    <section id="homeQuickAccess" class="mantra-info" aria-label="Quick spiritual paths">
+      <h3>Simplified Home</h3>
+      <p class="meaning">Pick your path directly and begin in one tap.</p>
+      <div class="quick-paths">
+        <button type="button" class="quick-path-btn" data-type="god" aria-label="Open Gods">🛕 Gods</button>
+        <button type="button" class="quick-path-btn" data-type="planet" aria-label="Open Planets">🪐 Planets</button>
+        <button type="button" class="quick-path-btn" data-type="guru" aria-label="Open Gurus">🧘 Gurus</button>
+      </div>
+    </section>
+
     <section class="controls" aria-label="Filters">
       <input id="searchInput" type="text" placeholder="Search deity, mantra, or meaning..." />
       <select id="typeSelect" aria-label="Type selector">
@@ -56,12 +66,61 @@
         <option value="gayatri">Gayatri Mantra</option>
         <option value="beej">Beej Mantra</option>
       </select>
+      <select id="famousVariantSelect" aria-label="Famous and traditional mantra variant selector"></select>
       <select id="scriptSelect" aria-label="Script selector">
         <option value="both">Show Devanagari + Tamil + Transliteration</option>
         <option value="devanagari">Show Devanagari only</option>
         <option value="tamil">Show Tamil only</option>
         <option value="iast">Show Transliteration only</option>
       </select>
+      <select id="experienceModeSelect" aria-label="Experience mode selector">
+        <option value="chant">Chant mode</option>
+        <option value="meditation">Meditation mode</option>
+        <option value="learning">Learning mode</option>
+      </select>
+    </section>
+
+    <section id="aiHub" class="mantra-info" aria-live="polite">
+      <h3>AI-Powered Enhancements</h3>
+      <div class="ai-grid">
+        <div class="ai-card">
+          <p class="script-mode">Personalized Mantra Suggestions</p>
+          <select id="aiDeitySelect" aria-label="Preferred deity for suggestions"></select>
+          <div class="ai-actions">
+            <button id="aiSuggestBtn" type="button">Suggest for me</button>
+            <button id="aiApplySuggestionBtn" type="button">Apply suggestion</button>
+          </div>
+          <p id="aiSuggestionText" class="meaning"></p>
+        </div>
+        <div class="ai-card">
+          <p class="script-mode">Voice AI Chant</p>
+          <select id="voiceAccentSelect" aria-label="Voice accent">
+            <option value="tamil">Tamil accent</option>
+            <option value="sanskrit">Sanskrit accent</option>
+            <option value="hindi">Hindi accent</option>
+          </select>
+          <label class="reminder-toggle"><input id="voiceLoopToggle" type="checkbox" checked /> Loop chant audio</label>
+          <div class="ai-actions">
+            <button id="voicePlayBtn" type="button">Play voice chant</button>
+            <button id="voiceStopBtn" type="button">Stop voice chant</button>
+          </div>
+          <p id="voiceStatus" class="meaning"></p>
+        </div>
+        <div class="ai-card">
+          <p class="script-mode">Mood-based UI</p>
+          <select id="moodSelect" aria-label="Mood selector">
+            <option value="auto">Auto (time based)</option>
+            <option value="calm">Calm</option>
+            <option value="devotional">Devotional</option>
+            <option value="festive">Festive</option>
+          </select>
+          <input id="emotionInput" type="text" placeholder="How do you feel? (e.g. calm, stressed, joyful)" />
+          <div class="ai-actions">
+            <button id="applyMoodBtn" type="button">Apply mood</button>
+          </div>
+          <p id="moodStatus" class="meaning"></p>
+        </div>
+      </div>
     </section>
 
     <section id="featured" class="featured hidden" aria-live="polite">
@@ -150,7 +209,7 @@
     </section>
 
     <section id="chantAssistant" class="mantra-info hidden" aria-live="polite">
-      <h3>Quick Chant Mode</h3>
+      <h3>Chant Mode</h3>
       <p id="chantTitle" class="featured-type"></p>
       <p id="chantScriptModeLabel" class="script-mode"></p>
       <p id="chantTextDevanagari" class="chant-text devanagari"></p>
@@ -179,8 +238,27 @@
       <p id="chantProgress" class="meaning"></p>
     </section>
 
+    <section id="meditationMode" class="mantra-info hidden" aria-live="polite">
+      <h3>Meditation Mode</h3>
+      <p id="meditationTitle" class="featured-type"></p>
+      <p id="meditationOverlay" class="chant-text"></p>
+      <div class="chant-controls">
+        <label for="meditationDurationSelect">Timer</label>
+        <select id="meditationDurationSelect" aria-label="Meditation duration">
+          <option value="60">1 min</option>
+          <option value="300">5 min</option>
+          <option value="600">10 min</option>
+          <option value="900">15 min</option>
+        </select>
+        <button id="startMeditationBtn" type="button">Start</button>
+        <button id="stopMeditationBtn" type="button">Stop</button>
+      </div>
+      <p id="meditationTimerText" class="meaning">Meditation timer not running.</p>
+    </section>
+
     <section id="templeInfo" class="mantra-info hidden" aria-live="polite">
-      <h3 id="templeInfoTitle">Famous Temples in Tamil Nadu</h3>
+      <h3 id="templeInfoTitle">Ritual Guidance</h3>
+      <div id="templeCards" class="temple-cards"></div>
       <ul id="templeList"></ul>
       <p id="templeFallback" class="meaning hidden"></p>
       <details id="muruganAruDetails" class="hidden">
@@ -191,7 +269,7 @@
   </main>
 
   <footer class="site-footer" aria-label="Copyright footer">
-    <p>© <span id="footerYear"></span> Soulvest Mantra app. All rights reserved.</p>
+    <p>© <span id="footerYear"></span> Soulvest Mantras. All rights reserved.</p>
   </footer>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>

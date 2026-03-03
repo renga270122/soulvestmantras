@@ -146,9 +146,9 @@ const mantras = [
     purpose: "For wisdom, guru kripa, silence-based meditation, and removal of ignorance.",
     brief:
       "Dhakshinamoorthy is Shiva as the primordial guru, imparting highest knowledge through silence and inner awakening.",
-    famousTitle: "Famous Mantra",
-    famousDevanagari: "ॐ नमो भगवते दक्षिणामूर्तये॥",
-    famousIast: "oṃ namo bhagavate dakṣiṇāmūrtaye ||",
+    famousTitle: "Famous Guru Sloka",
+    famousDevanagari: "गुरुर्ब्रह्मा गुरुर्विष्णुः गुरुर्देवो महेश्वरः । गुरुः साक्षात् परं ब्रह्म तस्मै श्रीगुरवे नमः॥",
+    famousIast: "gururbrahmā gururviṣṇuḥ gururdevo maheśvaraḥ | guruḥ sākṣāt paraṃ brahma tasmai śrīgurave namaḥ ||",
     gayatriTitle: "Gayatri Mantra",
     gayatriDevanagari: "ॐ दक्षिणामूर्तये विद्महे ज्ञानरूपाय धीमहि तन्नो धीशः प्रचोदयात्॥",
     gayatriIast: "oṃ dakṣiṇāmūrtaye vidmahe jñānarūpāya dhīmahi tanno dhīśaḥ pracodayāt ||"
@@ -426,6 +426,7 @@ const searchInput = document.getElementById("searchInput");
 const typeSelect = document.getElementById("typeSelect");
 const entitySelect = document.getElementById("entitySelect");
 const mantraSelect = document.getElementById("mantraSelect");
+const famousVariantSelect = document.getElementById("famousVariantSelect");
 const scriptSelect = document.getElementById("scriptSelect");
 const resultCount = document.getElementById("resultCount");
 const toast = document.getElementById("toast");
@@ -490,10 +491,34 @@ const reminderTimeInput = document.getElementById("reminderTimeInput");
 const reminderMessageInput = document.getElementById("reminderMessageInput");
 const saveReminderBtn = document.getElementById("saveReminderBtn");
 const reminderStatus = document.getElementById("reminderStatus");
+const homeQuickAccess = document.getElementById("homeQuickAccess");
+const experienceModeSelect = document.getElementById("experienceModeSelect");
+const meditationMode = document.getElementById("meditationMode");
+const meditationTitle = document.getElementById("meditationTitle");
+const meditationOverlay = document.getElementById("meditationOverlay");
+const meditationDurationSelect = document.getElementById("meditationDurationSelect");
+const startMeditationBtn = document.getElementById("startMeditationBtn");
+const stopMeditationBtn = document.getElementById("stopMeditationBtn");
+const meditationTimerText = document.getElementById("meditationTimerText");
+const templeCards = document.getElementById("templeCards");
+const aiDeitySelect = document.getElementById("aiDeitySelect");
+const aiSuggestBtn = document.getElementById("aiSuggestBtn");
+const aiApplySuggestionBtn = document.getElementById("aiApplySuggestionBtn");
+const aiSuggestionText = document.getElementById("aiSuggestionText");
+const voiceAccentSelect = document.getElementById("voiceAccentSelect");
+const voiceLoopToggle = document.getElementById("voiceLoopToggle");
+const voicePlayBtn = document.getElementById("voicePlayBtn");
+const voiceStopBtn = document.getElementById("voiceStopBtn");
+const voiceStatus = document.getElementById("voiceStatus");
+const moodSelect = document.getElementById("moodSelect");
+const emotionInput = document.getElementById("emotionInput");
+const applyMoodBtn = document.getElementById("applyMoodBtn");
+const moodStatus = document.getElementById("moodStatus");
 
 const imageCache = new Map();
 let selectedEntity = "";
 let selectedMantraKey = "famous";
+let famousVariantByEntity = {};
 let latestImageRequestId = 0;
 let chantCount = 0;
 let chantTarget = 11;
@@ -521,6 +546,16 @@ let soundSettings = {
 };
 let audioContextRef = null;
 let breathIntervalId = null;
+let experienceMode = "chant";
+let meditationTimerId = null;
+let meditationRemainingSec = 0;
+let aiCurrentSuggestionName = "";
+let voiceAccent = "tamil";
+let voiceLoop = true;
+let shouldKeepSpeaking = false;
+let selectedMood = "auto";
+let templeRenderRequestId = 0;
+const templeMetaCache = new Map();
 
 const PREF_KEY = "chant_helper_prefs_v1";
 const FAVORITES_KEY = "chant_helper_favorites_v1";
@@ -528,6 +563,7 @@ const CHANT_HISTORY_KEY = "chant_helper_history_v1";
 const SANKALPA_KEY = "chant_helper_sankalpa_v1";
 const REMINDER_KEY = "chant_helper_reminder_v1";
 const SOUND_PREF_KEY = "chant_helper_sound_pref_v1";
+const AI_PREF_KEY = "chant_helper_ai_pref_v1";
 
 const mantraOfDayByWeekday = {
   0: "Surya (Sun)",
@@ -539,6 +575,168 @@ const mantraOfDayByWeekday = {
   6: "Shani (Saturn)",
 };
 
+const voiceProfiles = {
+  tamil: { label: "Tamil", langs: ["ta-IN", "ta", "en-IN"] },
+  sanskrit: { label: "Sanskrit", langs: ["sa-IN", "hi-IN", "en-IN"] },
+  hindi: { label: "Hindi", langs: ["hi-IN", "hi", "en-IN"] },
+};
+
+const famousMantraLibraryByName = {
+  Ganesha: [
+    { title: "Ganapati Beej Invocation", devanagari: "ॐ गं गणपतये नमः॥", iast: "oṃ gaṃ gaṇapataye namaḥ ||" },
+    { title: "Ganesha Dhyana", devanagari: "गजाननं भूतगणादि सेवितं कपित्थजम्बूफलचारुभक्षणम् ।", iast: "gajānanaṃ bhūtagaṇādi sevitaṃ kapitthajambūphalacārubhakṣaṇam |" }
+  ],
+  Shiva: [
+    { title: "Mahamrityunjaya Mantra", devanagari: "ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम् । उर्वारुकमिव बन्धनान्मृत्योर्मुक्षीय मामृतात्॥", iast: "oṃ tryambakaṃ yajāmahe sugandhiṃ puṣṭivardhanam | urvārukamiva bandhanānmṛtyormukṣīya māmṛtāt ||" },
+    { title: "Shiva Panchakshari", devanagari: "नमः शिवाय॥", iast: "namaḥ śivāya ||" }
+  ],
+  Vishnu: [
+    { title: "Ashtakshari", devanagari: "ॐ नमो नारायणाय॥", iast: "oṃ namo nārāyaṇāya ||" },
+    { title: "Vishnu Sharanam", devanagari: "श्रीमन नारायण चरणौ शरणं प्रपद्ये॥", iast: "śrīmana nārāyaṇa caraṇau śaraṇaṃ prapadye ||" }
+  ],
+  Krishna: [
+    { title: "Krishna Ashtakshari", devanagari: "ॐ कृष्णाय नमः॥", iast: "oṃ kṛṣṇāya namaḥ ||" },
+    { title: "Gopala Mantra", devanagari: "ॐ क्लीं कृष्णाय गोविन्दाय गोपीजनवल्लभाय स्वाहा॥", iast: "oṃ klīṃ kṛṣṇāya govindāya gopījanavallabhāya svāhā ||" }
+  ],
+  Rama: [
+    { title: "Taraka Mantra", devanagari: "राम रामेति रामेति रमे रामे मनोरमे ।", iast: "rāma rāmeti rāmeti rame rāme manorame |" },
+    { title: "Rama Nama", devanagari: "ॐ रामाय नमः॥", iast: "oṃ rāmāya namaḥ ||" }
+  ],
+  Ramar: [
+    { title: "Taraka Mantra", devanagari: "राम रामेति रामेति रमे रामे मनोरमे ।", iast: "rāma rāmeti rāmeti rame rāme manorame |" },
+    { title: "Rama Nama", devanagari: "ॐ रामाय नमः॥", iast: "oṃ rāmāya namaḥ ||" }
+  ],
+  Hanuman: [
+    { title: "Hanuman Moola", devanagari: "ॐ हनुमते नमः॥", iast: "oṃ hanumate namaḥ ||" },
+    { title: "Anjaneya Mantra", devanagari: "ॐ श्री वज्रदेहाय रामभक्ताय वायुपुत्राय नमोऽस्तुते॥", iast: "oṃ śrī vajradehāya rāmabhaktāya vāyuputrāya namo'stute ||" }
+  ],
+  Durga: [
+    { title: "Durga Navarna", devanagari: "ॐ ऐं ह्रीं क्लीं चामुण्डायै विच्चे॥", iast: "oṃ aiṃ hrīṃ klīṃ cāmuṇḍāyai vicce ||" },
+    { title: "Durga Sharanam", devanagari: "दुर्गे दुर्गटि नाशिनि नमो नमः॥", iast: "durge durgaṭi nāśini namo namaḥ ||" }
+  ],
+  Lakshmi: [
+    { title: "Lakshmi Beej", devanagari: "ॐ श्रीं नमः॥", iast: "oṃ śrīṃ namaḥ ||" },
+    { title: "Mahalakshmi Mantra", devanagari: "ॐ श्रीं ह्रीं श्रीं कमले कमलालये प्रसीद प्रसीद॥", iast: "oṃ śrīṃ hrīṃ śrīṃ kamale kamalālaye prasīda prasīda ||" }
+  ],
+  Saraswati: [
+    { title: "Saraswati Beej", devanagari: "ॐ ऐं नमः॥", iast: "oṃ aiṃ namaḥ ||" },
+    { title: "Vani Mantra", devanagari: "या कुन्देन्दु तुषारहार धवला...", iast: "yā kundendu tuṣārahāra dhavalā..." }
+  ],
+  Dhakshinamoorthy: [
+    { title: "Dakshinamurti Mantra", devanagari: "ॐ दक्षिणामूर्तये नमः॥", iast: "oṃ dakṣiṇāmūrtaye namaḥ ||" },
+    { title: "Guru Shiva Mantra", devanagari: "ॐ नमः प्रणवार्थाय शुद्धज्ञानैकमूर्तये॥", iast: "oṃ namaḥ praṇavārthāya śuddhajñānaikamūrtaye ||" }
+  ],
+  Murugan: [
+    { title: "Skanda Shadakshari", devanagari: "ॐ सरवनभवाय नमः॥", iast: "oṃ saravaṇabhavāya namaḥ ||" },
+    { title: "Subrahmanya Mantra", devanagari: "ॐ सुब्रह्मण्याय नमः॥", iast: "oṃ subrahmaṇyāya namaḥ ||" }
+  ],
+  "Varahi Amman": [
+    { title: "Varahi Moola", devanagari: "ॐ वराह्यै नमः॥", iast: "oṃ varāhyai namaḥ ||" },
+    { title: "Varahi Beej", devanagari: "ह्लीं वाराह्यै नमः॥", iast: "hlīṃ vārāhyai namaḥ ||" }
+  ],
+  "Lakshmi Narasimhar": [
+    { title: "Narasimha Beej", devanagari: "क्ष्रौं॥", iast: "kṣrauṃ ||" },
+    { title: "Narasimha Protection", devanagari: "ॐ नृसिंहाय नमः॥", iast: "oṃ nṛsiṃhāya namaḥ ||" }
+  ],
+  "Surya (Sun)": [
+    { title: "Aditya Hridayam Seed", devanagari: "ॐ घृणिः सूर्य आदित्यः॥", iast: "oṃ ghṛṇiḥ sūrya ādityaḥ ||" },
+    { title: "Surya Nama", devanagari: "ॐ आदित्याय नमः॥", iast: "oṃ ādityāya namaḥ ||" }
+  ],
+  "Chandra (Moon)": [
+    { title: "Chandra Nama", devanagari: "ॐ चन्द्राय नमः॥", iast: "oṃ candrāya namaḥ ||" },
+    { title: "Soma Mantra", devanagari: "ॐ सोम सोमाय नमः॥", iast: "oṃ soma somāya namaḥ ||" }
+  ],
+  "Mangala (Mars)": [
+    { title: "Angaraka Nama", devanagari: "ॐ अङ्गारकाय नमः॥", iast: "oṃ aṅgārakāya namaḥ ||" },
+    { title: "Kuja Mantra", devanagari: "ॐ क्रां क्रीं क्रौं सः भौमाय नमः॥", iast: "oṃ krāṃ krīṃ krauṃ saḥ bhaumāya namaḥ ||" }
+  ],
+  "Budha (Mercury)": [
+    { title: "Budha Nama", devanagari: "ॐ बुधाय नमः॥", iast: "oṃ budhāya namaḥ ||" },
+    { title: "Budha Beej", devanagari: "ॐ ब्रां ब्रीं ब्रौं सः बुधाय नमः॥", iast: "oṃ brāṃ brīṃ brauṃ saḥ budhāya namaḥ ||" }
+  ],
+  "Brihaspati (Jupiter)": [
+    { title: "Guru Nama", devanagari: "ॐ गुरवे नमः॥", iast: "oṃ gurave namaḥ ||" },
+    { title: "Brihaspati Beej", devanagari: "ॐ ग्रां ग्रीं ग्रौं सः गुरवे नमः॥", iast: "oṃ grāṃ grīṃ grauṃ saḥ gurave namaḥ ||" }
+  ],
+  "Shukra (Venus)": [
+    { title: "Shukra Nama", devanagari: "ॐ शुक्राय नमः॥", iast: "oṃ śukrāya namaḥ ||" },
+    { title: "Shukra Beej", devanagari: "ॐ द्रां द्रीं द्रौं सः शुक्राय नमः॥", iast: "oṃ drāṃ drīṃ drauṃ saḥ śukrāya namaḥ ||" }
+  ],
+  "Shani (Saturn)": [
+    { title: "Shani Nama", devanagari: "ॐ शनैश्चराय नमः॥", iast: "oṃ śanaiścarāya namaḥ ||" },
+    { title: "Shani Beej", devanagari: "ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः॥", iast: "oṃ prāṃ prīṃ prauṃ saḥ śanaiścarāya namaḥ ||" }
+  ],
+  Rahu: [
+    { title: "Rahu Nama", devanagari: "ॐ राहवे नमः॥", iast: "oṃ rāhave namaḥ ||" },
+    { title: "Rahu Beej", devanagari: "ॐ भ्रां भ्रीं भ्रौं सः राहवे नमः॥", iast: "oṃ bhrāṃ bhrīṃ bhrauṃ saḥ rāhave namaḥ ||" }
+  ],
+  Ketu: [
+    { title: "Ketu Nama", devanagari: "ॐ केतवे नमः॥", iast: "oṃ ketave namaḥ ||" },
+    { title: "Ketu Beej", devanagari: "ॐ स्रां स्रीं स्रौं सः केतवे नमः॥", iast: "oṃ srāṃ srīṃ srauṃ saḥ ketave namaḥ ||" }
+  ],
+  "Shirdi Sai Baba": [
+    { title: "Sai Nama", devanagari: "ॐ साईनाथाय नमः॥", iast: "oṃ sāīnathāya namaḥ ||" },
+    { title: "Sai Dhyanam", devanagari: "श्री सच्चिदानंद सद्गुरु साईनाथ महाराज की जय॥", iast: "śrī saccidānanda sadguru sāīnatha mahārāja kī jaya ||" }
+  ],
+  "Raghavendra Swamy": [
+    { title: "Raghavendra Nama", devanagari: "ॐ श्री राघवेन्द्राय नमः॥", iast: "oṃ śrī rāghavendrāya namaḥ ||" },
+    { title: "Raghavendra Prarthana", devanagari: "पाहि मां राघवेन्द्र गुरो॥", iast: "pāhi māṃ rāghavendra guro ||" }
+  ],
+  "Adi Shankaracharya": [
+    { title: "Shankara Guru Nama", devanagari: "ॐ शंकराचार्याय नमः॥", iast: "oṃ śaṅkarācāryāya namaḥ ||" },
+    { title: "Guru Vandana", devanagari: "गुरुर्ब्रह्मा गुरुर्विष्णुः गुरुर्देवो महेश्वरः॥", iast: "gururbrahmā gururviṣṇuḥ gururdevo maheśvaraḥ ||" }
+  ],
+  "Kanchi Sankaracharyar": [
+    { title: "Kanchi Acharya Nama", devanagari: "जय जय शङ्कर हर हर शङ्कर॥", iast: "jaya jaya śaṅkara hara hara śaṅkara ||" },
+    { title: "Acharya Smaranam", devanagari: "ॐ श्री चन्द्रशेखरेन्द्र सरस्वत्यै नमः॥", iast: "oṃ śrī candraśekharendra sarasvatyai namaḥ ||" }
+  ],
+  "Puttaparthi Sai Baba": [
+    { title: "Sathya Sai Nama", devanagari: "ॐ श्री सत्य साईनाथाय नमः॥", iast: "oṃ śrī satya sāīnathāya namaḥ ||" },
+    { title: "Sai Gayana", devanagari: "साई राम साई राम॥", iast: "sāī rāma sāī rāma ||" }
+  ],
+  "Yogi Ram Surat Kumar": [
+    { title: "Yogi Nama", devanagari: "योगी राम सुरत कुमार जय गुरुराया॥", iast: "yogī rāma surata kumāra jaya gururāyā ||" },
+    { title: "Yogi Smaranam", devanagari: "ॐ योगिरामसुरत्कुमाराय नमः॥", iast: "oṃ yogirāmasuratkumārāya namaḥ ||" }
+  ],
+  "Gnanananda Giri": [
+    { title: "Gnanananda Nama", devanagari: "ॐ ज्ञानानन्द गुरवे नमः॥", iast: "oṃ jñānānanda gurave namaḥ ||" },
+    { title: "Guru Smaranam", devanagari: "ॐ श्री गुरुभ्यो नमः॥", iast: "oṃ śrī gurubhyo namaḥ ||" }
+  ]
+};
+
+const supplementalFamousSlokasByName = {
+  Ganesha: [{ title: "Vakratunda Smaranam", devanagari: "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ ।", iast: "vakratuṇḍa mahākāya sūryakoṭi samaprabha |" }],
+  Shiva: [{ title: "Shiva Stuti", devanagari: "नागेन्द्रहाराय त्रिलोचनाय भस्माङ्गरागाय महेश्वराय॥", iast: "nāgendrahārāya trilocanāya bhasmāṅgarāgāya maheśvarāya ||" }],
+  Vishnu: [{ title: "Shantakaram", devanagari: "शान्ताकारं भुजगशयनं पद्मनाभं सुरेशम्॥", iast: "śāntākāraṃ bhujagaśayanaṃ padmanābhaṃ sureśam ||" }],
+  Krishna: [{ title: "Krishna Smaranam", devanagari: "कृष्णाय वासुदेवाय हरये परमात्मने॥", iast: "kṛṣṇāya vāsudevāya haraye paramātmane ||" }],
+  Rama: [{ title: "Rama Jayam", devanagari: "रामो राजमणिः सदा विजयते रामं रमेशं भजे॥", iast: "rāmo rājamaniḥ sadā vijayate rāmaṃ rameśaṃ bhaje ||" }],
+  Ramar: [{ title: "Rama Jayam", devanagari: "रामो राजमणिः सदा विजयते रामं रमेशं भजे॥", iast: "rāmo rājamaniḥ sadā vijayate rāmaṃ rameśaṃ bhaje ||" }],
+  Hanuman: [{ title: "Manojavam", devanagari: "मनोजवं मारुततुल्यवेगं जितेन्द्रियं बुद्धिमतां वरिष्ठम्॥", iast: "manojavaṃ mārutatulyavegaṃ jitendriyaṃ buddhimatāṃ variṣṭham ||" }],
+  Durga: [{ title: "Ya Devi", devanagari: "या देवी सर्वभूतेषु शक्तिरूपेण संस्थिता नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥", iast: "yā devī sarvabhūteṣu śaktirūpeṇa saṃsthitā namastasyai namastasyai namastasyai namo namaḥ ||" }],
+  Lakshmi: [{ title: "Mahalakshmi Stuti", devanagari: "नमस्तेस्तु महामाये श्रीपीठे सुरपूजिते॥", iast: "namastestu mahāmāye śrīpīṭhe surapūjite ||" }],
+  Saraswati: [{ title: "Saraswati Vandana", devanagari: "सरस्वति नमस्तुभ्यं वरदे कामरूपिणि॥", iast: "sarasvati namastubhyaṃ varade kāmarūpiṇi ||" }],
+  Dhakshinamoorthy: [{ title: "Dakshinamurti Smaranam", devanagari: "ॐ नमो भगवते दक्षिणामूर्तये॥", iast: "oṃ namo bhagavate dakṣiṇāmūrtaye ||" }],
+  Murugan: [{ title: "Subrahmanya Smaranam", devanagari: "ॐ सुब्रह्मण्याय नमः॥", iast: "oṃ subrahmaṇyāya namaḥ ||" }],
+  "Varahi Amman": [{ title: "Varahi Kavacha Beej", devanagari: "ॐ ह्लीं वाराह्यै नमः॥", iast: "oṃ hlīṃ vārāhyai namaḥ ||" }],
+  "Lakshmi Narasimhar": [{ title: "Narasimha Karavalambam Seed", devanagari: "लक्ष्मीनृसिंह मम देहि करावलम्बम्॥", iast: "lakṣmīnṛsiṃha mama dehi karāvalambam ||" }],
+  "Surya (Sun)": [{ title: "Navagraha Surya Dhyana", devanagari: "जपाकुसुमसङ्काशं काश्यपेयं महद्युतिम्॥", iast: "japākusumasaṅkāśaṃ kāśyapeyaṃ mahadyutim ||" }],
+  "Chandra (Moon)": [{ title: "Navagraha Chandra Dhyana", devanagari: "दधिशङ्खतुषाराभं क्षीरोदार्णवसम्भवम्॥", iast: "dadhiśaṅkhatuṣārābhaṃ kṣīrodārṇavasambhavam ||" }],
+  "Mangala (Mars)": [{ title: "Navagraha Mangala Dhyana", devanagari: "धरणीगर्भसम्भूतं विद्युत्कान्तिसमप्रभम्॥", iast: "dharaṇīgarbhasambhūtaṃ vidyutkāntisamaprabham ||" }],
+  "Budha (Mercury)": [{ title: "Navagraha Budha Dhyana", devanagari: "प्रियङ्गुकलिकाश्यामं रूपेणाप्रतिमं बुधम्॥", iast: "priyaṅgukalikāśyāmaṃ rūpeṇāpratimaṃ budham ||" }],
+  "Brihaspati (Jupiter)": [{ title: "Navagraha Guru Dhyana", devanagari: "देवानां च ऋषीणां च गुरुं काञ्चनसन्निभम्॥", iast: "devānāṃ ca ṛṣīṇāṃ ca guruṃ kāñcanasannibham ||" }],
+  "Shukra (Venus)": [{ title: "Navagraha Shukra Dhyana", devanagari: "हिमकुण्डमृणालाभं दैत्यानां परमं गुरुम्॥", iast: "himakuṇḍamṛṇālābhaṃ daityānāṃ paramaṃ gurum ||" }],
+  "Shani (Saturn)": [{ title: "Navagraha Shani Dhyana", devanagari: "नीलाञ्जनसमाभासं रविपुत्रं यमाग्रजम्॥", iast: "nīlāñjanasamābhāsaṃ raviputraṃ yamāgrajam ||" }],
+  Rahu: [{ title: "Navagraha Rahu Dhyana", devanagari: "अर्धकायं महावीर्यं चन्द्रादित्यविमर्दनम्॥", iast: "ardhakāyaṃ mahāvīryaṃ candrādityavimardanam ||" }],
+  Ketu: [{ title: "Navagraha Ketu Dhyana", devanagari: "पलाशपुष्पसङ्काशं तारकाग्रहमस्तकम्॥", iast: "palāśapuṣpasaṅkāśaṃ tārakāgrahamastakam ||" }],
+  "Shirdi Sai Baba": [{ title: "Sai Smaranam", devanagari: "ॐ साईं श्री साईं जय जय साईं॥", iast: "oṃ sāīṃ śrī sāīṃ jaya jaya sāīṃ ||" }],
+  "Raghavendra Swamy": [{ title: "Raghavendra Mangalam", devanagari: "श्री राघवेन्द्राय नमः॥", iast: "śrī rāghavendrāya namaḥ ||" }],
+  "Adi Shankaracharya": [{ title: "Guru Stotram", devanagari: "गुरुर्ब्रह्मा गुरुर्विष्णुः गुरुर्देवो महेश्वरः॥", iast: "gururbrahmā gururviṣṇuḥ gururdevo maheśvaraḥ ||" }],
+  "Kanchi Sankaracharyar": [{ title: "Kanchi Guru Smaranam", devanagari: "गुरुर्ब्रह्मा गुरुर्विष्णुः गुरुर्देवो महेश्वरः॥", iast: "gururbrahmā gururviṣṇuḥ gururdevo maheśvaraḥ ||" }],
+  "Puttaparthi Sai Baba": [{ title: "Sai Bhajan Line", devanagari: "साई राम साई राम॥", iast: "sāī rāma sāī rāma ||" }],
+  "Yogi Ram Surat Kumar": [{ title: "Yogi Nama", devanagari: "योगी रामसुरत्कुमार जय गुरुराया॥", iast: "yogī rāmasuratkumāra jaya gururāyā ||" }],
+  "Gnanananda Giri": [{ title: "Guru Smaranam", devanagari: "ॐ श्री गुरुभ्यो नमः॥", iast: "oṃ śrī gurubhyo namaḥ ||" }]
+};
+
 const rotatingMessages = [
   "One focused chant is stronger than many distracted chants.",
   "Breathe deeply, chant clearly, and keep your sankalpa steady.",
@@ -548,12 +746,275 @@ const rotatingMessages = [
 ];
 
 const didYouKnowMessages = [
-  "Many practitioners choose 108 because it is considered a spiritually complete count.",
-  "Planet mantras are often aligned with specific weekdays for disciplined practice.",
-  "Gayatri mantras traditionally focus on illumination of the intellect.",
-  "Short beej mantras are commonly used for concentrated japa sessions.",
-  "Daily chanting at a fixed time helps build a stable spiritual routine."
+  "Beej mantra means a seed sound — a compact vibration that represents the core energy of a deity.",
+  "Common beej examples: ॐ गं (Gaṃ) for Ganesha, श्रीं (Śrīṃ) for Lakshmi, and ऐं (Aiṃ) for Saraswati.",
+  "Beej mantras are usually short, but they are repeated with deep attention, correct pronunciation, and steady breath.",
+  "In practice, many devotees start with a famous mantra and then continue with beej japa for focused inner absorption.",
+  "Gayatri mantras invoke illumination of intellect, while beej mantras emphasize concentrated divine vibration.",
+  "A fixed daily count such as 11, 21, 51, or 108 helps beej mantra practice become stable and disciplined."
 ];
+
+const ritualGuidanceByName = {
+  Ganesha: [
+    "Start after a brief sankalpa and chant 11 or 21 times before new tasks.",
+    "Offer a simple flower or akshata and recite with clear pronunciation.",
+    "Use Ganesha mantra first before any other deity mantra in your session."
+  ],
+  Shiva: [
+    "Best done in early morning or evening with calm, slow breathing.",
+    "Chant Panchakshari or Mahamrityunjaya for 11/21/108 repetitions.",
+    "Sit in silence for one minute after chanting to absorb the vibration."
+  ],
+  Vishnu: [
+    "Maintain a steady pace and devotional focus while chanting.",
+    "Use tulasi or mental offering with gratitude and consistency.",
+    "Prefer fixed daily count over irregular long sessions."
+  ],
+  Krishna: [
+    "Chant with bhakti-bhava and gentle rhythmic breathing.",
+    "Use shorter rounds multiple times in a day if needed.",
+    "Conclude with a short gratitude prayer."
+  ],
+  Rama: [
+    "Chant in a clean quiet space with upright posture.",
+    "Keep pronunciation simple and consistent rather than fast.",
+    "Use a fixed count and same time daily for best discipline."
+  ],
+  Ramar: [
+    "Chant in a clean quiet space with upright posture.",
+    "Keep pronunciation simple and consistent rather than fast.",
+    "Use a fixed count and same time daily for best discipline."
+  ],
+  Hanuman: [
+    "Tuesday/Saturday practice is common for Hanuman discipline.",
+    "Recite Hanuman mantra or Chalisa with courage and one-pointed focus.",
+    "End with a short silent prayer for strength and protection."
+  ],
+  Durga: [
+    "Chant with intention for protection and inner courage.",
+    "Prefer morning/evening recitation with stable breath.",
+    "Use shorter consistent counts daily rather than occasional long counts."
+  ],
+  Lakshmi: [
+    "Maintain clean altar/space and chant with gratitude mindset.",
+    "Friday is traditionally favored for Lakshmi upasana.",
+    "Avoid hurried chanting; keep voice soft and steady."
+  ],
+  Saraswati: [
+    "Chant before study, teaching, or creative work.",
+    "Use clear articulation and slower pace for mantra purity.",
+    "Offer short silent reflection after each round."
+  ],
+  Dhakshinamoorthy: [
+    "Begin with Guru Brahma sloka and sit in silence briefly.",
+    "Chant in a contemplative tone focusing on wisdom and clarity.",
+    "Thursday practice is commonly observed for guru tattva."
+  ],
+  Murugan: [
+    "Chant with courage-focused sankalpa and calm breath.",
+    "Use Skanda/Subrahmanya mantra in fixed counts.",
+    "Tuesday or special Murugan days can be used for extended practice."
+  ],
+  "Varahi Amman": [
+    "Practice with respect and clear protective intention.",
+    "Keep recitation disciplined and avoid random count changes.",
+    "Conclude with gratitude and grounding silence."
+  ],
+  "Lakshmi Narasimhar": [
+    "Begin with a protection sankalpa and steady breathing.",
+    "Chant with focus on courage and removal of fear.",
+    "Finish with calming breaths to settle the mind."
+  ],
+  "Surya (Sun)": [
+    "Morning practice around sunrise is traditionally preferred.",
+    "Face east when possible and chant with alert posture.",
+    "Use consistent weekday routine for visible discipline benefits."
+  ],
+  "Chandra (Moon)": [
+    "Evening/night calm sessions support emotional balance.",
+    "Use soft tone and slower pace to stabilize mind.",
+    "Keep count modest and consistent."
+  ],
+  "Mangala (Mars)": [
+    "Tuesday discipline is commonly followed.",
+    "Chant with firm rhythm and controlled breath.",
+    "Pair with a short grounding pause after completion."
+  ],
+  "Budha (Mercury)": [
+    "Wednesday practice is commonly preferred.",
+    "Focus on diction and clarity while chanting.",
+    "Useful before communication-heavy work or study."
+  ],
+  "Brihaspati (Jupiter)": [
+    "Thursday routine is traditionally followed.",
+    "Chant with guru-bhava and ethical intention.",
+    "Keep an unbroken daily count for better steadiness."
+  ],
+  "Shukra (Venus)": [
+    "Friday recitation is common in many traditions.",
+    "Practice with gratitude and relational harmony intention.",
+    "Maintain gentle pace and consistent count."
+  ],
+  "Shani (Saturn)": [
+    "Saturday discipline and humility are emphasized.",
+    "Chant slowly with patience and karmic acceptance mindset.",
+    "Avoid rushing; prioritize consistency over volume."
+  ],
+  Rahu: [
+    "Use focused short rounds with clear mental intention.",
+    "Maintain strict count and calm breathing.",
+    "End with grounding silence to settle restlessness."
+  ],
+  Ketu: [
+    "Use introspective chanting with minimal external distraction.",
+    "Keep posture upright and breath subtle.",
+    "Helpful for detachment and spiritual clarity routines."
+  ],
+  "Shirdi Sai Baba": [
+    "Chant with Shraddha and Saburi mindset.",
+    "Simple regular practice is better than irregular intensity.",
+    "Include a short prayer for compassion and service."
+  ],
+  "Raghavendra Swamy": [
+    "Begin with respectful guru remembrance.",
+    "Chant steadily and conclude with gratitude.",
+    "Thursday routine is commonly followed for guru worship."
+  ],
+  "Adi Shankaracharya": [
+    "Recite with reflection on jnana and viveka.",
+    "Keep chanting clear and contemplative.",
+    "Spend a minute in silence after recitation."
+  ],
+  "Kanchi Sankaracharyar": [
+    "Chant with humility and guru-bhakti focus.",
+    "Use fixed count and steady timing each day.",
+    "Add brief self-reflection after chanting."
+  ],
+  "Puttaparthi Sai Baba": [
+    "Practice with love-service-truth intention.",
+    "Chant softly and consistently at a fixed time.",
+    "Close with a brief prayer for all-being welfare."
+  ],
+  "Yogi Ram Surat Kumar": [
+    "Use nama-smarana style repetition with surrender.",
+    "Keep awareness on breath and mantra simultaneously.",
+    "Maintain simple daily continuity."
+  ],
+  "Gnanananda Giri": [
+    "Begin with guru pranam and mental quietness.",
+    "Chant in short disciplined rounds.",
+    "Finish with stillness and inward attention."
+  ]
+};
+
+const famousSlokaLinksByName = {
+  Ganesha: [
+    { label: "Ganesha Atharvashirsha", url: "https://en.wikipedia.org/wiki/Ganesha_Atharvashirsa" },
+    { label: "Ganesha Mantras", url: "https://en.wikipedia.org/wiki/Ganesha#Mantras" }
+  ],
+  Shiva: [
+    { label: "Maha Mrityunjaya Mantra", url: "https://en.wikipedia.org/wiki/Mahamrityunjaya_Mantra" },
+    { label: "Shiva Panchakshara", url: "https://en.wikipedia.org/wiki/Om_Namah_Shivaya" }
+  ],
+  Vishnu: [
+    { label: "Om Namo Narayanaya", url: "https://en.wikipedia.org/wiki/Om_Namo_Narayana" },
+    { label: "Vishnu Sahasranama", url: "https://en.wikipedia.org/wiki/Vishnu_Sahasranama" }
+  ],
+  Krishna: [
+    { label: "Hare Krishna Maha Mantra", url: "https://en.wikipedia.org/wiki/Hare_Krishna_(mantra)" },
+    { label: "Krishna Mantras", url: "https://en.wikipedia.org/wiki/Krishna#Worship" }
+  ],
+  Rama: [
+    { label: "Rama Nama", url: "https://en.wikipedia.org/wiki/Rama#Worship" },
+    { label: "Sri Rama Mantra", url: "https://en.wikipedia.org/wiki/Rama" }
+  ],
+  Ramar: [
+    { label: "Rama Nama", url: "https://en.wikipedia.org/wiki/Rama#Worship" },
+    { label: "Sri Rama Mantra", url: "https://en.wikipedia.org/wiki/Rama" }
+  ],
+  Hanuman: [
+    { label: "Hanuman Chalisa", url: "https://en.wikipedia.org/wiki/Hanuman_Chalisa" },
+    { label: "Hanuman Mantras", url: "https://en.wikipedia.org/wiki/Hanuman#Worship" }
+  ],
+  Durga: [
+    { label: "Durga Saptashati", url: "https://en.wikipedia.org/wiki/Devi_Mahatmyam" },
+    { label: "Durga Mantras", url: "https://en.wikipedia.org/wiki/Durga#Worship" }
+  ],
+  Lakshmi: [
+    { label: "Mahalakshmi Ashtakam", url: "https://en.wikipedia.org/wiki/Lakshmi#Worship" },
+    { label: "Lakshmi Mantras", url: "https://en.wikipedia.org/wiki/Lakshmi" }
+  ],
+  Saraswati: [
+    { label: "Saraswati Vandana", url: "https://en.wikipedia.org/wiki/Saraswati#Worship" },
+    { label: "Saraswati Stotram", url: "https://en.wikipedia.org/wiki/Saraswati" }
+  ],
+  Dhakshinamoorthy: [
+    { label: "Guru Stotram", url: "https://en.wikipedia.org/wiki/Guru#In_Hinduism" },
+    { label: "Dakshinamurti Stotram", url: "https://en.wikipedia.org/wiki/Dakshinamurti" }
+  ],
+  Murugan: [
+    { label: "Kanda Sashti Kavasam", url: "https://en.wikipedia.org/wiki/Kanda_Sashti_Kavasam" },
+    { label: "Subrahmanya Bhujangam", url: "https://en.wikipedia.org/wiki/Murugan" }
+  ],
+  "Varahi Amman": [
+    { label: "Varahi Mantras", url: "https://en.wikipedia.org/wiki/Varahi" }
+  ],
+  "Lakshmi Narasimhar": [
+    { label: "Narasimha Karavalamba Stotram", url: "https://en.wikipedia.org/wiki/Narasimha" },
+    { label: "Lakshmi Narasimha Mantras", url: "https://en.wikipedia.org/wiki/Lakshmi_Narasimha" }
+  ],
+  "Surya (Sun)": [
+    { label: "Aditya Hridayam", url: "https://en.wikipedia.org/wiki/Aditya_Hridayam" },
+    { label: "Surya Mantras", url: "https://en.wikipedia.org/wiki/Surya" }
+  ],
+  "Chandra (Moon)": [
+    { label: "Chandra Mantras", url: "https://en.wikipedia.org/wiki/Chandra" }
+  ],
+  "Mangala (Mars)": [
+    { label: "Mangala (Kuja) Mantras", url: "https://en.wikipedia.org/wiki/Mangala_(deity)" }
+  ],
+  "Budha (Mercury)": [
+    { label: "Budha Mantras", url: "https://en.wikipedia.org/wiki/Budha" }
+  ],
+  "Brihaspati (Jupiter)": [
+    { label: "Brihaspati Mantras", url: "https://en.wikipedia.org/wiki/Brihaspati" }
+  ],
+  "Shukra (Venus)": [
+    { label: "Shukra Mantras", url: "https://en.wikipedia.org/wiki/Shukra" }
+  ],
+  "Shani (Saturn)": [
+    { label: "Shani Stotra", url: "https://en.wikipedia.org/wiki/Shani" },
+    { label: "Shani Mantras", url: "https://en.wikipedia.org/wiki/Shani" }
+  ],
+  Rahu: [
+    { label: "Rahu Mantras", url: "https://en.wikipedia.org/wiki/Rahu" }
+  ],
+  Ketu: [
+    { label: "Ketu Mantras", url: "https://en.wikipedia.org/wiki/Ketu_(mythology)" }
+  ],
+  "Shirdi Sai Baba": [
+    { label: "Sai Baba Aarti / Chants", url: "https://en.wikipedia.org/wiki/Sai_Baba_of_Shirdi" }
+  ],
+  "Raghavendra Swamy": [
+    { label: "Raghavendra Stotra", url: "https://en.wikipedia.org/wiki/Raghavendra_Tirtha" }
+  ],
+  "Adi Shankaracharya": [
+    { label: "Bhaja Govindam", url: "https://en.wikipedia.org/wiki/Bhaja_Govindam" },
+    { label: "Nirvana Shatakam", url: "https://en.wikipedia.org/wiki/Nirvana_Shatakam" }
+  ],
+  "Kanchi Sankaracharyar": [
+    { label: "Kanchi Acharya Chants", url: "https://en.wikipedia.org/wiki/Chandrasekharendra_Saraswati" }
+  ],
+  "Puttaparthi Sai Baba": [
+    { label: "Sathya Sai Bhajans", url: "https://en.wikipedia.org/wiki/Sathya_Sai_Baba" }
+  ],
+  "Yogi Ram Surat Kumar": [
+    { label: "Yogi Ramsuratkumar Chants", url: "https://en.wikipedia.org/wiki/Yogi_Ramsuratkumar" }
+  ],
+  "Gnanananda Giri": [
+    { label: "Gnanananda Giri Hymns", url: "https://en.wikipedia.org/wiki/Swami_Gnanananda_Giri" }
+  ]
+};
 
 const tnTemplesByDeity = {
   Ganesha: [
@@ -995,6 +1456,304 @@ function renderMantraOfDay() {
   mantraOfDayText.textContent = `${suggestion.item.famousTitle}: ${suggestion.item.purpose}`;
 }
 
+function activeItem() {
+  return mantras.find((entry) => entry.name === selectedEntity) || null;
+}
+
+function recommendationForContext() {
+  const dayIndex = new Date().getDay();
+  const weekdayName = mantraOfDayByWeekday[dayIndex];
+  const weekdayItem = mantras.find((entry) => entry.name === weekdayName);
+  const preferredItem = mantras.find((entry) => entry.name === (aiDeitySelect?.value || ""));
+
+  if (preferredItem) {
+    return {
+      name: preferredItem.name,
+      reason: `Based on your chosen deity: ${preferredItem.name}.`,
+    };
+  }
+
+  if (weekdayItem) {
+    return {
+      name: weekdayItem.name,
+      reason: `Weekday alignment: ${weekdayLabel(dayIndex)} traditionally favors ${weekdayItem.name}.`,
+    };
+  }
+
+  const fallback = activeItem() || mantras[0] || null;
+  return {
+    name: fallback?.name || "",
+    reason: "Using your current selection as the best match.",
+  };
+}
+
+function renderAiSuggestion() {
+  if (!aiSuggestionText) return;
+  const suggestion = recommendationForContext();
+  aiCurrentSuggestionName = suggestion.name;
+  if (!suggestion.name) {
+    aiSuggestionText.textContent = "No personalized suggestion available right now.";
+    return;
+  }
+  aiSuggestionText.textContent = `${suggestion.name} — ${suggestion.reason}`;
+}
+
+function applyAiSuggestion() {
+  if (!aiCurrentSuggestionName) return;
+  const item = mantras.find((entry) => entry.name === aiCurrentSuggestionName);
+  if (!item) return;
+
+  if (typeSelect.value !== "all" && typeSelect.value !== item.type) {
+    typeSelect.value = item.type;
+    populateEntityOptions();
+  }
+  selectedEntity = item.name;
+  if (entitySelect.querySelector(`option[value="${selectedEntity}"]`)) {
+    entitySelect.value = selectedEntity;
+  }
+  selectedMantraKey = "famous";
+  mantraSelect.value = "famous";
+  chantCount = 0;
+  render();
+  showToast(`Suggested mantra opened: ${item.name}`);
+}
+
+function deriveAutoMood() {
+  const hour = new Date().getHours();
+  if (hour >= 4 && hour < 10) return "calm";
+  if (hour >= 10 && hour < 17) return "devotional";
+  if (hour >= 17 && hour < 22) return "festive";
+  return "calm";
+}
+
+function moodFromEmotionInput(rawText) {
+  const text = String(rawText || "").trim().toLowerCase();
+  if (!text) return "";
+  if (/(stress|anx|fear|tired|overwhelm|sad|heavy)/.test(text)) return "calm";
+  if (/(joy|happy|celebrat|excite|festiv|energetic)/.test(text)) return "festive";
+  if (/(devot|pray|bhakti|focused|gratitude|grateful)/.test(text)) return "devotional";
+  return "";
+}
+
+function applyMoodTheme(mood, reasonText = "") {
+  const nextMood = mood === "auto" ? deriveAutoMood() : mood;
+  document.body.dataset.mood = nextMood;
+  if (moodStatus) {
+    const reason = reasonText ? ` ${reasonText}` : "";
+    moodStatus.textContent = `Mood active: ${nextMood}.${reason}`;
+  }
+}
+
+function pickVoiceForAccent(accent) {
+  if (!("speechSynthesis" in window)) return { voice: null, lang: "en-IN" };
+  const profile = voiceProfiles[accent] || voiceProfiles.tamil;
+  const voices = window.speechSynthesis.getVoices();
+  for (const lang of profile.langs) {
+    const matched = voices.find((voice) => voice.lang && voice.lang.toLowerCase().startsWith(lang.toLowerCase()));
+    if (matched) return { voice: matched, lang: matched.lang };
+  }
+  return { voice: voices[0] || null, lang: profile.langs[0] || "en-IN" };
+}
+
+function selectedVoiceText() {
+  const item = activeItem();
+  if (!item) return "";
+  const mantra = selectedMantraData(item);
+  return mantra.iast || mantra.devanagari || "";
+}
+
+function stopVoiceChant() {
+  shouldKeepSpeaking = false;
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+  if (voiceStatus) {
+    voiceStatus.textContent = "Voice chant stopped.";
+  }
+}
+
+function speakCurrentMantra() {
+  if (!("speechSynthesis" in window)) {
+    if (voiceStatus) {
+      voiceStatus.textContent = "Voice chanting is not supported in this browser.";
+    }
+    return;
+  }
+
+  const text = selectedVoiceText();
+  if (!text) {
+    if (voiceStatus) {
+      voiceStatus.textContent = "Select a deity first to play chant audio.";
+    }
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+  shouldKeepSpeaking = true;
+  const { voice, lang } = pickVoiceForAccent(voiceAccent);
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.voice = voice;
+  utterance.lang = lang;
+  utterance.rate = 0.9;
+  utterance.pitch = 1;
+  utterance.onend = () => {
+    if (shouldKeepSpeaking && voiceLoop) {
+      setTimeout(() => {
+        speakCurrentMantra();
+      }, 220);
+    }
+  };
+
+  const label = voiceProfiles[voiceAccent]?.label || "Selected";
+  if (voiceStatus) {
+    voiceStatus.textContent = `Playing ${label} voice chant${voiceLoop ? " on loop" : ""}.`;
+  }
+  window.speechSynthesis.speak(utterance);
+}
+
+function formatMeditationTime(seconds) {
+  const safe = Math.max(0, Number(seconds) || 0);
+  const minutes = String(Math.floor(safe / 60)).padStart(2, "0");
+  const rem = String(safe % 60).padStart(2, "0");
+  return `${minutes}:${rem}`;
+}
+
+function stopMeditationSession(endedNaturally = false) {
+  if (meditationTimerId) {
+    clearInterval(meditationTimerId);
+    meditationTimerId = null;
+  }
+  if (endedNaturally) {
+    playSessionEndSound();
+    showToast("Meditation session complete");
+  }
+}
+
+function startMeditationSession() {
+  const item = activeItem();
+  if (!item) {
+    showToast("Select an entry to start meditation");
+    return;
+  }
+
+  stopMeditationSession(false);
+  meditationRemainingSec = Number(meditationDurationSelect?.value || 300);
+  playSessionStartSound();
+
+  if (meditationTimerText) {
+    meditationTimerText.textContent = `Silence timer: ${formatMeditationTime(meditationRemainingSec)}`;
+  }
+
+  meditationTimerId = setInterval(() => {
+    meditationRemainingSec -= 1;
+    if (meditationTimerText) {
+      meditationTimerText.textContent = `Silence timer: ${formatMeditationTime(meditationRemainingSec)}`;
+    }
+    if (meditationRemainingSec <= 0) {
+      stopMeditationSession(true);
+    }
+  }, 1000);
+}
+
+function renderExperienceMode(item) {
+  const mode = experienceModeSelect?.value || "chant";
+  experienceMode = mode;
+
+  const mantra = item ? selectedMantraData(item) : null;
+
+  const showChant = mode === "chant";
+  const showMeditation = mode === "meditation";
+  const showLearning = mode === "learning";
+
+  chantAssistant.classList.toggle("hidden", !showChant || !item);
+  meditationMode.classList.toggle("hidden", !showMeditation || !item);
+  mantraInfo.classList.toggle("hidden", !showLearning || !item);
+
+  if (showMeditation && item && mantra) {
+    meditationTitle.textContent = `${item.name} — Timed silent meditation`;
+    meditationOverlay.textContent = mantra.iast || mantra.devanagari;
+    if (!meditationTimerId) {
+      meditationTimerText.textContent = "Meditation timer not running.";
+    }
+  }
+
+  if (!showMeditation) {
+    stopMeditationSession(false);
+  }
+}
+
+async function fetchTempleMeta(placeName) {
+  const cacheKey = String(placeName || "").trim();
+  if (!cacheKey) return null;
+  if (templeMetaCache.has(cacheKey)) {
+    return templeMetaCache.get(cacheKey);
+  }
+
+  const searchName = cacheKey.replace(/\s*\([^)]*\)\s*/g, "").trim();
+  const endpoint = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(searchName)}`;
+  try {
+    const response = await fetch(endpoint);
+    if (!response.ok) throw new Error("summary fetch failed");
+    const payload = await response.json();
+    const result = {
+      title: payload?.title || searchName,
+      image: payload?.thumbnail?.source || payload?.originalimage?.source || "",
+      refUrl: payload?.content_urls?.desktop?.page || "",
+    };
+    templeMetaCache.set(cacheKey, result);
+    return result;
+  } catch {
+    const fallback = { title: searchName, image: "", refUrl: "" };
+    templeMetaCache.set(cacheKey, fallback);
+    return fallback;
+  }
+}
+
+async function renderTempleCards(temples) {
+  if (!templeCards) return;
+  if (!Array.isArray(temples) || !temples.length) {
+    templeCards.innerHTML = "";
+    return;
+  }
+
+  const requestId = ++templeRenderRequestId;
+  templeCards.innerHTML = temples
+    .slice(0, 4)
+    .map((name) => `<article class="temple-card"><div class="temple-card-body"><p>${name}</p><p class="meaning">Loading references...</p></div></article>`)
+    .join("");
+
+  const templeMeta = await Promise.all(temples.slice(0, 4).map((name) => fetchTempleMeta(name)));
+  if (requestId !== templeRenderRequestId) {
+    return;
+  }
+
+  templeCards.innerHTML = temples
+    .slice(0, 4)
+    .map((name, index) => {
+      const meta = templeMeta[index] || {};
+      const imageBlock = meta.image
+        ? `<img src="${meta.image}" alt="${name}" loading="lazy" />`
+        : "";
+      const referenceLink = meta.refUrl
+        ? `<a href="${meta.refUrl}" target="_blank" rel="noopener noreferrer">Reference</a>`
+        : `<a href="https://www.google.com/search?q=${encodeURIComponent(name + " temple")}" target="_blank" rel="noopener noreferrer">Reference</a>`;
+
+      return `
+        <article class="temple-card">
+          ${imageBlock}
+          <div class="temple-card-body">
+            <p>${name}</p>
+            <div class="temple-links">
+              <a href="${mapSearchUrl(name)}" target="_blank" rel="noopener noreferrer">Directions</a>
+              ${referenceLink}
+            </div>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+}
+
 function startRotatingMessages() {
   if (!rotatingMessage || !didYouKnowMessage) {
     return;
@@ -1219,7 +1978,7 @@ function buildBlessingCardCanvas(item) {
 
   context.fillStyle = "#b14d00";
   context.font = "24px 'Segoe UI'";
-  context.fillText(`Generated on ${new Date().toLocaleDateString()} · Soulvest Mantra`, 80, 1280);
+  context.fillText(`Generated on ${new Date().toLocaleDateString()} · Soulvest Mantras`, 80, 1280);
 
   context.save();
   context.translate(930, 180);
@@ -1309,6 +2068,81 @@ function scriptModeText(mode) {
   return "Script: Devanagari + Tamil + IAST";
 }
 
+function famousVariantsForItem(item) {
+  if (!item) return [];
+  const base = {
+    title: item.famousTitle || "Famous Mantra",
+    devanagari: item.famousDevanagari || "",
+    iast: item.famousIast || "",
+  };
+  const extras = famousMantraLibraryByName[item.name] || [];
+  const supplements = supplementalFamousSlokasByName[item.name] || [];
+  const traditional = [
+    {
+      title: `${item.gayatriTitle || "Gayatri Mantra"} (Traditional Recitation)`,
+      devanagari: item.gayatriDevanagari || "",
+      iast: item.gayatriIast || "",
+    },
+  ];
+
+  const beej = beejMantrasByName[item.name];
+  if (beej?.devanagari || beej?.iast) {
+    traditional.push({
+      title: `${beej.title || "Beej Mantra"} (Classical Japa)`,
+      devanagari: beej.devanagari || "",
+      iast: beej.iast || "",
+    });
+  }
+
+  const merged = [base, ...extras, ...supplements, ...traditional]
+    .filter((entry) => (entry?.devanagari || entry?.iast) && (entry?.title || "").trim())
+    .map((entry) => ({
+      title: String(entry.title || "Traditional Mantra").trim(),
+      devanagari: String(entry.devanagari || "").trim(),
+      iast: String(entry.iast || "").trim(),
+    }));
+
+  const seen = new Set();
+  return merged.filter((entry) => {
+    const key = `${entry.iast.toLowerCase()}|${entry.devanagari.toLowerCase()}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function currentFamousVariant(item) {
+  const variants = famousVariantsForItem(item);
+  const savedIndex = Number(famousVariantByEntity[item.name] || 0);
+  const index = Number.isNaN(savedIndex) ? 0 : Math.min(Math.max(savedIndex, 0), Math.max(variants.length - 1, 0));
+  famousVariantByEntity[item.name] = index;
+  return {
+    variant: variants[index] || variants[0] || null,
+    index,
+    total: variants.length,
+  };
+}
+
+function renderFamousVariantOptions(item) {
+  if (!famousVariantSelect) return;
+  if (!item || selectedMantraKey !== "famous") {
+    famousVariantSelect.classList.add("hidden");
+    famousVariantSelect.innerHTML = "";
+    return;
+  }
+
+  const variants = famousVariantsForItem(item);
+  famousVariantSelect.classList.remove("hidden");
+  famousVariantSelect.innerHTML = variants
+    .map((variant, index) => `<option value="${index}">${variant.title || `Famous Mantra ${index + 1}`}</option>`)
+    .join("");
+
+  const savedIndex = Number(famousVariantByEntity[item.name] || 0);
+  const safeIndex = Number.isNaN(savedIndex) ? 0 : Math.min(Math.max(savedIndex, 0), Math.max(variants.length - 1, 0));
+  famousVariantByEntity[item.name] = safeIndex;
+  famousVariantSelect.value = String(safeIndex);
+}
+
 function savePrefs() {
   const payload = {
     type: typeSelect.value,
@@ -1317,6 +2151,11 @@ function savePrefs() {
     script: scriptSelect.value,
     chantCount,
     chantTarget,
+    experienceMode,
+    voiceAccent,
+    voiceLoop,
+    selectedMood,
+    famousVariantByEntity,
   };
   localStorage.setItem(PREF_KEY, JSON.stringify(payload));
 }
@@ -1355,6 +2194,27 @@ function loadPrefs() {
     }
     if (typeof prefs?.entity === "string") {
       selectedEntity = prefs.entity;
+    }
+    if (prefs?.experienceMode && experienceModeSelect) {
+      experienceMode = prefs.experienceMode;
+      experienceModeSelect.value = experienceMode;
+    }
+    if (prefs?.voiceAccent && voiceAccentSelect) {
+      voiceAccent = prefs.voiceAccent;
+      voiceAccentSelect.value = voiceAccent;
+    }
+    if (typeof prefs?.voiceLoop === "boolean") {
+      voiceLoop = prefs.voiceLoop;
+      if (voiceLoopToggle) {
+        voiceLoopToggle.checked = voiceLoop;
+      }
+    }
+    if (prefs?.selectedMood && moodSelect) {
+      selectedMood = prefs.selectedMood;
+      moodSelect.value = selectedMood;
+    }
+    if (prefs?.famousVariantByEntity && typeof prefs.famousVariantByEntity === "object") {
+      famousVariantByEntity = prefs.famousVariantByEntity;
     }
   } catch {
   }
@@ -1594,6 +2454,49 @@ function renderReminderSettings() {
   }
 }
 
+function saveAiPrefs() {
+  if (!aiDeitySelect) return;
+  const payload = {
+    preferredDeity: aiDeitySelect.value || "",
+    emotion: emotionInput?.value || "",
+  };
+  localStorage.setItem(AI_PREF_KEY, JSON.stringify(payload));
+}
+
+function loadAiPrefs() {
+  if (!aiDeitySelect) return;
+  try {
+    const raw = localStorage.getItem(AI_PREF_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (typeof parsed?.preferredDeity === "string") {
+      aiDeitySelect.value = parsed.preferredDeity;
+    }
+    if (emotionInput && typeof parsed?.emotion === "string") {
+      emotionInput.value = parsed.emotion;
+    }
+  } catch {
+  }
+}
+
+function populateAiDeityOptions() {
+  if (!aiDeitySelect) return;
+  aiDeitySelect.innerHTML = [
+    `<option value="">No preference (weekday based)</option>`,
+    ...mantras
+      .filter((item) => item.type === "god")
+      .map((item) => `<option value="${item.name}">${item.name}</option>`),
+  ].join("");
+}
+
+function renderQuickPaths() {
+  if (!homeQuickAccess) return;
+  const buttons = homeQuickAccess.querySelectorAll(".quick-path-btn");
+  buttons.forEach((button) => {
+    button.classList.toggle("active", button.dataset.type === typeSelect.value);
+  });
+}
+
 function reminderShouldTrigger(now = new Date()) {
   if (!reminderSettings.enabled) {
     return false;
@@ -1630,7 +2533,7 @@ function triggerReminder() {
   showToast(message);
 
   if ("Notification" in window && Notification.permission === "granted") {
-    new Notification("Soulvest Mantra Reminder", { body: message });
+    new Notification("Soulvest Mantras Reminder", { body: message });
   }
 }
 
@@ -1697,54 +2600,63 @@ function mapSearchUrl(placeName) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${placeName}, Tamil Nadu`)}`;
 }
 
+function mantraSearchUrl(query) {
+  return `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+}
+
+function defaultRitualGuidanceByType(type) {
+  if (type === "planet") {
+    return [
+      "Follow the graha weekday tradition for consistency.",
+      "Chant with fixed count and stable breath.",
+      "Prefer discipline and regularity over long irregular sessions."
+    ];
+  }
+  if (type === "guru") {
+    return [
+      "Begin with gratitude and guru remembrance.",
+      "Use clear pronunciation and calm pace.",
+      "Sit in silence briefly after chanting."
+    ];
+  }
+  return [
+    "Start with a simple sankalpa and chant in fixed counts.",
+    "Keep posture upright and breath steady.",
+    "Conclude with short silence and gratitude."
+  ];
+}
+
 function renderTempleInfo(item) {
+  templeInfo.classList.remove("hidden");
+  if (templeCards) {
+    templeCards.innerHTML = "";
+  }
+  muruganAruDetails.classList.add("hidden");
+  muruganAruDetails.open = false;
+
   if (!item) {
-    templeInfo.classList.remove("hidden");
-    templeInfoTitle.textContent = "Famous Spiritual Places in Tamil Nadu";
+    templeInfoTitle.textContent = "Ritual Guidance";
     templeList.innerHTML = "";
     templeFallback.classList.remove("hidden");
-    templeFallback.textContent = "Select a god, planet, or guru to view related places in Tamil Nadu.";
-    muruganAruDetails.classList.add("hidden");
-    muruganAruDetails.open = false;
+    templeFallback.textContent = "Select a god, planet, or guru to view practical ritual guidance.";
     return;
   }
 
-  const key = deityTempleKey(item.name);
-  let temples = [];
-  if (item.type === "god") {
-    temples = tnTemplesByDeity[key] || [];
-  } else if (item.type === "planet") {
-    temples = tnTemplesByPlanet[item.name] || [];
-  } else if (item.type === "guru") {
-    temples = tnTemplesByGuru[item.name] || [];
-  }
+  const rituals = ritualGuidanceByName[item.name] || defaultRitualGuidanceByType(item.type);
 
-  templeInfo.classList.remove("hidden");
-  templeInfoTitle.textContent = `${item.name} — Famous Places in Tamil Nadu`;
+  templeInfoTitle.textContent = `${item.name} — Ritual Guidance`;
 
-  if (!temples.length) {
+  if (!rituals.length) {
     templeList.innerHTML = "";
     templeFallback.classList.remove("hidden");
-    templeFallback.textContent = "No curated Tamil Nadu temple list is available yet for this deity.";
-    muruganAruDetails.classList.add("hidden");
-    muruganAruDetails.open = false;
+    templeFallback.textContent = "No ritual guidance is available for this selection yet.";
     return;
   }
 
   templeFallback.classList.add("hidden");
-  templeList.innerHTML = temples
-    .map((name) => `<li><a href="${mapSearchUrl(name)}" target="_blank" rel="noopener noreferrer">${name}</a></li>`)
+  templeList.innerHTML = rituals
+    .map((line) => `<li>${line}</li>`)
     .join("");
-
-  if (key === "Murugan") {
-    muruganAruDetails.classList.remove("hidden");
-    muruganAruList.innerHTML = aruPadaiVeedu
-      .map((place) => `<li><a href="${mapSearchUrl(place)}" target="_blank" rel="noopener noreferrer">${place}</a></li>`)
-      .join("");
-  } else {
-    muruganAruDetails.classList.add("hidden");
-    muruganAruDetails.open = false;
-  }
 }
 
 function renderYouShouldKnow(item) {
@@ -1829,10 +2741,13 @@ function selectedMantraData(item) {
   const isGayatri = selectedMantraKey === "gayatri";
   const isBeej = selectedMantraKey === "beej";
   const isUnavailableBeej = isBeej && !beej;
+  const famousSelection = currentFamousVariant(item);
+  const famousVariant = famousSelection.variant;
+  const famousVariants = famousVariantsForItem(item);
 
-  let title = isGayatri ? item.gayatriTitle : item.famousTitle;
-  let devanagari = isGayatri ? item.gayatriDevanagari : item.famousDevanagari;
-  let iast = isGayatri ? item.gayatriIast : item.famousIast;
+  let title = isGayatri ? item.gayatriTitle : (famousVariant?.title || item.famousTitle);
+  let devanagari = isGayatri ? item.gayatriDevanagari : (famousVariant?.devanagari || item.famousDevanagari);
+  let iast = isGayatri ? item.gayatriIast : (famousVariant?.iast || item.famousIast);
 
   if (isBeej) {
     if (beej) {
@@ -1870,11 +2785,15 @@ function selectedMantraData(item) {
     ? "Usage: Traditionally chanted with focus on correct pronunciation and calm breathing, often during morning/evening prayer or meditation."
     : "Usage: Can be chanted during daily puja, before starting important tasks, or when seeking strength, peace, and blessings.";
 
-  return { title, devanagari, iast, tamil, meaning, usage, isEnglishOnlyFallback: isUnavailableBeej };
+  const famousCountLabel = !isGayatri && !isBeej
+    ? ` · Showing ${Math.min((famousSelection.index || 0) + 1, Math.max(famousSelection.total || 1, 1))} of ${Math.max(famousVariants.length, 1)} curated famous/traditional chants for ${item.name}.`
+    : "";
+
+  return { title, devanagari, iast, tamil, meaning, usage: `${usage}${famousCountLabel}`, isEnglishOnlyFallback: isUnavailableBeej };
 }
 
 function renderChantAssistant(item) {
-  if (!item) {
+  if (!item || experienceMode !== "chant") {
     chantAssistant.classList.add("hidden");
     stopBreathCue();
     return;
@@ -1896,7 +2815,7 @@ function renderChantAssistant(item) {
 }
 
 function renderMantraInfo(item) {
-  if (!item) {
+  if (!item || experienceMode !== "learning") {
     mantraInfo.classList.add("hidden");
     return;
   }
@@ -1944,7 +2863,8 @@ function filteredList() {
   return list.filter((item) => {
     const beej = beejMantrasByName[item.name];
     const tamilSet = tamilMantrasByName[item.name] || {};
-    const haystack = `${item.name} ${item.famousDevanagari} ${item.famousIast} ${item.gayatriDevanagari} ${item.gayatriIast} ${tamilSet.famous || ""} ${tamilSet.gayatri || ""} ${tamilSet.beej || ""} ${beej?.devanagari || ""} ${beej?.iast || ""} ${item.purpose} ${item.brief}`.toLowerCase();
+    const famousExtra = (famousMantraLibraryByName[item.name] || []).map((entry) => `${entry.title || ""} ${entry.devanagari || ""} ${entry.iast || ""}`).join(" ");
+    const haystack = `${item.name} ${item.famousDevanagari} ${item.famousIast} ${item.gayatriDevanagari} ${item.gayatriIast} ${famousExtra} ${tamilSet.famous || ""} ${tamilSet.gayatri || ""} ${tamilSet.beej || ""} ${beej?.devanagari || ""} ${beej?.iast || ""} ${item.purpose} ${item.brief}`.toLowerCase();
     return haystack.includes(query);
   });
 }
@@ -2028,6 +2948,7 @@ async function renderFeatured() {
 
 function render() {
   const mode = scriptSelect.value;
+  experienceMode = experienceModeSelect?.value || "chant";
   const list = filteredList();
 
   if (!list.length) {
@@ -2035,6 +2956,7 @@ function render() {
     resultCount.textContent = "0 entries shown";
     renderMantraInfo(null);
     renderChantAssistant(null);
+    renderExperienceMode(null);
     renderYouShouldKnow(null);
   } else {
     let selectedItem = list.find((item) => item.name === selectedEntity);
@@ -2046,18 +2968,27 @@ function render() {
       }
     }
 
+    renderFamousVariantOptions(selectedItem);
+
     grid.innerHTML = buildCard(selectedItem, mode);
     resultCount.textContent = "Full page view for selected entry";
+    renderExperienceMode(selectedItem);
     renderMantraInfo(selectedItem);
     renderChantAssistant(selectedItem);
     renderYouShouldKnow(selectedItem);
     renderTempleInfo(selectedItem);
   }
 
+  if (!list.length) {
+    renderFamousVariantOptions(null);
+  }
+
   renderFeatured();
   renderMantraOfDay();
   renderPersonalHub();
   renderSankalpaTracker();
+  renderAiSuggestion();
+  renderQuickPaths();
   savePrefs();
 }
 
@@ -2137,7 +3068,23 @@ mantraSelect.addEventListener("change", () => {
   chantCount = 0;
   render();
 });
+if (famousVariantSelect) {
+  famousVariantSelect.addEventListener("change", () => {
+    const item = activeItem();
+    if (!item) return;
+    const nextIndex = Number(famousVariantSelect.value);
+    famousVariantByEntity[item.name] = Number.isNaN(nextIndex) ? 0 : nextIndex;
+    chantCount = 0;
+    render();
+  });
+}
 scriptSelect.addEventListener("change", render);
+if (experienceModeSelect) {
+  experienceModeSelect.addEventListener("change", () => {
+    experienceMode = experienceModeSelect.value;
+    render();
+  });
+}
 chantTargetSelect.addEventListener("change", () => {
   chantTarget = Number(chantTargetSelect.value);
   const item = mantras.find((entry) => entry.name === selectedEntity);
@@ -2182,6 +3129,102 @@ if (sessionSoundToggle) {
     soundSettings.enabled = sessionSoundToggle.checked;
     saveSoundPrefs();
     showToast(soundSettings.enabled ? "Temple sounds enabled" : "Temple sounds disabled");
+  });
+}
+
+if (homeQuickAccess) {
+  homeQuickAccess.addEventListener("click", (event) => {
+    const button = event.target.closest(".quick-path-btn");
+    if (!button?.dataset.type) return;
+    typeSelect.value = button.dataset.type;
+    populateEntityOptions();
+    chantCount = 0;
+    render();
+  });
+}
+
+if (aiSuggestBtn) {
+  aiSuggestBtn.addEventListener("click", () => {
+    renderAiSuggestion();
+    saveAiPrefs();
+  });
+}
+
+if (aiApplySuggestionBtn) {
+  aiApplySuggestionBtn.addEventListener("click", () => {
+    applyAiSuggestion();
+    saveAiPrefs();
+  });
+}
+
+if (aiDeitySelect) {
+  aiDeitySelect.addEventListener("change", () => {
+    renderAiSuggestion();
+    saveAiPrefs();
+  });
+}
+
+if (voiceAccentSelect) {
+  voiceAccentSelect.addEventListener("change", () => {
+    voiceAccent = voiceAccentSelect.value;
+    savePrefs();
+  });
+}
+
+if (voiceLoopToggle) {
+  voiceLoopToggle.addEventListener("change", () => {
+    voiceLoop = voiceLoopToggle.checked;
+    savePrefs();
+  });
+}
+
+if (voicePlayBtn) {
+  voicePlayBtn.addEventListener("click", () => {
+    speakCurrentMantra();
+  });
+}
+
+if (voiceStopBtn) {
+  voiceStopBtn.addEventListener("click", () => {
+    stopVoiceChant();
+  });
+}
+
+if (moodSelect) {
+  moodSelect.addEventListener("change", () => {
+    selectedMood = moodSelect.value;
+    applyMoodTheme(selectedMood);
+    savePrefs();
+  });
+}
+
+if (applyMoodBtn) {
+  applyMoodBtn.addEventListener("click", () => {
+    const emotionMood = moodFromEmotionInput(emotionInput?.value || "");
+    const targetMood = emotionMood || moodSelect?.value || "auto";
+    selectedMood = targetMood;
+    if (moodSelect) {
+      moodSelect.value = targetMood;
+    }
+    const reason = emotionMood ? "Adjusted from your emotional input." : "Adjusted from selected mode/time.";
+    applyMoodTheme(targetMood, reason);
+    saveAiPrefs();
+    savePrefs();
+  });
+}
+
+if (startMeditationBtn) {
+  startMeditationBtn.addEventListener("click", () => {
+    startMeditationSession();
+  });
+}
+
+if (stopMeditationBtn) {
+  stopMeditationBtn.addEventListener("click", () => {
+    stopMeditationSession(false);
+    if (meditationTimerText) {
+      meditationTimerText.textContent = "Meditation timer not running.";
+    }
   });
 }
 
@@ -2279,7 +3322,10 @@ loadChantHistory();
 loadSankalpa();
 loadReminderSettings();
 loadSoundPrefs();
+populateAiDeityOptions();
+loadAiPrefs();
 populateEntityOptions();
+applyMoodTheme(selectedMood);
 render();
 startRotatingMessages();
 renderReminderSettings();

@@ -44,6 +44,21 @@ body::before {
   padding: 24px 16px 48px;
 }
 
+body[data-mood="calm"] {
+  --accent: #2a6f97;
+  --accent-soft: #d8edf8;
+}
+
+body[data-mood="devotional"] {
+  --accent: #9d4edd;
+  --accent-soft: #eddcff;
+}
+
+body[data-mood="festive"] {
+  --accent: #c2410c;
+  --accent-soft: #ffe4d6;
+}
+
 .hero {
   position: relative;
   border: 1px solid var(--border);
@@ -332,8 +347,52 @@ body::before {
 
 .controls {
   display: grid;
-  grid-template-columns: 1fr 220px 240px 220px 260px;
+  grid-template-columns: 1fr 170px 220px 210px 220px 250px 180px;
   gap: 12px;
+}
+
+#famousVariantSelect.hidden {
+  display: none;
+}
+
+.quick-paths {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(140px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.quick-path-btn {
+  min-height: 56px;
+  border-radius: 14px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.quick-path-btn.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.ai-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.ai-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  background: #fffdf9;
+  display: grid;
+  gap: 8px;
+}
+
+.ai-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 input,
@@ -644,6 +703,14 @@ button:active {
   align-items: center;
 }
 
+#meditationOverlay {
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  background: #fffaf2;
+  padding: 12px;
+  min-height: 84px;
+}
+
 .mala-ring {
   --mala-progress: 0%;
   width: 76px;
@@ -699,6 +766,53 @@ button:active {
 #templeList {
   margin: 0;
   padding-left: 18px;
+}
+
+.temple-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.temple-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fffdf9;
+  overflow: hidden;
+}
+
+.temple-card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+  background: #f3eadb;
+}
+
+.temple-card-body {
+  padding: 10px;
+}
+
+.temple-card-body p {
+  margin: 0 0 8px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.temple-links {
+  display: flex;
+  gap: 12px;
+}
+
+.temple-links a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.temple-links a:hover {
+  text-decoration: underline;
 }
 
 #templeList li {
@@ -789,6 +903,11 @@ button:active {
   }
 
   .controls {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-paths,
+  .ai-grid {
     grid-template-columns: 1fr;
   }
 
