@@ -1498,6 +1498,25 @@ function localizedFooterText(year) {
   return `© ${year} Soulvest Mantras. All rights reserved.`;
 }
 
+function localizedMoodValue(mood) {
+  if (mood === "calm") return t("moodCalm");
+  if (mood === "devotional") return t("moodDevotional");
+  if (mood === "festive") return t("moodFestive");
+  if (currentLanguage === "ta") return "தானாக";
+  if (currentLanguage === "te") return "ఆటో";
+  if (currentLanguage === "kn") return "ಸ್ವಯಂ";
+  if (currentLanguage === "hi") return "ऑटो";
+  return "Auto";
+}
+
+function localizedBeejUnavailableText() {
+  if (currentLanguage === "ta") return "இந்த தேர்வுக்கு பீஜ மந்திரம் கிடைக்கவில்லை.";
+  if (currentLanguage === "te") return "ఈ ఎంపికకు బీజ మంత్రం అందుబాటులో లేదు.";
+  if (currentLanguage === "kn") return "ಈ ಆಯ್ಕೆಗೆ ಬೀಜ ಮಂತ್ರ ಲಭ್ಯವಿಲ್ಲ.";
+  if (currentLanguage === "hi") return "इस चयन के लिए बीज मंत्र उपलब्ध नहीं है।";
+  return "Beej mantra is not available for this selection.";
+}
+
 function applyLanguageToStaticUI() {
   document.documentElement.lang = currentLanguage;
   const L = (en, ta, te, kn, hi) => ({ en, ta, te, kn, hi }[currentLanguage] || en);
@@ -2889,7 +2908,7 @@ function applyMoodTheme(mood, reasonText = "") {
   applyTimeTheme(manualTimeTheme);
   if (moodStatus) {
     const reason = reasonText ? ` ${reasonText}` : "";
-    moodStatus.textContent = t("moodActive", { mood: nextMood, reason });
+    moodStatus.textContent = t("moodActive", { mood: localizedMoodValue(nextMood), reason });
   }
 }
 
@@ -4591,8 +4610,8 @@ function selectedMantraData(item) {
       iast = beej.iast;
     } else {
       title = "Beej Mantra";
-      devanagari = "इस चयन के लिए बीज मंत्र उपलब्ध नहीं है।";
-      iast = "Beej mantra is not available for this selection.";
+      devanagari = localizedBeejUnavailableText();
+      iast = localizedBeejUnavailableText();
     }
   }
 
