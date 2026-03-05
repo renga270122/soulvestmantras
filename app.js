@@ -549,6 +549,9 @@ const languageSelect = document.getElementById("languageSelect");
 const languageBarLabel = document.getElementById("languageBarLabel");
 const langEnglishBtn = document.getElementById("langEnglishBtn");
 const langTamilBtn = document.getElementById("langTamilBtn");
+const langTeluguBtn = document.getElementById("langTeluguBtn");
+const langKannadaBtn = document.getElementById("langKannadaBtn");
+const langHindiBtn = document.getElementById("langHindiBtn");
 
 const imageCache = new Map();
 let selectedEntity = "";
@@ -612,6 +615,9 @@ const uiCopy = {
   en: {
     languageEnglish: "English",
     languageTamil: "தமிழ்",
+    languageTelugu: "తెలుగు",
+    languageKannada: "ಕನ್ನಡ",
+    languageHindi: "हिंदी",
     searchPlaceholder: "Search deity, mantra, or meaning...",
     slokaSearchPlaceholder: "Search by deity, sloka text, or purpose...",
     noEntries: "No entries found for your search.",
@@ -619,6 +625,9 @@ const uiCopy = {
     fullPageView: "Full page view for selected entry",
     scriptDevanagari: "Script: Devanagari",
     scriptTamil: "Script: Tamil",
+    scriptTelugu: "Script: Telugu",
+    scriptKannada: "Script: Kannada",
+    scriptHindi: "Script: Hindi (Devanagari)",
     scriptIast: "Script: IAST (Transliteration)",
     scriptBoth: "Script: Devanagari + Tamil + IAST",
     typeGod: "God",
@@ -662,6 +671,7 @@ const uiCopy = {
     aiWeekdayReason: "Weekday alignment: {day} traditionally favors {name}.",
     aiFallbackReason: "Using your current selection as the best match.",
     aiOpened: "Suggested mantra opened: {name}",
+    noPreferenceWeekday: "No preference (weekday based)",
     light: "Light",
     medium: "Medium",
     deep: "Deep",
@@ -726,6 +736,9 @@ const uiCopy = {
   ta: {
     languageEnglish: "English",
     languageTamil: "தமிழ்",
+    languageTelugu: "తెలుగు",
+    languageKannada: "ಕನ್ನಡ",
+    languageHindi: "हिंदी",
     searchPlaceholder: "தெய்வம், மந்திரம் அல்லது பொருள் தேடுங்கள்...",
     slokaSearchPlaceholder: "தெய்வம், ஸ்லோகம் அல்லது நோக்கம் மூலம் தேடுங்கள்...",
     noEntries: "உங்கள் தேடலுக்கு பொருந்தும் பதிவுகள் இல்லை.",
@@ -733,6 +746,9 @@ const uiCopy = {
     fullPageView: "தேர்ந்தெடுத்த பதிவுக்கான முழுப் பக்க காட்சி",
     scriptDevanagari: "எழுத்து: தேவநாகரி",
     scriptTamil: "எழுத்து: தமிழ்",
+    scriptTelugu: "எழுத்து: தெலுங்கு",
+    scriptKannada: "எழுத்து: கன்னடம்",
+    scriptHindi: "எழுத்து: ஹிந்தி (தேவநாகரி)",
     scriptIast: "எழுத்து: IAST (ஒலிபெயர்ப்பு)",
     scriptBoth: "எழுத்து: தேவநாகரி + தமிழ் + IAST",
     typeGod: "தெய்வம்",
@@ -776,6 +792,7 @@ const uiCopy = {
     aiWeekdayReason: "வாரநாள் பொருத்தம்: {day} அன்று {name} பரிந்துரைக்கப்படுகிறது.",
     aiFallbackReason: "உங்கள் தற்போதைய தேர்வே சிறந்ததாக பயன்படுத்தப்பட்டது.",
     aiOpened: "பரிந்துரைக்கப்பட்ட மந்திரம் திறக்கப்பட்டது: {name}",
+    noPreferenceWeekday: "விருப்பம் இல்லை (வாரநாள் அடிப்படையில்)",
     light: "இலகு",
     medium: "மத்திய",
     deep: "ஆழம்",
@@ -836,6 +853,371 @@ const uiCopy = {
       "காயத்ரி மந்திரம் புத்தி ஒளிவளத்தை வேண்டுகிறது; பீஜ மந்திரம் சுருக்கமான தெய்வ அதிர்வை வலுப்படுத்துகிறது.",
       "11, 21, 51 அல்லது 108 போன்ற நிலையான எண்ணிக்கை பீஜ ஜபத்தை ஒழுங்காக மாற்றுகிறது."
     ]
+  },
+  te: {
+    languageEnglish: "English",
+    languageTamil: "தமிழ்",
+    languageTelugu: "తెలుగు",
+    languageKannada: "ಕನ್ನಡ",
+    languageHindi: "हिंदी",
+    searchPlaceholder: "దేవుడు, మంత్రం లేదా అర్థం కోసం వెతకండి...",
+    slokaSearchPlaceholder: "దేవుడు, శ్లోకం లేదా ఉద్దేశం ద్వారా వెతకండి...",
+    noEntries: "మీ శోధనకు ఎలాంటి నమోదులు కనబడలేదు.",
+    entriesShown: "{count} నమోదులు చూపబడుతున్నాయి",
+    fullPageView: "ఎంచుకున్న నమోదుకు పూర్తి పేజీ వీక్షణం",
+    scriptDevanagari: "లిపి: దేవనాగరి",
+    scriptTamil: "లిపి: తమిళం",
+    scriptTelugu: "లిపి: తెలుగు",
+    scriptKannada: "లిపి: కన్నడ",
+    scriptHindi: "లిపి: హిందీ (దేవనాగరి)",
+    scriptIast: "లిపి: IAST (లిప్యంతరీకరణ)",
+    scriptBoth: "లిపి: దేవనాగరి + తమిళం + IAST",
+    typeGod: "దేవుడు",
+    typeGuru: "గురు",
+    typePlanet: "గ్రహం (నవగ్రహం)",
+    addFavorite: "ఇష్టాల్లో చేర్చు",
+    removeFavorite: "ఇష్టాల నుండి తొలగించు",
+    copySelected: "ఎంచుకున్నదాన్ని కాపీ చేయండి",
+    copyAll: "అన్నింటినీ కాపీ చేయండి",
+    blessingCard: "ఆశీర్వాద కార్డ్",
+    shareCard: "కార్డును పంచుకోండి",
+    copied: "{label} కాపీ అయింది",
+    copyFailed: "కాపీ విఫలమైంది",
+    favoritesAdded: "{name} ఇష్టాల్లో చేరింది",
+    favoritesRemoved: "{name} ఇష్టాల నుండి తొలగించబడింది",
+    justNow: "ఇప్పుడే",
+    recently: "ఇటీవల",
+    chants: "జపాలు",
+    last: "చివరి",
+    today: "ఈ రోజు",
+    sankalpa: "సంకల్పం",
+    completedToday: "ఈ రోజు పూర్తి",
+    currentStreak: "ప్రస్తుత స్ట్రీక్",
+    best: "ఉత్తమం",
+    days: "రోజు(లు)",
+    everyDay: "ప్రతి రోజు",
+    reminderActive: "రిమైండర్ సక్రియంగా ఉంది: {day} {time} కు",
+    reminderDisabled: "రిమైండర్ నిలిపివేయబడింది.",
+    notifUnsupported: "ఈ బ్రౌజర్‌లో నోటిఫికేషన్లు అందుబాటులో లేవు.",
+    notifEnabled: "బ్రౌజర్ నోటిఫికేషన్లు ప్రారంభించబడ్డాయి.",
+    notifBlocked: "బ్రౌజర్ సెట్టింగుల్లో నోటిఫికేషన్ అనుమతి బ్లాక్ చేయబడింది.",
+    notifPending: "నోటిఫికేషన్ అనుమతి ఇంకా ఇవ్వబడలేదు.",
+    reminderSaved: "రిమైండర్ సెట్టింగులు సేవ్ అయ్యాయి",
+    reminderTitle: "Soulvest Mantras రిమైండర్",
+    defaultReminderMessage: "మీ మంత్ర సాధనకు సమయం.",
+    mantraUnavailable: "ప్రస్తుతం మంత్ర సూచన అందుబాటులో లేదు.",
+    mantraOfDayTitle: "{day} — {name}",
+    mantraOfDayText: "{title}: {purpose}",
+    aiNoSuggestion: "ప్రస్తుతం వ్యక్తిగత సూచన లేదు.",
+    aiChosenReason: "మీరు ఎంచుకున్న దేవుడు ఆధారంగా: {name}.",
+    aiWeekdayReason: "వారంలో రోజు సరిపోలిక: {day} రోజున సంప్రదాయంగా {name} అనుకూలం.",
+    aiFallbackReason: "మీ ప్రస్తుత ఎంపికను ఉత్తమ సరిపోలికగా ఉపయోగించాం.",
+    aiOpened: "సూచించిన మంత్రం తెరచబడింది: {name}",
+    light: "తేలిక",
+    medium: "మధ్యస్థ",
+    deep: "లోతైన",
+    moodCalm: "శాంతం",
+    moodDevotional: "భక్తి",
+    moodFestive: "ఉత్సవ",
+    moodActive: "మూడ్ సక్రియం: {mood}.{reason}",
+    ambientUnsupported: "ఈ బ్రౌజర్‌లో అంబియెంట్ ఆడియోకు మద్దతు లేదు.",
+    ambientAlready: "అంబియెంట్ ఆడియో ఇప్పటికే ప్లే అవుతోంది.",
+    ambientPlaying: "తంబూరా శైలిలో అంబియెంట్ ధ్వని ప్లే అవుతోంది.",
+    ambientStopped: "అంబియెంట్ ఆడియో ఆగింది.",
+    voiceStopped: "వాయిస్ జపం ఆపబడింది.",
+    voiceUnsupported: "ఈ బ్రౌజర్‌లో వాయిస్ జపం మద్దతు లేదు.",
+    voiceSelectFirst: "వాయిస్ జపం ప్లే చేయడానికి ముందుగా ఒక దేవుడిని ఎంచుకోండి.",
+    voicePlaying: "{label} వాయిస్ జపం{loop} {intensity} తీవ్రతతో ప్లే అవుతోంది.",
+    voiceLoopOn: " లూప్‌లో",
+    noPreferenceWeekday: "ప్రాధాన్యం లేదు (వారంలో రోజు ఆధారంగా)",
+    meditationComplete: "ధ్యాన సెషన్ పూర్తైంది",
+    meditationPickEntry: "ధ్యానం ప్రారంభించడానికి ఒక నమోదు ఎంచుకోండి",
+    silenceTimer: "నిశ్శబ్ద టైమర్: {time}",
+    meditationTitle: "{name} — సమయబద్ధ నిశ్శబ్ద ధ్యానం",
+    meditationNotRunning: "ధ్యాన టైమర్ నడవడం లేదు.",
+    malaProgress: "మాలా పురోగతి: {count} / 108",
+    countProgress: "లెక్క: {count} / {target} · మొత్తం జపం: {total}",
+    ritualGuidance: "పూజా మార్గదర్శకం",
+    ritualGuidanceFor: "{name} — పూజా మార్గదర్శకం",
+    ritualChoose: "ప్రాయోగిక పూజా మార్గదర్శకం కోసం దేవుడు, గ్రహం లేదా గురువును ఎంచుకోండి.",
+    ritualMissing: "ఈ ఎంపికకు పూజా మార్గదర్శకం ఇంకా అందుబాటులో లేదు.",
+    slokasShown: "{count} శ్లోకాలు చూపబడుతున్నాయి",
+    mantraTypePlanet: "గ్రహం",
+    completedChants: "{count} జపాలు పూర్తయ్యాయి",
+    sankalpaComplete: "ఈరోజు సంకల్పం పూర్తి అయింది",
+    templeSoundsEnabled: "దేవాలయ ధ్వనులు ప్రారంభించబడ్డాయి",
+    templeSoundsDisabled: "దేవాలయ ధ్వనులు నిలిపివేయబడ్డాయి",
+    journalSavedStatus: "ఈరోజు జర్నల్ నమోదు సేవ్ చేయబడింది.",
+    ritualJournalSaved: "పూజా జర్నల్ సేవ్ చేయబడింది",
+    sankalpaSaved: "సంకల్పం సేవ్ చేయబడింది",
+    sankalpaAlready: "ఈరోజు సంకల్పం ఇప్పటికే పూర్తి అయింది",
+    blessingCardNotSupported: "ఆశీర్వాద కార్డ్‌కు మద్దతు లేదు",
+    blessingCardShared: "ఆశీర్వాద కార్డ్ పంచబడింది",
+    generatedOn: "సృష్టించిన తేదీ",
+    todaysMessage: "ఈరోజు సందేశం",
+    purpose: "ఉద్దేశ్యం",
+    about: "గురించి",
+    blessingDownloaded: "ఆశీర్వాద కార్డ్ డౌన్‌లోడ్ అయింది",
+    weekdays: ["ఆది", "సోమ", "మంగళ", "బుధ", "గురు", "శుక్ర", "శని"]
+    ,
+    rotatingMessages: [
+      "ఏకాగ్రతతో చేసిన ఒక్క జపం, దృష్టి చెదిరిన ఎన్నో జపాల కంటే శ్రేష్ఠం.",
+      "లోతుగా శ్వాస తీసుకోండి, స్పష్టంగా జపించండి, సంకల్పాన్ని స్థిరంగా ఉంచండి.",
+      "ప్రతి రోజు 11 జపాలు క్రమంగా చేస్తే అంతరబలం పెరుగుతుంది.",
+      "కృతజ్ఞతతో ప్రారంభించి నిశ్శబ్దంతో ముగించండి.",
+      "వేగం కంటే భక్తితో సరైన ఉచ్చారణ ముఖ్యం."
+    ],
+    didYouKnowMessages: [
+      "బీజ మంత్రం అంటే విత్తన ధ్వని — దేవత యొక్క మూలశక్తిని సూచించే సంక్షిప్త నాదం.",
+      "సాధారణ బీజ ఉదాహరణలు: గణేశుడికి ॐ गं, లక్ష్మీకి श्रीं, సరస్వతికి ऐं.",
+      "బీజ మంత్రాలు చిన్నవైనా, అవి ఏకాగ్రతతో, సరైన ఉచ్చారణతో, స్థిర శ్వాసతో జపించాలి.",
+      "చాలామంది మొదట ప్రసిద్ధ మంత్రంతో ప్రారంభించి, తరువాత బీజ జపంతో అంతర్గత ఏకాగ్రత పెంచుతారు.",
+      "గాయత్రి మంత్రాలు బుద్ధి ప్రకాశాన్ని కోరుతాయి; బీజ మంత్రాలు కేంద్రీకృత దైవిక నాదాన్ని బలపరుస్తాయి.",
+      "11, 21, 51 లేదా 108 వంటి స్థిర సంఖ్యలు బీజ జపాన్ని క్రమబద్ధం చేస్తాయి."
+    ]
+  },
+  kn: {
+    languageEnglish: "English",
+    languageTamil: "தமிழ்",
+    languageTelugu: "తెలుగు",
+    languageKannada: "ಕನ್ನಡ",
+    languageHindi: "हिंदी",
+    searchPlaceholder: "ದೇವತೆ, ಮಂತ್ರ ಅಥವಾ ಅರ್ಥವನ್ನು ಹುಡುಕಿ...",
+    slokaSearchPlaceholder: "ದೇವತೆ, ಶ್ಲೋಕ ಅಥವಾ ಉದ್ದೇಶದಿಂದ ಹುಡುಕಿ...",
+    noEntries: "ನಿಮ್ಮ ಹುಡುಕಾಟಕ್ಕೆ ಯಾವುದೇ ದಾಖಲೆಯಿಲ್ಲ.",
+    entriesShown: "{count} ದಾಖಲೆಗಳು ತೋರಿಸಲಾಗುತ್ತಿವೆ",
+    fullPageView: "ಆಯ್ದ ದಾಖಲೆಗಾಗಿ ಪೂರ್ಣ ಪುಟ ವೀಕ್ಷಣೆ",
+    scriptDevanagari: "ಲಿಪಿ: ದೇವನಾಗರಿ",
+    scriptTamil: "ಲಿಪಿ: ತಮಿಳು",
+    scriptTelugu: "ಲಿಪಿ: తెలుగు",
+    scriptKannada: "ಲಿಪಿ: ಕನ್ನಡ",
+    scriptHindi: "ಲಿಪಿ: ಹಿಂದಿ (ದೇವನಾಗರಿ)",
+    scriptIast: "ಲಿಪಿ: IAST (ಲಿಪ್ಯಂತರ)",
+    scriptBoth: "ಲಿಪಿ: ದೇವನಾಗರಿ + ತಮಿಳು + IAST",
+    typeGod: "ದೇವರು",
+    typeGuru: "ಗುರು",
+    typePlanet: "ಗ್ರಹ (ನವಗ್ರಹ)",
+    addFavorite: "ಮೆಚ್ಚಿನಕ್ಕೆ ಸೇರಿಸಿ",
+    removeFavorite: "ಮೆಚ್ಚಿನದಿಂದ ತೆಗೆದುಹಾಕಿ",
+    copySelected: "ಆಯ್ದುದನ್ನು ನಕಲಿಸಿ",
+    copyAll: "ಎಲ್ಲವನ್ನೂ ನಕಲಿಸಿ",
+    blessingCard: "ಆಶೀರ್ವಾದ ಕಾರ್ಡ್",
+    shareCard: "ಕಾರ್ಡ್ ಹಂಚಿಕೆ",
+    copied: "{label} ನಕಲಾಯಿತು",
+    copyFailed: "ನಕಲು ವಿಫಲವಾಗಿದೆ",
+    favoritesAdded: "{name} ಮೆಚ್ಚಿನಕ್ಕೆ ಸೇರಿಸಲಾಗಿದೆ",
+    favoritesRemoved: "{name} ಮೆಚ್ಚಿನದಿಂದ ತೆಗೆದುಹಾಕಲಾಗಿದೆ",
+    justNow: "ಈಗಷ್ಟೇ",
+    recently: "ಇತ್ತೀಚೆಗೆ",
+    chants: "ಜಪಗಳು",
+    last: "ಕೊನೆಯದು",
+    today: "ಇಂದು",
+    sankalpa: "ಸಂಕಲ್ಪ",
+    completedToday: "ಇಂದು ಪೂರ್ಣ",
+    currentStreak: "ಪ್ರಸ್ತುತ ಸರಣಿ",
+    best: "ಅತ್ಯುತ್ತಮ",
+    days: "ದಿನ(ಗಳು)",
+    everyDay: "ಪ್ರತಿ ದಿನ",
+    reminderActive: "ಜ್ಞಾಪನೆ ಸಕ್ರಿಯ: {day} ರಂದು {time}",
+    reminderDisabled: "ಜ್ಞಾಪನೆ ನಿಷ್ಕ್ರಿಯವಾಗಿದೆ.",
+    notifUnsupported: "ಈ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಸೂಚನೆಗಳಿಗೆ ಬೆಂಬಲ ಇಲ್ಲ.",
+    notifEnabled: "ಬ್ರೌಸರ್ ಸೂಚನೆಗಳು ಸಕ್ರಿಯವಾಗಿವೆ.",
+    notifBlocked: "ಬ್ರೌಸರ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಸೂಚನೆ ಅನುಮತಿ ನಿರ್ಬಂಧಿಸಲಾಗಿದೆ.",
+    notifPending: "ಸೂಚನೆ ಅನುಮತಿ ಇನ್ನೂ ನೀಡಲಾಗಿಲ್ಲ.",
+    reminderSaved: "ಜ್ಞಾಪನೆ ಸೆಟ್ಟಿಂಗ್ಸ್ ಉಳಿಸಲಾಗಿದೆ",
+    reminderTitle: "Soulvest Mantras ಜ್ಞಾಪನೆ",
+    defaultReminderMessage: "ನಿಮ್ಮ ಮಂತ್ರ ಅಭ್ಯಾಸದ ಸಮಯ.",
+    mantraUnavailable: "ಈಗ ಮಂತ್ರ ಸಲಹೆ ಲಭ್ಯವಿಲ್ಲ.",
+    mantraOfDayTitle: "{day} — {name}",
+    mantraOfDayText: "{title}: {purpose}",
+    aiNoSuggestion: "ಈಗ ವೈಯಕ್ತಿಕ ಸಲಹೆ ಲಭ್ಯವಿಲ್ಲ.",
+    aiChosenReason: "ನೀವು ಆಯ್ಕೆ ಮಾಡಿದ ದೇವತೆ ಆಧಾರದ ಮೇಲೆ: {name}.",
+    aiWeekdayReason: "ವಾರದ ದಿನ ಹೊಂದಾಣಿಕೆ: {day} ದಿನ {name} ಪರಂಪರೆಯಿಂದ ಅನುಕೂಲವಾಗಿದೆ.",
+    aiFallbackReason: "ನಿಮ್ಮ ಪ್ರಸ್ತುತ ಆಯ್ಕೆಯನ್ನು ಅತ್ಯುತ್ತಮ ಹೊಂದಾಣಿಕೆಯಾಗಿಯಾಗಿ ಬಳಸಲಾಗಿದೆ.",
+    aiOpened: "ಸೂಚಿಸಿದ ಮಂತ್ರ ತೆರೆಯಲಾಗಿದೆ: {name}",
+    light: "ಲಘು",
+    medium: "ಮಧ್ಯಮ",
+    deep: "ಆಳವಾದ",
+    moodCalm: "ಶಾಂತ",
+    moodDevotional: "ಭಕ್ತಿ",
+    moodFestive: "ಹಬ್ಬದ",
+    moodActive: "ಮೂಡ್ ಸಕ್ರಿಯ: {mood}.{reason}",
+    ambientUnsupported: "ಈ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಅಂಬಿಯೆಂಟ್ ಆಡಿಯೋ ಬೆಂಬಲಿತವಲ್ಲ.",
+    ambientAlready: "ಅಂಬಿಯೆಂಟ್ ಆಡಿಯೋ ಈಗಾಗಲೇ ಪ್ಲೇ ಆಗುತ್ತಿದೆ.",
+    ambientPlaying: "ತಂಬೂರಾ ಶೈಲಿಯ ಅಂಬಿಯೆಂಟ್ ಧ್ವನಿ ಪ್ಲೇ ಆಗುತ್ತಿದೆ.",
+    ambientStopped: "ಅಂಬಿಯೆಂಟ್ ಆಡಿಯೋ ನಿಂತಿದೆ.",
+    voiceStopped: "ವಾಯ್ಸ್ ಜಪ ನಿಲ್ಲಿಸಲಾಗಿದೆ.",
+    voiceUnsupported: "ಈ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ವಾಯ್ಸ್ ಜಪ ಬೆಂಬಲಿತವಲ್ಲ.",
+    voiceSelectFirst: "ವಾಯ್ಸ್ ಜಪವನ್ನು ಪ್ಲೇ ಮಾಡಲು ಮೊದಲು ದೇವತೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.",
+    voicePlaying: "{label} ವಾಯ್ಸ್ ಜಪ{loop} {intensity} ತೀವ್ರತೆಯಲ್ಲಿ ಪ್ಲೇ ಆಗುತ್ತಿದೆ.",
+    voiceLoopOn: " ಲೂಪ್‌ನಲ್ಲಿ",
+    noPreferenceWeekday: "ಆಯ್ಕೆ ಇಲ್ಲ (ವಾರದ ದಿನದ ಆಧಾರದಲ್ಲಿ)",
+    meditationComplete: "ಧ್ಯಾನ ಸೆಷನ್ ಪೂರ್ಣಗೊಂಡಿದೆ",
+    meditationPickEntry: "ಧ್ಯಾನ ಆರಂಭಿಸಲು ಒಂದು ನಮೂದನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+    silenceTimer: "ಮೌನ ಟೈಮರ್: {time}",
+    meditationTitle: "{name} — ಸಮಯನಿಗದಿತ ಮೌನ ಧ್ಯಾನ",
+    meditationNotRunning: "ಧ್ಯಾನ ಟೈಮರ್ ಚಾಲನೆಯಲ್ಲಿಲ್ಲ.",
+    malaProgress: "ಮಾಲಾ ಪ್ರಗತಿ: {count} / 108",
+    countProgress: "ಎಣಿಕೆ: {count} / {target} · ಒಟ್ಟು ಜಪ: {total}",
+    ritualGuidance: "ಆಚಾರ ಮಾರ್ಗದರ್ಶನ",
+    ritualGuidanceFor: "{name} — ಆಚಾರ ಮಾರ್ಗದರ್ಶನ",
+    ritualChoose: "ಪ್ರಾಯೋಗಿಕ ಆಚಾರ ಮಾರ್ಗದರ್ಶನ ನೋಡಲು ದೇವರು, ಗ್ರಹ ಅಥವಾ ಗುರುವನ್ನು ಆಯ್ಕೆಮಾಡಿ.",
+    ritualMissing: "ಈ ಆಯ್ಕೆಗೆ ಆಚಾರ ಮಾರ್ಗದರ್ಶನ ಇನ್ನೂ ಲಭ್ಯವಿಲ್ಲ.",
+    slokasShown: "{count} ಶ್ಲೋಕಗಳು ತೋರಿಸಲಾಗುತ್ತಿವೆ",
+    mantraTypePlanet: "ಗ್ರಹ",
+    completedChants: "{count} ಜಪಗಳು ಪೂರ್ಣಗೊಂಡಿವೆ",
+    sankalpaComplete: "ಇಂದಿನ ಸಂಕಲ್ಪ ಪೂರ್ಣಗೊಂಡಿದೆ",
+    templeSoundsEnabled: "ದೇವಾಲಯ ಧ್ವನಿಗಳು ಸಕ್ರಿಯಗೊಂಡಿವೆ",
+    templeSoundsDisabled: "ದೇವಾಲಯ ಧ್ವನಿಗಳು ನಿಷ್ಕ್ರಿಯಗೊಂಡಿವೆ",
+    journalSavedStatus: "ಇಂದಿನ ಜರ್ನಲ್ ನಮೂದು ಉಳಿಸಲಾಗಿದೆ.",
+    ritualJournalSaved: "ಆಚಾರ ಜರ್ನಲ್ ಉಳಿಸಲಾಗಿದೆ",
+    sankalpaSaved: "ಸಂಕಲ್ಪ ಉಳಿಸಲಾಗಿದೆ",
+    sankalpaAlready: "ಇಂದಿನ ಸಂಕಲ್ಪ ಈಗಾಗಲೇ ಪೂರ್ಣಗೊಂಡಿದೆ",
+    blessingCardNotSupported: "ಆಶೀರ್ವಾದ ಕಾರ್ಡ್ ಬೆಂಬಲಿತವಲ್ಲ",
+    blessingCardShared: "ಆಶೀರ್ವಾದ ಕಾರ್ಡ್ ಹಂಚಲಾಗಿದೆ",
+    generatedOn: "ರಚಿಸಿದ ದಿನಾಂಕ",
+    todaysMessage: "ಇಂದಿನ ಸಂದೇಶ",
+    purpose: "ಉದ್ದೇಶ",
+    about: "ಬಗ್ಗೆ",
+    blessingDownloaded: "ಆಶೀರ್ವಾದ ಕಾರ್ಡ್ ಡೌನ್‌ಲೋಡ್ ಆಗಿದೆ",
+    weekdays: ["ಭಾನು", "ಸೋಮ", "ಮಂಗಳ", "ಬುಧ", "ಗುರು", "ಶುಕ್ರ", "ಶನಿ"]
+    ,
+    rotatingMessages: [
+      "ಏಕಾಗ್ರತೆಯಿಂದ ಮಾಡಿದ ಒಂದು ಜಪ, ಗಮನ ಹರಿದ ಅನೇಕ ಜಪಗಳಿಗಿಂತ ಶಕ್ತಿಯುತ.",
+      "ಆಳವಾಗಿ ಉಸಿರಾಡಿ, ಸ್ಪಷ್ಟವಾಗಿ ಜಪಿಸಿ, ಸಂಕಲ್ಪವನ್ನು ಸ್ಥಿರವಾಗಿಡಿ.",
+      "ಪ್ರತಿ ದಿನ 11 ಜಪಗಳನ್ನು ನಿರಂತರವಾಗಿ ಮಾಡಿದರೆ ಒಳಬಲ ಹೆಚ್ಚುತ್ತದೆ.",
+      "ಕೃತಜ್ಞತೆಯಿಂದ ಆರಂಭಿಸಿ, ಮೌನದಿಂದ ಮುಗಿಸಿ.",
+      "ವೇಗಕ್ಕಿಂತ ಭಕ್ತಿಯಿಂದ ಸರಿಯಾದ ಉಚ್ಚಾರಣೆ ಮುಖ್ಯ."
+    ],
+    didYouKnowMessages: [
+      "ಬೀಜ ಮಂತ್ರ ಎಂದರೆ ಬೀಜ ನಾದ — ದೇವರ ಮೂಲಶಕ್ತಿಯನ್ನು ಸೂಚಿಸುವ ಸಂಕ್ಷಿಪ್ತ ಸ್ಪಂದನ.",
+      "ಸಾಮಾನ್ಯ ಬೀಜ ಉದಾಹರಣೆಗಳು: ಗಣೇಶನಿಗೆ ॐ गं, ಲಕ್ಷ್ಮಿಗೆ श्रीं, ಸರಸ್ವತಿಗೆ ऐं.",
+      "ಬೀಜ ಮಂತ್ರಗಳು ಚಿಕ್ಕದಾದರೂ, ಅವನ್ನು ಏಕಾಗ್ರತೆ, ಸರಿಯಾದ ಉಚ್ಚಾರಣೆ ಮತ್ತು ಸ್ಥಿರ ಉಸಿರಿನಿಂದ ಜಪಿಸಬೇಕು.",
+      "ಅನೇಕರು ಮೊದಲು ಪ್ರಸಿದ್ಧ ಮಂತ್ರದಿಂದ ಆರಂಭಿಸಿ, ನಂತರ ಬೀಜ ಜಪದಿಂದ ಒಳಗಿನ ಏಕಾಗ್ರತೆಯನ್ನು ಗಾಢಗೊಳಿಸುತ್ತಾರೆ.",
+      "ಗಾಯತ್ರಿ ಮಂತ್ರಗಳು ಬುದ್ಧಿಯ ಪ್ರಕಾಶವನ್ನು ಕೋರುತ್ತವೆ; ಬೀಜ ಮಂತ್ರಗಳು ಕೇಂದ್ರೀಕೃತ ದೈವಿಕ ಸ್ಪಂದನವನ್ನು ಬಲಪಡಿಸುತ್ತವೆ.",
+      "11, 21, 51 ಅಥವಾ 108 જેવી ಸ್ಥಿರ ಎಣಿಕೆಗಳು ಬೀಜ ಜಪವನ್ನು ನಿಯಮಿತಗೊಳಿಸುತ್ತವೆ."
+    ]
+  },
+  hi: {
+    languageEnglish: "English",
+    languageTamil: "தமிழ்",
+    languageTelugu: "తెలుగు",
+    languageKannada: "ಕನ್ನಡ",
+    languageHindi: "हिंदी",
+    searchPlaceholder: "देवता, मंत्र या अर्थ खोजें...",
+    slokaSearchPlaceholder: "देवता, श्लोक या उद्देश्य से खोजें...",
+    noEntries: "आपकी खोज के लिए कोई प्रविष्टि नहीं मिली।",
+    entriesShown: "{count} प्रविष्टियाँ दिखाई जा रही हैं",
+    fullPageView: "चयनित प्रविष्टि का पूर्ण पेज दृश्य",
+    scriptDevanagari: "लिपि: देवनागरी",
+    scriptTamil: "लिपि: तमिल",
+    scriptTelugu: "लिपि: तेलुगु",
+    scriptKannada: "लिपि: कन्नड़",
+    scriptHindi: "लिपि: हिंदी (देवनागरी)",
+    scriptIast: "लिपि: IAST (लिप्यंतरण)",
+    scriptBoth: "लिपि: देवनागरी + तमिल + IAST",
+    typeGod: "देवता",
+    typeGuru: "गुरु",
+    typePlanet: "ग्रह (नवग्रह)",
+    addFavorite: "पसंदीदा में जोड़ें",
+    removeFavorite: "पसंदीदा से हटाएँ",
+    copySelected: "चयनित कॉपी करें",
+    copyAll: "सभी कॉपी करें",
+    blessingCard: "आशीर्वाद कार्ड",
+    shareCard: "कार्ड साझा करें",
+    copied: "{label} कॉपी हुआ",
+    copyFailed: "कॉपी असफल",
+    favoritesAdded: "{name} पसंदीदा में जोड़ा गया",
+    favoritesRemoved: "{name} पसंदीदा से हटाया गया",
+    justNow: "अभी",
+    recently: "हाल ही में",
+    chants: "जप",
+    last: "पिछला",
+    today: "आज",
+    sankalpa: "संकल्प",
+    completedToday: "आज पूर्ण",
+    currentStreak: "वर्तमान क्रम",
+    best: "सर्वश्रेष्ठ",
+    days: "दिन",
+    everyDay: "हर दिन",
+    reminderActive: "रिमाइंडर सक्रिय: {day} को {time} बजे",
+    reminderDisabled: "रिमाइंडर बंद है।",
+    notifUnsupported: "इस ब्राउज़र में सूचनाएँ समर्थित नहीं हैं।",
+    notifEnabled: "ब्राउज़र सूचनाएँ सक्षम हैं।",
+    notifBlocked: "ब्राउज़र सेटिंग्स में सूचना अनुमति अवरुद्ध है।",
+    notifPending: "सूचना अनुमति अभी तक नहीं दी गई है।",
+    reminderSaved: "रिमाइंडर सेटिंग्स सहेजी गईं",
+    reminderTitle: "Soulvest Mantras रिमाइंडर",
+    defaultReminderMessage: "आपके मंत्र अभ्यास का समय है।",
+    mantraUnavailable: "अभी कोई मंत्र सुझाव उपलब्ध नहीं है।",
+    mantraOfDayTitle: "{day} — {name}",
+    mantraOfDayText: "{title}: {purpose}",
+    aiNoSuggestion: "अभी कोई व्यक्तिगत सुझाव उपलब्ध नहीं है।",
+    aiChosenReason: "आपके चुने हुए देवता के आधार पर: {name}।",
+    aiWeekdayReason: "सप्ताह के दिन के अनुसार: {day} को पारंपरिक रूप से {name} उपयुक्त है।",
+    aiFallbackReason: "आपकी वर्तमान चयन को सर्वोत्तम मिलान के रूप में उपयोग किया गया।",
+    aiOpened: "सुझाया गया मंत्र खोला गया: {name}",
+    light: "हल्का",
+    medium: "मध्यम",
+    deep: "गहरा",
+    moodCalm: "शांत",
+    moodDevotional: "भक्ति",
+    moodFestive: "उत्सवी",
+    moodActive: "मूड सक्रिय: {mood}.{reason}",
+    ambientUnsupported: "इस ब्राउज़र में एंबियंट ऑडियो समर्थित नहीं है।",
+    ambientAlready: "एंबियंट ऑडियो पहले से चल रहा है।",
+    ambientPlaying: "तंबूरा शैली का एंबियंट स्वर चल रहा है।",
+    ambientStopped: "एंबियंट ऑडियो बंद किया गया।",
+    voiceStopped: "वॉइस जप बंद किया गया।",
+    voiceUnsupported: "इस ब्राउज़र में वॉइस जप समर्थित नहीं है।",
+    voiceSelectFirst: "वॉइस जप चलाने के लिए पहले एक देवता चुनें।",
+    voicePlaying: "{label} वॉइस जप{loop} {intensity} तीव्रता पर चल रहा है।",
+    voiceLoopOn: " लूप में",
+    noPreferenceWeekday: "कोई वरीयता नहीं (सप्ताह के दिन के आधार पर)",
+    meditationComplete: "ध्यान सत्र पूरा हुआ",
+    meditationPickEntry: "ध्यान शुरू करने के लिए एक प्रविष्टि चुनें",
+    silenceTimer: "मौन टाइमर: {time}",
+    meditationTitle: "{name} — समयबद्ध मौन ध्यान",
+    meditationNotRunning: "ध्यान टाइमर चालू नहीं है।",
+    malaProgress: "माला प्रगति: {count} / 108",
+    countProgress: "गिनती: {count} / {target} · कुल जप: {total}",
+    ritualGuidance: "अनुष्ठान मार्गदर्शन",
+    ritualGuidanceFor: "{name} — अनुष्ठान मार्गदर्शन",
+    ritualChoose: "व्यावहारिक अनुष्ठान मार्गदर्शन देखने के लिए देवता, ग्रह या गुरु चुनें।",
+    ritualMissing: "इस चयन के लिए अभी अनुष्ठान मार्गदर्शन उपलब्ध नहीं है।",
+    slokasShown: "{count} श्लोक दिखाए जा रहे हैं",
+    mantraTypePlanet: "ग्रह",
+    completedChants: "{count} जप पूर्ण",
+    sankalpaComplete: "आज का संकल्प पूर्ण",
+    templeSoundsEnabled: "मंदिर ध्वनियाँ सक्षम की गईं",
+    templeSoundsDisabled: "मंदिर ध्वनियाँ बंद की गईं",
+    journalSavedStatus: "आज की जर्नल प्रविष्टि सहेजी गई।",
+    ritualJournalSaved: "अनुष्ठान जर्नल सहेजा गया",
+    sankalpaSaved: "संकल्प सहेजा गया",
+    sankalpaAlready: "आज का संकल्प पहले ही पूरा हो चुका है",
+    blessingCardNotSupported: "आशीर्वाद कार्ड समर्थित नहीं है",
+    blessingCardShared: "आशीर्वाद कार्ड साझा किया गया",
+    generatedOn: "निर्मित तिथि",
+    todaysMessage: "आज का संदेश",
+    purpose: "उद्देश्य",
+    about: "के बारे में",
+    blessingDownloaded: "आशीर्वाद कार्ड डाउनलोड किया गया",
+    weekdays: ["रवि", "सोम", "मंगल", "बुध", "गुरु", "शुक्र", "शनि"],
+    rotatingMessages: [
+      "एकाग्र होकर किया गया एक जप, बिखरे ध्यान वाले कई जपों से अधिक प्रभावी होता है।",
+      "गहरी साँस लें, स्पष्ट जप करें और अपने संकल्प को स्थिर रखें।",
+      "रोज़ 11 जप की निरंतरता समय के साथ भीतर की शक्ति बढ़ाती है।",
+      "कृतज्ञता से शुरू करें और गहरे अवशोषण के लिए मौन में समाप्त करें।",
+      "गति से अधिक, भक्ति के साथ सही उच्चारण महत्वपूर्ण है।"
+    ],
+    didYouKnowMessages: [
+      "बीज मंत्र का अर्थ है बीज ध्वनि — देवता की मूल ऊर्जा का संक्षिप्त स्पंदन।",
+      "सामान्य बीज उदाहरण: गणेश के लिए ॐ गं, लक्ष्मी के लिए श्रीं और सरस्वती के लिए ऐं।",
+      "बीज मंत्र छोटे होते हैं, लेकिन उन्हें गहन ध्यान, सही उच्चारण और स्थिर श्वास के साथ जपा जाता है।",
+      "अनेक साधक पहले प्रसिद्ध मंत्र से शुरू करते हैं और फिर एकाग्र आंतरिक साधना हेतु बीज जप जारी रखते हैं।",
+      "गायत्री मंत्र बुद्धि के प्रकाश का आह्वान करते हैं, जबकि बीज मंत्र केंद्रित दिव्य कंपन पर बल देते हैं।",
+      "11, 21, 51 या 108 जैसी निश्चित संख्या बीज मंत्र अभ्यास को अनुशासित बनाती है।"
+    ]
   }
 };
 
@@ -883,12 +1265,132 @@ const tamilNameByEntity = {
   "Gnanananda Giri": "ஞானானந்த கிரி"
 };
 
+const teluguNameByEntity = {
+  "Ganesha": "గణేశుడు",
+  "Shiva": "శివుడు",
+  "Vishnu": "విష్ణువు",
+  "Krishna": "కృష్ణుడు",
+  "Rama": "రాముడు",
+  "Ramar": "రాముడు",
+  "Hanuman": "హనుమాన్",
+  "Durga": "దుర్గా దేవి",
+  "Lakshmi": "లక్ష్మి దేవి",
+  "Saraswati": "సరస్వతి దేవి",
+  "Dhakshinamoorthy": "దక్షిణామూర్తి",
+  "Murugan": "మురుగన్",
+  "Varahi Amman": "వరాహి అమ్మవారు",
+  "Lakshmi Narasimhar": "లక్ష్మీ నరసింహుడు",
+  "Surya (Sun)": "సూర్యుడు",
+  "Chandra (Moon)": "చంద్రుడు",
+  "Mangala (Mars)": "మంగళుడు",
+  "Budha (Mercury)": "బుధుడు",
+  "Brihaspati (Jupiter)": "బృహస్పతి",
+  "Shukra (Venus)": "శుక్రుడు",
+  "Shani (Saturn)": "శని",
+  "Rahu": "రాహు",
+  "Ketu": "కేతు",
+  "Navagraha (All Planets)": "నవగ్రహాలు",
+  "Shirdi Sai Baba": "షిర్డీ సాయిబాబా",
+  "Raghavendra Swamy": "రాఘవేంద్ర స్వామి",
+  "Adi Shankaracharya": "ఆది శంకరాచార్యులు",
+  "Kanchi Sankaracharyar": "కాంచీ శంకరాచార్యులు",
+  "Puttaparthi Sai Baba": "పుట్టపర్తి సాయిబాబా",
+  "Yogi Ram Surat Kumar": "యోగి రామ్ సురత్ కుమార్",
+  "Gnanananda Giri": "జ్ఞానానంద గిరి"
+};
+
+const kannadaNameByEntity = {
+  "Ganesha": "ಗಣೇಶ",
+  "Shiva": "ಶಿವ",
+  "Vishnu": "ವಿಷ್ಣು",
+  "Krishna": "ಕೃಷ್ಣ",
+  "Rama": "ರಾಮ",
+  "Ramar": "ರಾಮ",
+  "Hanuman": "ಹನುಮಾನ್",
+  "Durga": "ದುರ್ಗಾ ದೇವಿ",
+  "Lakshmi": "ಲಕ್ಷ್ಮೀ ದೇವಿ",
+  "Saraswati": "ಸರಸ್ವತಿ ದೇವಿ",
+  "Dhakshinamoorthy": "ದಕ್ಷಿಣಾಮೂರ್ತಿ",
+  "Murugan": "ಮುರುಗನ್",
+  "Varahi Amman": "ವಾರಾಹಿ ಅಮ್ಮ",
+  "Lakshmi Narasimhar": "ಲಕ್ಷ್ಮೀ ನರಸಿಂಹ",
+  "Surya (Sun)": "ಸೂರ್ಯ",
+  "Chandra (Moon)": "ಚಂದ್ರ",
+  "Mangala (Mars)": "ಮಂಗಳ",
+  "Budha (Mercury)": "ಬುಧ",
+  "Brihaspati (Jupiter)": "ಬೃಹಸ್ಪತಿ",
+  "Shukra (Venus)": "ಶುಕ್ರ",
+  "Shani (Saturn)": "ಶನಿ",
+  "Rahu": "ರಾಹು",
+  "Ketu": "ಕೇತು",
+  "Navagraha (All Planets)": "ನವಗ್ರಹಗಳು",
+  "Shirdi Sai Baba": "ಶಿರಡಿ ಸಾಯಿಬಾಬಾ",
+  "Raghavendra Swamy": "ರಾಘವೇಂದ್ರ ಸ್ವಾಮಿ",
+  "Adi Shankaracharya": "ಆದಿ ಶಂಕರಾಚಾರ್ಯರು",
+  "Kanchi Sankaracharyar": "ಕಾಂಚಿ ಶಂಕರಾಚಾರ್ಯರು",
+  "Puttaparthi Sai Baba": "ಪುಟ್ಟಪರ್ತಿ ಸಾಯಿಬಾಬಾ",
+  "Yogi Ram Surat Kumar": "ಯೋಗಿ ರಾಮ್ ಸುರತ್ ಕುಮಾರ್",
+  "Gnanananda Giri": "ಜ್ಞಾನಾನಂದ ಗಿರಿ"
+};
+
+const hindiNameByEntity = {
+  "Ganesha": "गणेश",
+  "Shiva": "शिव",
+  "Vishnu": "विष्णु",
+  "Krishna": "कृष्ण",
+  "Rama": "राम",
+  "Ramar": "राम",
+  "Hanuman": "हनुमान",
+  "Durga": "दुर्गा",
+  "Lakshmi": "लक्ष्मी",
+  "Saraswati": "सरस्वती",
+  "Dhakshinamoorthy": "दक्षिणामूर्ति",
+  "Murugan": "मुरुगन",
+  "Varahi Amman": "वाराही अम्मन",
+  "Lakshmi Narasimhar": "लक्ष्मी नरसिंह",
+  "Surya (Sun)": "सूर्य",
+  "Chandra (Moon)": "चंद्र",
+  "Mangala (Mars)": "मंगल",
+  "Budha (Mercury)": "बुध",
+  "Brihaspati (Jupiter)": "बृहस्पति",
+  "Shukra (Venus)": "शुक्र",
+  "Shani (Saturn)": "शनि",
+  "Rahu": "राहु",
+  "Ketu": "केतु",
+  "Navagraha (All Planets)": "नवग्रह",
+  "Shirdi Sai Baba": "शिरडी साईं बाबा",
+  "Raghavendra Swamy": "राघवेंद्र स्वामी",
+  "Adi Shankaracharya": "आदि शंकराचार्य",
+  "Kanchi Sankaracharyar": "कांची शंकराचार्य",
+  "Puttaparthi Sai Baba": "पुट्टपर्थी साईं बाबा",
+  "Yogi Ram Surat Kumar": "योगी राम सुरत कुमार",
+  "Gnanananda Giri": "ज्ञानानंद गिरी"
+};
+
 function displayName(name) {
-  if (currentLanguage !== "ta") return name;
-  return tamilNameByEntity[name] || name;
+  if (currentLanguage === "ta") return tamilNameByEntity[name] || name;
+  if (currentLanguage === "te") return teluguNameByEntity[name] || name;
+  if (currentLanguage === "kn") return kannadaNameByEntity[name] || name;
+  if (currentLanguage === "hi") return hindiNameByEntity[name] || name;
+  return name;
 }
 
 function localizedPurpose(item) {
+  if (currentLanguage === "te") {
+    if (item.type === "planet") return `${displayName(item.name)} కు సంబంధించిన నియమం, మానసిక సమతుల్యం మరియు ఆధ్యాత్మిక పురోగతికి.`;
+    if (item.type === "guru") return `${displayName(item.name)} కృపతో జ్ఞానం, స్పష్టత మరియు అంతరశాంతి కోసం.`;
+    return `${displayName(item.name)} అనుగ్రహం, రక్షణ మరియు జీవితంలో మేలు కోసం.`;
+  }
+  if (currentLanguage === "kn") {
+    if (item.type === "planet") return `${displayName(item.name)} ಸಂಬಂಧಿತ ಶಿಸ್ತು, ಮನಸ್ಸಿನ ಸಮತೋಲನ ಮತ್ತು ಆಧ್ಯಾತ್ಮಿಕ ಪ್ರಗತಿಗಾಗಿ.`;
+    if (item.type === "guru") return `${displayName(item.name)} ಕೃಪೆಯಿಂದ ಜ್ಞಾನ, ಸ್ಪಷ್ಟತೆ ಮತ್ತು ಒಳಶಾಂತಿಗಾಗಿ.`;
+    return `${displayName(item.name)} ಕೃಪೆ, ರಕ್ಷಣೆಯೊಂದಿಗೆ ಜೀವನದಲ್ಲಿ ಮಂಗಳಕ್ಕಾಗಿ.`;
+  }
+  if (currentLanguage === "hi") {
+    if (item.type === "planet") return `${displayName(item.name)} से संबंधित अनुशासन, मानसिक संतुलन और आध्यात्मिक प्रगति के लिए।`;
+    if (item.type === "guru") return `${displayName(item.name)} की कृपा से ज्ञान, स्पष्टता और आंतरिक शांति के लिए।`;
+    return `${displayName(item.name)} की कृपा, सुरक्षा और जीवन में मंगल के लिए।`;
+  }
   if (currentLanguage !== "ta") return item.purpose || "";
   if (item.type === "planet") return `${displayName(item.name)} தொடர்பான ஒழுக்கம், மனநிலை சமநிலை மற்றும் ஆன்மிக முன்னேற்றத்திற்காக.`;
   if (item.type === "guru") return `${displayName(item.name)} அருளால் ஞானம், தெளிவு மற்றும் உள அமைதிக்காக.`;
@@ -896,6 +1398,21 @@ function localizedPurpose(item) {
 }
 
 function localizedBrief(item) {
+  if (currentLanguage === "te") {
+    if (item.type === "planet") return `${displayName(item.name)} కు సంబంధించిన జపం జీవనంలో క్రమశిక్షణ, ఆత్మవిశ్వాసం మరియు సమతుల్యాన్ని పెంచడంలో సహాయపడుతుంది.`;
+    if (item.type === "guru") return `${displayName(item.name)} స్మరణ ద్వారా వినయం, ఆధ్యాత్మిక స్పష్టత మరియు అంతర్గత స్థిరత్వం లభిస్తాయి.`;
+    return `${displayName(item.name)} ఆరాధన భక్తి, మనోబలం మరియు అంతరశాంతిని పెంచుతుంది.`;
+  }
+  if (currentLanguage === "kn") {
+    if (item.type === "planet") return `${displayName(item.name)} ಸಂಬಂಧಿತ ಜಪವು ಜೀವನದಲ್ಲಿ ಶಿಸ್ತು, ಆತ್ಮವಿಶ್ವಾಸ ಮತ್ತು ಸಮತೋಲನವನ್ನು ಬೆಳೆಸಲು ಸಹಕಾರಿಯಾಗುತ್ತದೆ.`;
+    if (item.type === "guru") return `${displayName(item.name)} ಸ್ಮರಣೆಯಿಂದ ವಿನಯ, ಆಧ್ಯಾತ್ಮಿಕ ಸ್ಪಷ್ಟತೆ ಮತ್ತು ಒಳಸ್ಥೈರ್ಯ ದೊರೆಯುತ್ತದೆ.`;
+    return `${displayName(item.name)} ಆರಾಧನೆ ಭಕ್ತಿ, ಮನೋಬಲ ಮತ್ತು ಒಳಶಾಂತಿಯನ್ನು ವೃದ್ಧಿಸುತ್ತದೆ.`;
+  }
+  if (currentLanguage === "hi") {
+    if (item.type === "planet") return `${displayName(item.name)} से संबंधित जप जीवन में अनुशासन, आत्मविश्वास और संतुलन बढ़ाने में सहायक होता है।`;
+    if (item.type === "guru") return `${displayName(item.name)} के स्मरण से विनम्रता, आध्यात्मिक स्पष्टता और आंतरिक स्थिरता मिलती है।`;
+    return `${displayName(item.name)} की उपासना भक्ति, मानसिक शक्ति और आंतरिक शांति को बढ़ाती है।`;
+  }
   if (currentLanguage !== "ta") return item.brief || "";
   if (item.type === "planet") return `${displayName(item.name)} தொடர்பான ஜபம் வாழ்க்கையில் ஒழுக்கம், தன்னம்பிக்கை மற்றும் சமநிலையை வளர்க்க உதவும்.`;
   if (item.type === "guru") return `${displayName(item.name)} ஸ்மரணம் மூலம் பணிவு, ஆன்மிக தெளிவு மற்றும் உள்ளார்ந்த நிலைத்தன்மை கிடைக்கும்.`;
@@ -903,6 +1420,33 @@ function localizedBrief(item) {
 }
 
 function localizedMantraTitle(rawTitle = "") {
+  if (currentLanguage === "te") {
+    return String(rawTitle)
+      .replace(/Famous Guru Sloka/gi, "ప్రసిద్ధ గురు శ్లోకం")
+      .replace(/Famous Mantra/gi, "ప్రసిద్ధ మంత్రం")
+      .replace(/Gayatri Mantra/gi, "గాయత్రి మంత్రం")
+      .replace(/Beej Mantra/gi, "బీజ మంత్రం")
+      .replace(/Traditional Recitation/gi, "సాంప్రదాయ పారాయణం")
+      .replace(/Classical Japa/gi, "సాంప్రదాయ జపం");
+  }
+  if (currentLanguage === "kn") {
+    return String(rawTitle)
+      .replace(/Famous Guru Sloka/gi, "ಪ್ರಸಿದ್ಧ ಗುರು ಶ್ಲೋಕ")
+      .replace(/Famous Mantra/gi, "ಪ್ರಸಿದ್ಧ ಮಂತ್ರ")
+      .replace(/Gayatri Mantra/gi, "ಗಾಯತ್ರಿ ಮಂತ್ರ")
+      .replace(/Beej Mantra/gi, "ಬೀಜ ಮಂತ್ರ")
+      .replace(/Traditional Recitation/gi, "ಪಾರಂಪರಿಕ ಪಾರಾಯಣ")
+      .replace(/Classical Japa/gi, "ಪಾರಂಪರಿಕ ಜಪ");
+  }
+  if (currentLanguage === "hi") {
+    return String(rawTitle)
+      .replace(/Famous Guru Sloka/gi, "प्रसिद्ध गुरु श्लोक")
+      .replace(/Famous Mantra/gi, "प्रसिद्ध मंत्र")
+      .replace(/Gayatri Mantra/gi, "गायत्री मंत्र")
+      .replace(/Beej Mantra/gi, "बीज मंत्र")
+      .replace(/Traditional Recitation/gi, "पारंपरिक पाठ")
+      .replace(/Classical Japa/gi, "पारंपरिक जप");
+  }
   if (currentLanguage !== "ta") return rawTitle;
   return String(rawTitle)
     .replace(/Famous Guru Sloka/gi, "பிரபல குரு ஸ்லோகம்")
@@ -921,8 +1465,21 @@ function setSelectOptionText(selectElement, value, label) {
   }
 }
 
+function isTamilLanguage() {
+  return currentLanguage === "ta";
+}
+
+function preferredScriptModeForLanguage() {
+  if (currentLanguage === "ta") return "tamil";
+  if (currentLanguage === "te") return "telugu";
+  if (currentLanguage === "kn") return "kannada";
+  if (currentLanguage === "hi") return "hindi";
+  return scriptSelect?.value || "both";
+}
+
 function applyLanguageToStaticUI() {
-  document.documentElement.lang = currentLanguage === "ta" ? "ta" : "en";
+  document.documentElement.lang = currentLanguage;
+  const L = (en, ta, te, kn, hi) => ({ en, ta, te, kn, hi }[currentLanguage] || en);
 
   if (languageSelect) {
     setSelectOptionText(languageSelect, "en", t("languageEnglish"));
@@ -931,7 +1488,14 @@ function applyLanguageToStaticUI() {
   }
 
   if (languageBarLabel) {
-    languageBarLabel.textContent = currentLanguage === "ta" ? "மொழியைத் தேர்ந்தெடுக்கவும்" : "Choose Language";
+    const labelByLanguage = {
+      en: "Choose Language",
+      ta: "மொழியைத் தேர்ந்தெடுக்கவும்",
+      te: "భాషను ఎంచుకోండి",
+      kn: "ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+      hi: "भाषा चुनें"
+    };
+    languageBarLabel.textContent = labelByLanguage[currentLanguage] || labelByLanguage.en;
   }
   if (langEnglishBtn) {
     langEnglishBtn.textContent = "English";
@@ -941,6 +1505,18 @@ function applyLanguageToStaticUI() {
     langTamilBtn.textContent = "தமிழ்";
     langTamilBtn.classList.toggle("active", currentLanguage === "ta");
   }
+  if (langTeluguBtn) {
+    langTeluguBtn.textContent = "తెలుగు";
+    langTeluguBtn.classList.toggle("active", currentLanguage === "te");
+  }
+  if (langKannadaBtn) {
+    langKannadaBtn.textContent = "ಕನ್ನಡ";
+    langKannadaBtn.classList.toggle("active", currentLanguage === "kn");
+  }
+  if (langHindiBtn) {
+    langHindiBtn.textContent = "हिंदी";
+    langHindiBtn.classList.toggle("active", currentLanguage === "hi");
+  }
 
   if (searchInput) {
     searchInput.placeholder = t("searchPlaceholder");
@@ -949,22 +1525,22 @@ function applyLanguageToStaticUI() {
     slokaLibrarySearch.placeholder = t("slokaSearchPlaceholder");
   }
 
-  setSelectOptionText(typeSelect, "all", currentLanguage === "ta" ? "அனைத்தும்" : "All");
-  setSelectOptionText(typeSelect, "god", currentLanguage === "ta" ? "தெய்வங்கள்" : "Gods");
-  setSelectOptionText(typeSelect, "planet", currentLanguage === "ta" ? "கிரகங்கள் (நவகிரகம்)" : "Planets (Navagraha)");
-  setSelectOptionText(typeSelect, "guru", currentLanguage === "ta" ? "குருமார்கள்" : "Gurus");
+  setSelectOptionText(typeSelect, "all", L("All", "அனைத்தும்", "అన్నీ", "ಎಲ್ಲಾ", "सभी"));
+  setSelectOptionText(typeSelect, "god", L("Gods", "தெய்வங்கள்", "దేవుళ్లు", "ದೇವತೆಗಳು", "देवता"));
+  setSelectOptionText(typeSelect, "planet", L("Planets (Navagraha)", "கிரகங்கள் (நவகிரகம்)", "గ్రహాలు (నవగ్రహం)", "ಗ್ರಹಗಳು (ನವಗ್ರಹ)", "ग्रह (नवग्रह)"));
+  setSelectOptionText(typeSelect, "guru", L("Gurus", "குருமார்கள்", "గురువులు", "ಗುರುಗಳು", "गुरु"));
 
-  setSelectOptionText(mantraSelect, "famous", currentLanguage === "ta" ? "பிரபல மந்திரம் / ஸ்லோகம்" : "Famous Mantra / Sloka");
-  setSelectOptionText(mantraSelect, "gayatri", currentLanguage === "ta" ? "காயத்ரி மந்திரம்" : "Gayatri Mantra");
-  setSelectOptionText(mantraSelect, "beej", currentLanguage === "ta" ? "பீஜ மந்திரம்" : "Beej Mantra");
+  setSelectOptionText(mantraSelect, "famous", L("Famous Mantra / Sloka", "பிரபல மந்திரம் / ஸ்லோகம்", "ప్రసిద్ధ మంత్రం / శ్లోకం", "ಪ್ರಸಿದ್ಧ ಮಂತ್ರ / ಶ್ಲೋಕ", "प्रसिद्ध मंत्र / श्लोक"));
+  setSelectOptionText(mantraSelect, "gayatri", L("Gayatri Mantra", "காயத்ரி மந்திரம்", "గాయత్రి మంత్రం", "ಗಾಯತ್ರಿ ಮಂತ್ರ", "गायत्री मंत्र"));
+  setSelectOptionText(mantraSelect, "beej", L("Beej Mantra", "பீஜ மந்திரம்", "బీజ మంత్రం", "ಬೀಜ ಮಂತ್ರ", "बीज मंत्र"));
 
-  setSelectOptionText(scriptSelect, "both", currentLanguage === "ta" ? "தேவநாகரி + தமிழ் + ஒலிபெயர்ப்பு" : "Show Devanagari + Tamil + Transliteration");
-  setSelectOptionText(scriptSelect, "devanagari", currentLanguage === "ta" ? "தேவநாகரி மட்டும்" : "Show Devanagari only");
-  setSelectOptionText(scriptSelect, "tamil", currentLanguage === "ta" ? "தமிழ் மட்டும்" : "Show Tamil only");
-  setSelectOptionText(scriptSelect, "iast", currentLanguage === "ta" ? "ஒலிபெயர்ப்பு மட்டும்" : "Show Transliteration only");
+  setSelectOptionText(scriptSelect, "both", isTamilLanguage() ? "தேவநாகரி + தமிழ் + ஒலிபெயர்ப்பு" : "Show Devanagari + Tamil + Transliteration");
+  setSelectOptionText(scriptSelect, "devanagari", isTamilLanguage() ? "தேவநாகரி மட்டும்" : "Show Devanagari only");
+  setSelectOptionText(scriptSelect, "tamil", isTamilLanguage() ? "தமிழ் மட்டும்" : "Show Tamil only");
+  setSelectOptionText(scriptSelect, "iast", isTamilLanguage() ? "ஒலிபெயர்ப்பு மட்டும்" : "Show Transliteration only");
   if (scriptSelect) {
-    if (currentLanguage === "ta") {
-      scriptSelect.value = "tamil";
+    if (currentLanguage !== "en") {
+      scriptSelect.value = preferredScriptModeForLanguage();
       scriptSelect.disabled = true;
       scriptSelect.hidden = true;
     } else {
@@ -974,13 +1550,13 @@ function applyLanguageToStaticUI() {
   }
 
   if (scriptModeLabel) {
-    scriptModeLabel.hidden = currentLanguage === "ta";
+    scriptModeLabel.hidden = currentLanguage !== "en";
   }
   if (chantScriptModeLabel) {
-    chantScriptModeLabel.hidden = currentLanguage === "ta";
+    chantScriptModeLabel.hidden = currentLanguage !== "en";
   }
 
-  setSelectOptionText(reminderDaySelect, "daily", currentLanguage === "ta" ? "ஒவ்வொரு நாளும்" : "Every day");
+  setSelectOptionText(reminderDaySelect, "daily", L("Every day", "ஒவ்வொரு நாளும்", "ప్రతి రోజు", "ಪ್ರತಿ ದಿನ", "हर दिन"));
   setSelectOptionText(reminderDaySelect, "0", weekdayLabel(0));
   setSelectOptionText(reminderDaySelect, "1", weekdayLabel(1));
   setSelectOptionText(reminderDaySelect, "2", weekdayLabel(2));
@@ -990,9 +1566,15 @@ function applyLanguageToStaticUI() {
   setSelectOptionText(reminderDaySelect, "6", weekdayLabel(6));
 
   if (voiceAccentSelect) {
-    setSelectOptionText(voiceAccentSelect, "tamil", currentLanguage === "ta" ? "தமிழ் குரல்" : "Tamil accent");
-    setSelectOptionText(voiceAccentSelect, "sanskrit", currentLanguage === "ta" ? "சமஸ்கிருத குரல்" : "Sanskrit accent");
-    setSelectOptionText(voiceAccentSelect, "hindi", currentLanguage === "ta" ? "ஹிந்தி குரல்" : "Hindi accent");
+    setSelectOptionText(voiceAccentSelect, "tamil", L("Tamil accent", "தமிழ் குரல்", "తెలుగు/తమిళ స్వరం", "ತಮಿಳು ಉಚ್ಚಾರಣೆ", "तमिल उच्चारण"));
+    setSelectOptionText(voiceAccentSelect, "sanskrit", L("Sanskrit accent", "சமஸ்கிருத குரல்", "సంస్కృత స్వరం", "ಸಂಸ್ಕೃತ ಉಚ್ಚಾರಣೆ", "संस्कृत उच्चारण"));
+    setSelectOptionText(voiceAccentSelect, "hindi", L("Hindi accent", "ஹிந்தி குரல்", "హిందీ స్వరం", "ಹಿಂದಿ ಉಚ್ಚಾರಣೆ", "हिंदी उच्चारण"));
+  }
+  if (moodSelect) {
+    setSelectOptionText(moodSelect, "auto", L("Auto (time based)", "தானாக (நேர அடிப்படை)", "ఆటో (సమయ ఆధారిత)", "ಸ್ವಯಂ (ಸಮಯ ಆಧಾರಿತ)", "ऑटो (समय आधारित)"));
+    setSelectOptionText(moodSelect, "calm", L("Calm", "அமைதி", "శాంతం", "ಶಾಂತ", "शांत"));
+    setSelectOptionText(moodSelect, "devotional", L("Devotional", "பக்தி", "భక్తి", "ಭಕ್ತಿ", "भक्ति"));
+    setSelectOptionText(moodSelect, "festive", L("Festive", "உற்சவம்", "ఉత్సవ", "ಹಬ್ಬದ", "उत्सवी"));
   }
 
   const rotatingList = rotatingMessagesForLanguage();
@@ -1009,80 +1591,106 @@ function applyLanguageToStaticUI() {
     if (el) el.textContent = text;
   };
 
-  setText("#homeQuickAccess h3", currentLanguage === "ta" ? "எளிய முகப்பு" : "Simplified Home");
-  setText("#homeQuickAccess .meaning", currentLanguage === "ta" ? "உங்கள் பாதையை நேரடியாகத் தேர்வு செய்து ஒரே தொடுதலில் தொடங்குங்கள்." : "Pick your path directly and begin in one tap.");
-  setText(".hero-kicker", currentLanguage === "ta" ? "Soulvest புனித இடம்" : "Soulvest Sacred Space");
-  setText(".hero-copy h1", currentLanguage === "ta" ? "Soulvest மந்திரங்கள்" : "Soulvest Mantras");
-  setText(".hero-copy p:not(.hero-kicker)", currentLanguage === "ta" ? "உங்கள் புனித ஸ்லோக மற்றும் ஜப நூலகம்." : "Your sacred library of slokas and chants.");
-  setText(".welcome-kicker", currentLanguage === "ta" ? "உங்கள் தெய்வீக ஜப இடத்திற்கு வரவேற்கிறோம்" : "Welcome to your divine chanting space");
-  setText(".welcome-banner h2", currentLanguage === "ta" ? "பக்தியுடன் தொடங்கி, ஒழுக்கத்துடன் தொடருங்கள்." : "Start with devotion, continue with discipline, and grow with grace.");
+  setText("#homeQuickAccess h3", L("Simplified Home", "எளிய முகப்பு", "సరళ హోమ్", "ಸರಳ ಹೋಮ್", "सरल होम"));
+  setText("#homeQuickAccess .meaning", L("Pick your path directly and begin in one tap.", "உங்கள் பாதையை நேரடியாகத் தேர்வு செய்து ஒரே தொடுதலில் தொடங்குங்கள்.", "మీ మార్గాన్ని ఎంచుకుని ఒక్క ట్యాప్‌లో ప్రారంభించండి.", "ನಿಮ್ಮ ಮಾರ್ಗವನ್ನು ಆಯ್ದು ಒಂದು ಟ್ಯಾಪ್‌ನಲ್ಲಿ ಪ್ರಾರಂಭಿಸಿ.", "अपना मार्ग चुनें और एक टैप में शुरू करें।"));
+  setText(".hero-kicker", L("Soulvest Sacred Space", "Soulvest புனித இடம்", "Soulvest పవిత్ర స్థలం", "Soulvest ಪವಿತ್ರ ಸ್ಥಳ", "Soulvest पवित्र स्थान"));
+  setText(".hero-copy h1", L("Soulvest Mantras", "Soulvest மந்திரங்கள்", "Soulvest మంత్రాలు", "Soulvest ಮಂತ್ರಗಳು", "Soulvest मंत्र"));
+  setText(".hero-copy p:not(.hero-kicker)", L("Your sacred library of slokas and chants.", "உங்கள் புனித ஸ்லோக மற்றும் ஜப நூலகம்.", "మీ పవిత్ర శ్లోకాలు మరియు జపాల గ్రంథాలయం.", "ನಿಮ್ಮ ಪವಿತ್ರ ಶ್ಲೋಕ ಮತ್ತು ಜಪಗಳ ಸಂಗ್ರಹ.", "आपकी पवित्र श्लोक और जप लाइब्रेरी।"));
+  setText(".welcome-kicker", L("Welcome to your divine chanting space", "உங்கள் தெய்வீக ஜப இடத்திற்கு வரவேற்கிறோம்", "మీ దివ్య జప స్థలానికి స్వాగతం", "ನಿಮ್ಮ ದಿವ್ಯ ಜಪ ಸ್ಥಳಕ್ಕೆ ಸ್ವಾಗತ", "आपके दिव्य जप स्थल में स्वागत है"));
+  setText(".welcome-banner h2", L("Start with devotion, continue with discipline, and grow with grace.", "பக்தியுடன் தொடங்கி, ஒழுக்கத்துடன் தொடருங்கள்.", "భక్తితో ప్రారంభించి, నియమంతో కొనసాగండి.", "ಭಕ್ತಿಯಿಂದ ಪ್ರಾರಂಭಿಸಿ, ನಿಯಮದಿಂದ ಮುಂದುವರಿಯಿರಿ.", "भक्ति से शुरू करें, अनुशासन से जारी रखें।"));
   const welcomeDesc = document.querySelector(".welcome-banner h2 + p");
-  if (welcomeDesc) welcomeDesc.textContent = currentLanguage === "ta" ? "தெய்வம், கிரகம் அல்லது குருவைத் தேர்வு செய்து தினசரி ஜபப் பயிற்சியை தொடங்குங்கள்." : "Choose a deity, planet, or guru and begin your daily practice with focused mantra recitation.";
-  setText(".did-you-know-title", currentLanguage === "ta" ? "உங்களுக்கு தெரியுமா?" : "Do You Know?");
+  if (welcomeDesc) welcomeDesc.textContent = L("Choose a deity, planet, or guru and begin your daily practice with focused mantra recitation.", "தெய்வம், கிரகம் அல்லது குருவைத் தேர்வு செய்து தினசரி ஜபப் பயிற்சியை தொடங்குங்கள்.", "దేవుడు, గ్రహం లేదా గురువును ఎంచుకుని దైనందిన సాధన ప్రారంభించండి.", "ದೇವತೆ, ಗ್ರಹ ಅಥವಾ ಗುರುವನ್ನೆ ಆರಿಸಿ ದೈನಂದಿನ ಸಾಧನೆ ಆರಂಭಿಸಿ.", "देवता, ग्रह या गुरु चुनकर दैनिक साधना शुरू करें।");
+  setText(".did-you-know-title", L("Do You Know?", "உங்களுக்கு தெரியுமா?", "మీకు తెలుసా?", "ನಿಮಗೆ ಗೊತ್ತೇ?", "क्या आप जानते हैं?"));
 
   const quickButtons = document.querySelectorAll("#homeQuickAccess .quick-path-btn");
-  if (quickButtons[0]) quickButtons[0].textContent = currentLanguage === "ta" ? "🛕 தெய்வங்கள்" : "🛕 Gods";
-  if (quickButtons[1]) quickButtons[1].textContent = currentLanguage === "ta" ? "🪐 கிரகங்கள்" : "🪐 Planets";
-  if (quickButtons[2]) quickButtons[2].textContent = currentLanguage === "ta" ? "🧘 குருமார்கள்" : "🧘 Gurus";
+  if (quickButtons[0]) quickButtons[0].textContent = `🛕 ${L("Gods", "தெய்வங்கள்", "దేవుళ్లు", "ದೇವತೆಗಳು", "देवता")}`;
+  if (quickButtons[1]) quickButtons[1].textContent = `🪐 ${L("Planets", "கிரகங்கள்", "గ్రహాలు", "ಗ್ರಹಗಳು", "ग्रह")}`;
+  if (quickButtons[2]) quickButtons[2].textContent = `🧘 ${L("Gurus", "குருமார்கள்", "గురువులు", "ಗುರುಗಳು", "गुरु")}`;
 
-  setText("#slokaLibrary h3", currentLanguage === "ta" ? "ஸ்லோக நூலகம்" : "Sloka Library");
-  setText("#slokaLibrary .meaning", currentLanguage === "ta" ? "ஒலிபெயர்ப்பில் தொகுக்கப்பட்ட பிரபல ஸ்லோகங்களை பார்வையிடுங்கள்." : "Browse all curated famous slokas in transliteration.");
+  setText("#slokaLibrary h3", L("Sloka Library", "ஸ்லோக நூலகம்", "శ్లోక లైబ్రరీ", "ಶ್ಲೋಕ ಲೈಬ್ರರಿ", "श्लोक लाइब्रेरी"));
+  const slokaMode = preferredScriptModeForLanguage();
+  const slokaModeLabel = slokaMode === "tamil"
+    ? "தமிழ்"
+    : slokaMode === "telugu"
+    ? "తెలుగు"
+    : slokaMode === "kannada"
+    ? "ಕನ್ನಡ"
+    : slokaMode === "hindi"
+    ? "हिंदी"
+    : "Transliteration";
+  setText("#slokaLibrary .meaning", L("Browse all curated famous slokas.", "தொகுக்கப்பட்ட பிரபல ஸ்லோகங்களை பார்வையிடுங்கள்.", "క్యూరేట్ చేసిన ప్రసిద్ధ శ్లోకాలను వీక్షించండి.", "ಆಯ್ದ ಪ್ರಸಿದ್ಧ ಶ್ಲೋಕಗಳನ್ನು ನೋಡಿ.", "संकलित प्रसिद्ध श्लोक देखें।"));
   const slokaHeaders = document.querySelectorAll("#slokaLibrary th");
-  if (slokaHeaders[0]) slokaHeaders[0].textContent = currentLanguage === "ta" ? "பெயர்" : "Name";
-  if (slokaHeaders[1]) slokaHeaders[1].textContent = currentLanguage === "ta" ? "வகை" : "Type";
-  if (slokaHeaders[2]) slokaHeaders[2].textContent = currentLanguage === "ta" ? "பிரபல ஸ்லோகம் (தமிழ்)" : "Famous Sloka (Transliteration)";
-  if (slokaHeaders[3]) slokaHeaders[3].textContent = currentLanguage === "ta" ? "நோக்கம்" : "Purpose";
+  if (slokaHeaders[0]) slokaHeaders[0].textContent = L("Name", "பெயர்", "పేరు", "ಹೆಸರು", "नाम");
+  if (slokaHeaders[1]) slokaHeaders[1].textContent = L("Type", "வகை", "రకం", "ಪ್ರಕಾರ", "प्रकार");
+  if (slokaHeaders[2]) slokaHeaders[2].textContent = `${L("Famous Sloka", "பிரபல ஸ்லோகம்", "ప్రసిద్ధ శ్లోకం", "ಪ್ರಸಿದ್ಧ ಶ್ಲೋಕ", "प्रसिद्ध श्लोक")} (${slokaModeLabel})`;
+  if (slokaHeaders[3]) slokaHeaders[3].textContent = L("Purpose", "நோக்கம்", "ఉద్దేశం", "ಉದ್ದೇಶ", "उद्देश्य");
 
-  setText("#mantraOfDay h3", currentLanguage === "ta" ? "இன்றைய மந்திரம்" : "Mantra of the Day");
-  if (mantraOfDayOpenBtn) mantraOfDayOpenBtn.textContent = currentLanguage === "ta" ? "இன்றைய மந்திரத்தைத் திற" : "Open Today’s Mantra";
+  setText("#mantraOfDay h3", L("Mantra of the Day", "இன்றைய மந்திரம்", "నేటి మంత్రం", "ಇಂದಿನ ಮಂತ್ರ", "आज का मंत्र"));
+  if (mantraOfDayOpenBtn) mantraOfDayOpenBtn.textContent = L("Open Today’s Mantra", "இன்றைய மந்திரத்தைத் திற", "ఈరోజు మంత్రాన్ని తెరువు", "ಇಂದಿನ ಮಂತ್ರ ತೆರೆಯಿರಿ", "आज का मंत्र खोलें");
 
-  setText("#aiHub h3", currentLanguage === "ta" ? "AI ஆதரித்த அம்சங்கள்" : "AI-Powered Enhancements");
+  setText("#aiHub h3", L("AI-Powered Enhancements", "AI ஆதரித்த அம்சங்கள்", "AI ఆధారిత మెరుగుదలలు", "AI ಆಧಾರಿತ ವೈಶಿಷ್ಟ್ಯಗಳು", "AI आधारित सुधार"));
   const aiCardTitles = document.querySelectorAll("#aiHub .ai-card .script-mode");
-  if (aiCardTitles[0]) aiCardTitles[0].textContent = currentLanguage === "ta" ? "தனிப்பட்ட மந்திர பரிந்துரைகள்" : "Personalized Mantra Suggestions";
-  if (aiCardTitles[1]) aiCardTitles[1].textContent = currentLanguage === "ta" ? "குரல் AI ஜபம்" : "Voice AI Chant";
-  if (aiCardTitles[2]) aiCardTitles[2].textContent = currentLanguage === "ta" ? "மனநிலை UI" : "Mood-based UI";
-  if (aiSuggestBtn) aiSuggestBtn.textContent = currentLanguage === "ta" ? "எனக்காக பரிந்துரைக்க" : "Suggest for me";
-  if (aiApplySuggestionBtn) aiApplySuggestionBtn.textContent = currentLanguage === "ta" ? "பரிந்துரையை பயன்படுத்து" : "Apply suggestion";
-  if (voicePlayBtn) voicePlayBtn.textContent = currentLanguage === "ta" ? "குரல் ஜபம் தொடங்கு" : "Play voice chant";
-  if (voiceStopBtn) voiceStopBtn.textContent = currentLanguage === "ta" ? "குரல் ஜபம் நிறுத்து" : "Stop voice chant";
-  if (applyMoodBtn) applyMoodBtn.textContent = currentLanguage === "ta" ? "மனநிலையை பயன்படுத்து" : "Apply mood";
-  if (ambientPlayBtn) ambientPlayBtn.textContent = currentLanguage === "ta" ? "பின்னணி ஒலி தொடங்கு" : "Play Ambient";
-  if (ambientStopBtn) ambientStopBtn.textContent = currentLanguage === "ta" ? "பின்னணி ஒலி நிறுத்து" : "Stop Ambient";
-  if (emotionInput) emotionInput.placeholder = currentLanguage === "ta" ? "நீங்கள் இப்போது எப்படி உணர்கிறீர்கள்?" : "How do you feel? (e.g. calm, stressed, joyful)";
+  if (aiCardTitles[0]) aiCardTitles[0].textContent = L("Personalized Mantra Suggestions", "தனிப்பட்ட மந்திர பரிந்துரைகள்", "వ్యక్తిగత మంత్ర సూచనలు", "ವೈಯಕ್ತಿಕ ಮಂತ್ರ ಸೂಚನೆಗಳು", "व्यक्तिगत मंत्र सुझाव");
+  if (aiCardTitles[1]) aiCardTitles[1].textContent = L("Voice AI Chant", "குரல் AI ஜபம்", "వాయిస్ AI జపం", "ವಾಯ್ಸ್ AI ಜಪ", "वॉइस AI जप");
+  if (aiCardTitles[2]) aiCardTitles[2].textContent = L("Mood-based UI", "மனநிலை UI", "మూడ్ ఆధారిత UI", "ಮೂಡ್ ಆಧಾರಿತ UI", "मूड आधारित UI");
+  if (aiSuggestBtn) aiSuggestBtn.textContent = L("Suggest for me", "எனக்காக பரிந்துரைக்க", "నాకు సూచించు", "ನನಗಾಗಿ ಸೂಚಿಸಿ", "मेरे लिए सुझाव दें");
+  if (aiApplySuggestionBtn) aiApplySuggestionBtn.textContent = L("Apply suggestion", "பரிந்துரையை பயன்படுத்து", "సూచనను వర్తింపజేయి", "ಸೂಚನೆಯನ್ನು ಅನ್ವಯಿಸಿ", "सुझाव लागू करें");
+  if (voicePlayBtn) voicePlayBtn.textContent = L("Play voice chant", "குரல் ஜபம் தொடங்கு", "వాయిస్ జపం ప్రారంభించు", "ವಾಯ್ಸ್ ಜಪ ಆರಂಭಿಸಿ", "वॉइस जप चलाएँ");
+  if (voiceStopBtn) voiceStopBtn.textContent = L("Stop voice chant", "குரல் ஜபம் நிறுத்து", "వాయిస్ జపం ఆపు", "ವಾಯ್ಸ್ ಜಪ ನಿಲ್ಲಿಸಿ", "वॉइस जप रोकें");
+  if (applyMoodBtn) applyMoodBtn.textContent = L("Apply mood", "மனநிலையை பயன்படுத்து", "మూడ్‌ను వర్తింపజేయి", "ಮೂಡ್ ಅನ್ವಯಿಸಿ", "मूड लागू करें");
+  if (ambientPlayBtn) ambientPlayBtn.textContent = L("Play Ambient", "பின்னணி ஒலி தொடங்கு", "అంబియెంట్ ప్రారంభించు", "ಅಂಬಿಯೆಂಟ್ ಚಾಲನೆ ಮಾಡಿ", "एंबियंट चलाएँ");
+  if (ambientStopBtn) ambientStopBtn.textContent = L("Stop Ambient", "பின்னணி ஒலி நிறுத்து", "అంబియెంట్ ఆపు", "ಅಂಬಿಯೆಂಟ್ ನಿಲ್ಲಿಸಿ", "एंबियंट रोकें");
+  if (emotionInput) emotionInput.placeholder = L("How do you feel? (e.g. calm, stressed, joyful)", "நீங்கள் இப்போது எப்படி உணர்கிறீர்கள்?", "మీరు ఎలా అనుభవిస్తున్నారు? (ఉదా: calm, stressed, joyful)", "ನೀವು ಹೇಗೆ ಭಾವಿಸುತ್ತಿದ್ದೀರಿ? (ಉದಾ: calm, stressed, joyful)", "आप कैसा महसूस कर रहे हैं? (जैसे: calm, stressed, joyful)");
 
-  setText("#personalHub h3", currentLanguage === "ta" ? "பிடித்தவை & ஜப வரலாறு" : "Favorites & Chant History");
+  setText("#personalHub h3", L("Favorites & Chant History", "பிடித்தவை & ஜப வரலாறு", "ఇష్టాలు & జప చరిత్ర", "ಮೆಚ್ಚಿನವುಗಳು & ಜಪ ಇತಿಹಾಸ", "पसंदीदा और जप इतिहास"));
   const personalLabels = document.querySelectorAll("#personalHub .script-mode");
-  if (personalLabels[0]) personalLabels[0].textContent = currentLanguage === "ta" ? "பிடித்தவை" : "Favorites";
-  if (personalLabels[1]) personalLabels[1].textContent = currentLanguage === "ta" ? "ஜப வரலாறு" : "Chant History";
-  if (favoritesEmpty) favoritesEmpty.textContent = currentLanguage === "ta" ? "இன்னும் பிடித்தவை இல்லை. மந்திர அட்டையில் “பிடித்ததில் சேர்” ஐ பயன்படுத்துங்கள்." : "No favorites yet. Use “Add to Favorites” on a mantra card.";
-  if (historyEmpty) historyEmpty.textContent = currentLanguage === "ta" ? "ஜப வரலாறு இல்லை. முன்னேற்றத்தைப் பார்க்க ஜபம் தொடங்குங்கள்." : "No chant history yet. Start chanting to track progress.";
+  if (personalLabels[0]) personalLabels[0].textContent = L("Favorites", "பிடித்தவை", "ఇష్టాలు", "ಮೆಚ್ಚಿನವುಗಳು", "पसंदीदा");
+  if (personalLabels[1]) personalLabels[1].textContent = L("Chant History", "ஜப வரலாறு", "జప చరిత్ర", "ಜಪ ಇತಿಹಾಸ", "जप इतिहास");
+  if (favoritesEmpty) favoritesEmpty.textContent = L("No favorites yet. Use “Add to Favorites” on a mantra card.", "இன்னும் பிடித்தவை இல்லை. மந்திர அட்டையில் “பிடித்ததில் சேர்” ஐ பயன்படுத்துங்கள்.", "ఇంకా ఇష్టాలు లేవు. మంత్ర కార్డ్‌లో “Add to Favorites” ఉపయోగించండి.", "ಇನ್ನೂ ಮೆಚ್ಚಿನವುಗಳಿಲ್ಲ. ಮಂತ್ರ ಕಾರ್ಡ್‌ನಲ್ಲಿ “Add to Favorites” ಬಳಸಿ.", "अभी कोई पसंदीदा नहीं। मंत्र कार्ड पर “Add to Favorites” का उपयोग करें।");
+  if (historyEmpty) historyEmpty.textContent = L("No chant history yet. Start chanting to track progress.", "ஜப வரலாறு இல்லை. முன்னேற்றத்தைப் பார்க்க ஜபம் தொடங்குங்கள்.", "ఇంకా జప చరిత్ర లేదు. పురోగతిని ట్రాక్ చేయడానికి జపం ప్రారంభించండి.", "ಇನ್ನೂ ಜಪ ಇತಿಹಾಸ ಇಲ್ಲ. ಪ್ರಗತಿಯನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡಲು ಜಪ ಪ್ರಾರಂಭಿಸಿ.", "अभी जप इतिहास नहीं है। प्रगति ट्रैक करने के लिए जप शुरू करें।");
 
-  setText("#sankalpaTracker h3", currentLanguage === "ta" ? "தினசரி சங்கல்ப கண்காணிப்பு" : "Daily Sankalpa Tracker");
-  if (sankalpaInput) sankalpaInput.placeholder = currentLanguage === "ta" ? "இன்றைய சங்கல்பத்தை அமைக்கவும்..." : "Set your sankalpa for today...";
-  if (sankalpaSaveBtn) sankalpaSaveBtn.textContent = currentLanguage === "ta" ? "சங்கல்பம் சேமி" : "Save Sankalpa";
-  if (sankalpaCompleteBtn) sankalpaCompleteBtn.textContent = currentLanguage === "ta" ? "இன்றை நாள் நிறைவு செய்" : "Mark Today Complete";
+  setText("#sankalpaTracker h3", L("Daily Sankalpa Tracker", "தினசரி சங்கல்ப கண்காணிப்பு", "దైనందిన సంకల్ప ట్రాకర్", "ದೈನಂದಿನ ಸಂಕಲ್ಪ ಟ್ರ್ಯಾಕರ್", "दैनिक संकल्प ट्रैकर"));
+  if (sankalpaInput) sankalpaInput.placeholder = L("Set your sankalpa for today...", "இன்றைய சங்கல்பத்தை அமைக்கவும்...", "ఈరోజుకి మీ సంకల్పాన్ని సెట్ చేయండి...", "ಇಂದಿಗೆ ನಿಮ್ಮ ಸಂಕಲ್ಪವನ್ನು ಸೆಟ್ ಮಾಡಿ...", "आज के लिए अपना संकल्प सेट करें...");
+  if (sankalpaSaveBtn) sankalpaSaveBtn.textContent = L("Save Sankalpa", "சங்கல்பம் சேமி", "సంకల్పం సేవ్ చేయి", "ಸಂಕಲ್ಪ ಉಳಿಸಿ", "संकल्प सहेजें");
+  if (sankalpaCompleteBtn) sankalpaCompleteBtn.textContent = L("Mark Today Complete", "இன்றை நாள் நிறைவு செய்", "ఈరోజు పూర్తయింది అని గుర్తించు", "ಇಂದಿನದನ್ನು ಪೂರ್ಣವಾಗಿದೆ ಎಂದು ಗುರುತುಮಾಡಿ", "आज पूरा हुआ चिह्नित करें");
 
-  setText("#reminderSettings h3", currentLanguage === "ta" ? "நினைவூட்டல் அமைப்புகள்" : "Reminder Settings");
-  if (saveReminderBtn) saveReminderBtn.textContent = currentLanguage === "ta" ? "நினைவூட்டலை சேமி" : "Save Reminder";
-  if (reminderMessageInput) reminderMessageInput.placeholder = currentLanguage === "ta" ? "நினைவூட்டல் செய்தி" : "Reminder message";
+  setText("#reminderSettings h3", L("Reminder Settings", "நினைவூட்டல் அமைப்புகள்", "రిమైండర్ సెట్టింగులు", "ಜ್ಞಾಪನೆ ಸೆಟ್ಟಿಂಗ್ಗಳು", "रिमाइंडर सेटिंग्स"));
+  if (saveReminderBtn) saveReminderBtn.textContent = L("Save Reminder", "நினைவூட்டலை சேமி", "రిమైండర్ సేవ్ చేయి", "ಜ್ಞಾಪನೆ ಉಳಿಸಿ", "रिमाइंडर सहेजें");
+  if (reminderMessageInput) reminderMessageInput.placeholder = L("Reminder message", "நினைவூட்டல் செய்தி", "రిమైండర్ సందేశం", "ಜ್ಞಾಪನೆ ಸಂದೇಶ", "रिमाइंडर संदेश");
+  const reminderToggleLabel = reminderEnabled?.closest("label");
+  if (reminderToggleLabel) reminderToggleLabel.lastChild.textContent = ` ${L("Enable reminder", "நினைவூட்டலை இயக்கவும்", "రిమైండర్ ప్రారంభించు", "ಜ್ಞಾಪನೆ ಸಕ್ರಿಯಗೊಳಿಸಿ", "रिमाइंडर सक्षम करें")}`;
 
-  setText("#chantAssistant h3", currentLanguage === "ta" ? "ஜப முறை" : "Chant Mode");
-  if (chantPlusBtn) chantPlusBtn.textContent = currentLanguage === "ta" ? "+1 ஜபம்" : "+1 Chant";
-  if (chantResetBtn) chantResetBtn.textContent = currentLanguage === "ta" ? "மீட்டமை" : "Reset";
+  setText("#chantAssistant h3", L("Chant Mode", "ஜப முறை", "జప మోడ్", "ಜಪ ಮೋಡ್", "जप मोड"));
+  if (chantPlusBtn) chantPlusBtn.textContent = L("+1 Chant", "+1 ஜபம்", "+1 జపం", "+1 ಜಪ", "+1 जप");
+  if (chantResetBtn) chantResetBtn.textContent = L("Reset", "மீட்டமை", "రీసెట్", "ರೀಸೆಟ್", "रीसेट");
+  const chantTargetLabel = document.querySelector('label[for="chantTargetSelect"]');
+  if (chantTargetLabel) chantTargetLabel.textContent = L("Target", "இலக்கு", "లక్ష్యం", "ಗುರಿ", "लक्ष्य");
+  const sessionSoundLabel = sessionSoundToggle?.closest("label");
+  if (sessionSoundLabel) sessionSoundLabel.lastChild.textContent = ` ${L("Temple bell + soft chime", "கோவில் மணி + மென்மையான ஒலி", "దేవాలయ గంట + మృదువైన నాదం", "ದೇವಾಲಯ ಗಂಟೆ + ಮೃದು ನಾದ", "मंदिर घंटी + हल्की ध्वनि")}`;
 
-  setText("#meditationMode h3", currentLanguage === "ta" ? "தியான முறை" : "Meditation Mode");
-  if (startMeditationBtn) startMeditationBtn.textContent = currentLanguage === "ta" ? "தொடங்கு" : "Start";
-  if (stopMeditationBtn) stopMeditationBtn.textContent = currentLanguage === "ta" ? "நிறுத்து" : "Stop";
+  setText("#meditationMode h3", L("Meditation Mode", "தியான முறை", "ధ్యాన మోడ్", "ಧ್ಯಾನ ಮೋಡ್", "ध्यान मोड"));
+  if (startMeditationBtn) startMeditationBtn.textContent = L("Start", "தொடங்கு", "ప్రారంభించు", "ಪ್ರಾರಂಭಿಸಿ", "शुरू करें");
+  if (stopMeditationBtn) stopMeditationBtn.textContent = L("Stop", "நிறுத்து", "ఆపు", "ನಿಲ್ಲಿಸಿ", "रोकें");
+  const meditationTimerLabel = document.querySelector('label[for="meditationDurationSelect"]');
+  if (meditationTimerLabel) meditationTimerLabel.textContent = L("Timer", "நேரம்", "టైమర్", "ಟೈಮರ್", "टाइमर");
 
-  setText("#youShouldKnow h3", currentLanguage === "ta" ? "நீங்கள் அறிந்திருக்க வேண்டியது" : "You Should Know");
-  setText("#ritualJournal h3", currentLanguage === "ta" ? "தினசரி சடங்கு ஜர்னல்" : "Daily Ritual Journal");
-  if (saveJournalBtn) saveJournalBtn.textContent = currentLanguage === "ta" ? "பதிவை சேமி" : "Save Entry";
+  setText("#youShouldKnow h3", L("You Should Know", "நீங்கள் அறிந்திருக்க வேண்டியது", "మీరు తెలుసుకోవాలి", "ನೀವು ತಿಳಿಯಬೇಕು", "आपको जानना चाहिए"));
+  setText("#ritualJournal h3", L("Daily Ritual Journal", "தினசரி சடங்கு ஜர்னல்", "దైనందిన రీతువల్ జర్నల్", "ದೈನಂದಿನ ಆಚರಣೆ ಜರ್ನಲ್", "दैनिक अनुष्ठान जर्नल"));
+  if (saveJournalBtn) saveJournalBtn.textContent = L("Save Entry", "பதிவை சேமி", "ఎంట్రీ సేవ్ చేయి", "ಎಂಟ್ರಿ ಉಳಿಸಿ", "प्रविष्टि सहेजें");
+  const ritualPromptLabel = document.querySelector('label[for="ritualJournalEntry"]');
+  if (ritualPromptLabel) ritualPromptLabel.textContent = L("Today’s prompt", "இன்றைய வழிகாட்டல்", "ఈరోజు సూచన", "ಇಂದಿನ ಸೂಚನೆ", "आज का संकेत");
+  if (ritualJournalEntry) ritualJournalEntry.placeholder = L("Today I will chant with...", "இன்று நான் ஜபிப்பது...", "ఈ రోజు నేను జపించేది...", "ಇಂದು ನಾನು ಜಪಿಸುವುದು...", "आज मैं जप करूँगा...");
+  const voiceLoopLabel = voiceLoopToggle?.closest("label");
+  if (voiceLoopLabel) voiceLoopLabel.lastChild.textContent = ` ${L("Loop chant audio", "ஜப ஒலியை மீண்டும் மீண்டும் இயக்கவும்", "జప ధ్వనిని లూప్‌లో ప్లే చేయి", "ಜಪ ಧ್ವನಿಯನ್ನು ಲೂಪ್‌ನಲ್ಲಿ ಪ್ಲೇ ಮಾಡಿ", "जप ऑडियो को लूप में चलाएँ")}`;
+  const minimalVisualLabel = visualModeToggle?.closest("label");
+  if (minimalVisualLabel) minimalVisualLabel.lastChild.textContent = ` ${L("Minimal visual mode", "குறைந்த காட்சி முறை", "కనిష్ట దృశ్య మోడ్", "ಕನಿಷ್ಠ ದೃಶ್ಯ ಮೋಡ್", "न्यूनतम दृश्य मोड")}`;
 
   populateAiDeityOptions();
 }
 
 function setLanguage(nextLanguage) {
-  const next = nextLanguage === "ta" ? "ta" : "en";
+  const allowed = new Set(["en", "ta", "te", "kn", "hi"]);
+  const next = allowed.has(nextLanguage) ? nextLanguage : "en";
   if (next === currentLanguage) return;
   currentLanguage = next;
   applyLanguageToStaticUI();
@@ -1874,6 +2482,128 @@ function getTamilMantraText(item, key, iastText) {
   return iastToTamil(iastText);
 }
 
+function iastToBrahmic(text, maps) {
+  if (!text) return "";
+  const lower = text.toLowerCase();
+  const consonants = [
+    "kṣ", "jñ", "kh", "gh", "ch", "jh", "ṭh", "ḍh", "th", "dh", "ph", "bh",
+    "ṅ", "ñ", "ṭ", "ḍ", "ṇ", "ś", "ṣ", "ḷ", "ḻ", "ṟ", "k", "g", "c", "j", "t", "d", "n", "p", "b", "m", "y", "r", "l", "v", "w", "s", "h"
+  ];
+  const vowels = ["ai", "au", "ā", "ī", "ū", "ē", "ō", "ṛ", "ṝ", "a", "i", "u", "e", "o"];
+
+  const startsWithAny = (source, index, options) => {
+    for (const token of options) {
+      if (source.startsWith(token, index)) return token;
+    }
+    return "";
+  };
+
+  let result = "";
+  let index = 0;
+  while (index < lower.length) {
+    const char = lower[index];
+    if (/\s/.test(char)) {
+      result += char;
+      index += 1;
+      continue;
+    }
+    if (lower.startsWith("oṃ", index) || lower.startsWith("om", index)) {
+      result += maps.om;
+      index += lower.startsWith("oṃ", index) ? 2 : 2;
+      continue;
+    }
+    if (lower.startsWith("||", index)) {
+      result += "॥";
+      index += 2;
+      continue;
+    }
+    if (lower[index] === "|") {
+      result += "।";
+      index += 1;
+      continue;
+    }
+    if (lower[index] === "ṃ" || lower[index] === "ṁ") {
+      result += maps.anusvara;
+      index += 1;
+      continue;
+    }
+    if (lower[index] === "ḥ") {
+      result += maps.visarga;
+      index += 1;
+      continue;
+    }
+
+    const vowelToken = startsWithAny(lower, index, vowels);
+    if (vowelToken) {
+      result += maps.independentVowel[vowelToken] || vowelToken;
+      index += vowelToken.length;
+      continue;
+    }
+
+    const consonantToken = startsWithAny(lower, index, consonants);
+    if (consonantToken) {
+      const base = maps.consonantMap[consonantToken] || consonantToken;
+      index += consonantToken.length;
+      const nextVowel = startsWithAny(lower, index, vowels);
+      if (nextVowel) {
+        result += `${base}${maps.vowelSign[nextVowel] || ""}`;
+        index += nextVowel.length;
+      } else {
+        result += `${base}${maps.virama}`;
+      }
+      continue;
+    }
+
+    result += char;
+    index += 1;
+  }
+  return result.replace(/\s+/g, " ").trim();
+}
+
+const teluguScriptMaps = {
+  om: "ఓం",
+  anusvara: "ం",
+  visarga: "ః",
+  virama: "్",
+  consonantMap: {
+    kṣ: "క్ష", jñ: "జ్ఞ", kh: "ఖ", gh: "ఘ", ch: "చ", jh: "ఝ", ṭh: "ఠ", ḍh: "ఢ", th: "థ", dh: "ధ", ph: "ఫ", bh: "భ",
+    ṅ: "ఙ", ñ: "ఞ", ṭ: "ట", ḍ: "డ", ṇ: "ణ", ś: "శ", ṣ: "ష", ḷ: "ళ", ḻ: "ళ", ṟ: "ర",
+    k: "క", g: "గ", c: "చ", j: "జ", t: "త", d: "ద", n: "న", p: "ప", b: "బ", m: "మ", y: "య", r: "ర", l: "ల", v: "వ", w: "వ", s: "స", h: "హ"
+  },
+  independentVowel: { a: "అ", ā: "ఆ", i: "ఇ", ī: "ఈ", u: "ఉ", ū: "ఊ", e: "ఎ", ē: "ఏ", o: "ఒ", ō: "ఓ", ai: "ఐ", au: "ఔ", ṛ: "ఋ", ṝ: "ౠ" },
+  vowelSign: { a: "", ā: "ా", i: "ి", ī: "ీ", u: "ు", ū: "ూ", e: "ె", ē: "ే", o: "ొ", ō: "ో", ai: "ై", au: "ౌ", ṛ: "ృ", ṝ: "ౄ" }
+};
+
+const kannadaScriptMaps = {
+  om: "ಓಂ",
+  anusvara: "ಂ",
+  visarga: "ಃ",
+  virama: "್",
+  consonantMap: {
+    kṣ: "ಕ್ಷ", jñ: "ಜ್ಞ", kh: "ಖ", gh: "ಘ", ch: "ಚ", jh: "ಝ", ṭh: "ಠ", ḍh: "ಢ", th: "ಥ", dh: "ಧ", ph: "ಫ", bh: "ಭ",
+    ṅ: "ಙ", ñ: "ಞ", ṭ: "ಟ", ḍ: "ಡ", ṇ: "ಣ", ś: "ಶ", ṣ: "ಷ", ḷ: "ಳ", ḻ: "ಳ", ṟ: "ರ",
+    k: "ಕ", g: "ಗ", c: "ಚ", j: "ಜ", t: "ತ", d: "ದ", n: "ನ", p: "ಪ", b: "ಬ", m: "ಮ", y: "ಯ", r: "ರ", l: "ಲ", v: "ವ", w: "ವ", s: "ಸ", h: "ಹ"
+  },
+  independentVowel: { a: "ಅ", ā: "ಆ", i: "ಇ", ī: "ಈ", u: "ಉ", ū: "ಊ", e: "ಎ", ē: "ಏ", o: "ಒ", ō: "ಓ", ai: "ಐ", au: "ಔ", ṛ: "ಋ", ṝ: "ೠ" },
+  vowelSign: { a: "", ā: "ಾ", i: "ಿ", ī: "ೀ", u: "ು", ū: "ೂ", e: "ೆ", ē: "ೇ", o: "ೊ", ō: "ೋ", ai: "ೈ", au: "ೌ", ṛ: "ೃ", ṝ: "ೄ" }
+};
+
+function iastToTelugu(text) {
+  return iastToBrahmic(text, teluguScriptMaps);
+}
+
+function iastToKannada(text) {
+  return iastToBrahmic(text, kannadaScriptMaps);
+}
+
+function getLanguageScriptText(item, key, iastText, devanagariText = "") {
+  if (currentLanguage === "ta") return getTamilMantraText(item, key, iastText);
+  if (currentLanguage === "te") return iastToTelugu(iastText);
+  if (currentLanguage === "kn") return iastToKannada(iastText);
+  if (currentLanguage === "hi") return devanagariText || iastText;
+  return iastText;
+}
+
 const tamilMantrasByName = {
   Ganesha: { famous: "வக்ரதுண்ட மகாகாய ...", gayatri: "ஓம் ஏகதந்தாய வித்மஹே ...", beej: "ஓம் கம் கணபதயே நம:" },
   Shiva: { famous: "ஓம் நம சிவாய", gayatri: "ஓம் தத்புருஷாய வித்மஹே ...", beej: "ஹௌம்" },
@@ -2226,6 +2956,42 @@ function quoteOfTheDay() {
     ];
     return tamilQuotes[new Date().getDay() % tamilQuotes.length];
   }
+  if (currentLanguage === "te") {
+    const teluguQuotes = [
+      "నిరంతర జపం మనసును శుద్ధి చేసి సంకల్పాన్ని బలపరుస్తుంది.",
+      "ఏకాగ్రతతో చేసిన ఒక చుట్టు, దృష్టి చెదిరిన అనేక చుట్టుల కంటే మెరుగైనది.",
+      "మంత్రం తరువాతి నిశ్శబ్దం ప్రార్థనను అంతరంగంలో నిలబెడుతుంది.",
+      "రోజువారీ చిన్న నియమం లోతైన ఆధ్యాత్మిక శక్తిని పెంచుతుంది.",
+      "శ్వాస, మంత్రం, అవగాహన కలిసి అంతర సమతుల్యాన్ని సృష్టిస్తాయి.",
+      "సరళమైన సంకల్పం ప్రతి జపాన్ని అర్థవంతం చేస్తుంది.",
+      "నియమిత, ప్రశాంత, నిజాయితీ సాధనలో భక్తి పెరుగుతుంది."
+    ];
+    return teluguQuotes[new Date().getDay() % teluguQuotes.length];
+  }
+  if (currentLanguage === "kn") {
+    const kannadaQuotes = [
+      "ನಿಯತ ಜಪವು ಮನಸ್ಸನ್ನು ಶುದ್ಧಗೊಳಿಸಿ ಸಂಕಲ್ಪವನ್ನು ಬಲಪಡಿಸುತ್ತದೆ.",
+      "ಏಕಾಗ್ರತೆಯ ಒಂದು ಸುತ್ತು, ಗಮನ ತಪ್ಪಿದ ಅನೇಕ ಸುತ್ತಿಗಿಂತ ಉತ್ತಮ.",
+      "ಮಂತ್ರದ ನಂತರದ ಮೌನವು ಪ್ರಾರ್ಥನೆಯನ್ನು ಒಳಗೆ ನೆಲಸಿಸುತ್ತದೆ.",
+      "ಪ್ರತಿದಿನದ ಸಣ್ಣ ನಿಯಮಿತತೆ ಆಳವಾದ ಆಧ್ಯಾತ್ಮಿಕ ವೇಗವನ್ನು ಕಟ್ಟುತ್ತದೆ.",
+      "ಉಸಿರು, ಮಂತ್ರ ಮತ್ತು ಜಾಗೃತಿ ಸೇರಿ ಒಳಸಮತೋಲನವನ್ನು ನಿರ್ಮಿಸುತ್ತವೆ.",
+      "ಸರಳ ಸಂಕಲ್ಪವು ಪ್ರತಿಯೊಂದು ಜಪವನ್ನೂ ಅರ್ಥಪೂರ್ಣಗೊಳಿಸುತ್ತದೆ.",
+      "ನಿಯಮಿತ, ಶಾಂತ ಮತ್ತು ಸತ್ಯಸಂಧ ಅಭ್ಯಾಸದಲ್ಲಿ ಭಕ್ತಿ ವೃದ್ಧಿಸುತ್ತದೆ."
+    ];
+    return kannadaQuotes[new Date().getDay() % kannadaQuotes.length];
+  }
+  if (currentLanguage === "hi") {
+    const hindiQuotes = [
+      "नियमित जप मन को शुद्ध करता है और संकल्प को मजबूत बनाता है।",
+      "एकाग्रता से किया गया एक चक्र, बिखरे हुए कई चक्रों से बेहतर है।",
+      "मंत्र के बाद का मौन प्रार्थना को भीतर स्थिर करता है।",
+      "दैनिक छोटे अनुशासन से गहरी आध्यात्मिक शक्ति बनती है।",
+      "श्वास, मंत्र और जागरूकता मिलकर आंतरिक संतुलन रचते हैं।",
+      "सरल संकल्प हर जप को अर्थपूर्ण बनाता है।",
+      "नियमित, शांत और सच्ची साधना में भक्ति बढ़ती है।"
+    ];
+    return hindiQuotes[new Date().getDay() % hindiQuotes.length];
+  }
   return dailyRitualQuotes[new Date().getDay() % dailyRitualQuotes.length];
 }
 
@@ -2241,6 +3007,42 @@ function journalPromptForItem(item) {
       return `இன்று ${displayName(item.name)} அருளை நினைத்து பணிவுடனும் தெளிவுடனும் ஜபிக்கிறேன்.`;
     }
     return `இன்று ${displayName(item.name)} அருளை வேண்டி பக்தியுடனும் சீரான எண்ணிக்கையுடனும் ஜபிக்கிறேன்.`;
+  }
+  if (currentLanguage === "te") {
+    if (!item) {
+      return "ఈ రోజు నేను స్థిరత్వం మరియు కృతజ్ఞతతో జపం చేస్తాను.";
+    }
+    if (item.type === "planet") {
+      return `ఈ రోజు ${displayName(item.name)} అనుబంధ నియమంతో స్థిర సంఖ్యలో ప్రశాంతంగా జపం చేస్తాను.`;
+    }
+    if (item.type === "guru") {
+      return `ఈ రోజు ${displayName(item.name)}ను వినయం, స్పష్టమైన జపం, నిశ్శబ్ద మననంతో స్మరిస్తాను.`;
+    }
+    return `ఈ రోజు ${displayName(item.name)} అనుగ్రహం కోసం భక్తితో, స్పష్టమైన ఉచ్చారణతో, స్థిర జపసంఖ్యతో సాధన చేస్తాను.`;
+  }
+  if (currentLanguage === "kn") {
+    if (!item) {
+      return "ಇಂದು ನಾನು ಸ್ಥಿರತೆ ಮತ್ತು ಕೃತಜ್ಞತೆಯೊಂದಿಗೆ ಜಪ ಮಾಡುತ್ತೇನೆ.";
+    }
+    if (item.type === "planet") {
+      return `ಇಂದು ${displayName(item.name)} ಶಿಸ್ತಿಗೆ ಅನುಗುಣವಾಗಿ ನಿಗದಿತ ಎಣಿಕೆಯಲ್ಲಿ ಶಾಂತವಾಗಿ ಜಪ ಮಾಡುತ್ತೇನೆ.`;
+    }
+    if (item.type === "guru") {
+      return `ಇಂದು ${displayName(item.name)}ರನ್ನು ವಿನಯ, ಸ್ಪಷ್ಟ ಜಪ ಮತ್ತು ಮೌನ ಚಿಂತನೆಯೊಂದಿಗೆ ಸ್ಮರಿಸುತ್ತೇನೆ.`;
+    }
+    return `ಇಂದು ${displayName(item.name)} ಕೃಪೆಗೆ ಭಕ್ತಿಯಿಂದ, ಸ್ಪಷ್ಟ ಉಚ್ಚಾರಣೆ ಮತ್ತು ನಿಗದಿತ ಜಪ ಎಣಿಕೆಯಿಂದ ಸಾಧನೆ ಮಾಡುತ್ತೇನೆ.`;
+  }
+  if (currentLanguage === "hi") {
+    if (!item) {
+      return "आज मैं स्थिरता और कृतज्ञता के साथ जप करूँगा।";
+    }
+    if (item.type === "planet") {
+      return `आज मैं ${displayName(item.name)} अनुशासन के अनुसार निश्चित संख्या और शांत श्वास के साथ जप करूँगा।`;
+    }
+    if (item.type === "guru") {
+      return `आज मैं ${displayName(item.name)} का सम्मान विनम्रता, स्पष्ट जप और मौन चिंतन से करूँगा।`;
+    }
+    return `आज मैं ${displayName(item.name)} का आह्वान भक्ति, स्पष्ट उच्चारण और नियमित जप-संख्या के साथ करूँगा।`;
   }
   if (!item) {
     return "Today I will chant with steadiness and gratitude.";
@@ -2737,7 +3539,7 @@ function buildBlessingCardCanvas(item) {
 
   context.fillStyle = "#625949";
   context.font = "28px 'Segoe UI'";
-  wrapCanvasText(context, `${t("purpose")}: ${item.purpose}`, 80, cursorY + 42, 920, 40);
+  wrapCanvasText(context, `${t("purpose")}: ${localizedPurpose(item)}`, 80, cursorY + 42, 920, 40);
 
   context.fillStyle = "#b14d00";
   context.font = "24px 'Segoe UI'";
@@ -2826,17 +3628,20 @@ function typeLabel(value) {
 
 function scriptModeText(mode) {
   if (currentLanguage === "ta") return t("scriptTamil");
+  if (currentLanguage === "te") return t("scriptTelugu");
+  if (currentLanguage === "kn") return t("scriptKannada");
+  if (currentLanguage === "hi") return t("scriptHindi");
   if (mode === "devanagari") return t("scriptDevanagari");
   if (mode === "tamil") return t("scriptTamil");
+  if (mode === "telugu") return t("scriptTelugu");
+  if (mode === "kannada") return t("scriptKannada");
+  if (mode === "hindi") return t("scriptHindi");
   if (mode === "iast") return t("scriptIast");
   return t("scriptBoth");
 }
 
 function effectiveScriptMode() {
-  if (currentLanguage === "ta") {
-    return "tamil";
-  }
-  return scriptSelect?.value || "both";
+  return preferredScriptModeForLanguage();
 }
 
 function famousVariantsForItem(item) {
@@ -2923,7 +3728,7 @@ function saveChantHistory() {
 function loadPrefs() {
   try {
     const savedLanguage = localStorage.getItem(LANGUAGE_KEY);
-    if (savedLanguage === "en" || savedLanguage === "ta") {
+    if (["en", "ta", "te", "kn", "hi"].includes(savedLanguage)) {
       currentLanguage = savedLanguage;
     }
 
@@ -2979,7 +3784,7 @@ function loadPrefs() {
     if (typeof prefs?.manualTimeTheme === "string") {
       manualTimeTheme = prefs.manualTimeTheme;
     }
-    if (prefs?.language === "en" || prefs?.language === "ta") {
+    if (["en", "ta", "te", "kn", "hi"].includes(prefs?.language)) {
       currentLanguage = prefs.language;
     }
   } catch {
@@ -3138,6 +3943,14 @@ function incrementSankalpaProgress(step = 1) {
   return newlyCompleted;
 }
 
+function defaultSankalpaText() {
+  if (currentLanguage === "ta") return "பக்தியுடனும் தெளிவுடனும் ஜபம் செய்கிறேன்.";
+  if (currentLanguage === "te") return "భక్తితో మరియు స్పష్టతతో జపం చేస్తాను.";
+  if (currentLanguage === "kn") return "ಭಕ್ತಿ ಮತ್ತು ಸ್ಪಷ್ಟತೆಯೊಂದಿಗೆ ಜಪ ಮಾಡುತ್ತೇನೆ.";
+  if (currentLanguage === "hi") return "मैं भक्ति और स्पष्टता के साथ जप करूँगा।";
+  return "Chant with devotion and clarity.";
+}
+
 function renderSankalpaTracker() {
   if (!sankalpaInput || !sankalpaTargetSelect || !sankalpaSummary || !sankalpaStreak) {
     return;
@@ -3145,9 +3958,7 @@ function renderSankalpaTracker() {
 
   resetSankalpaDailyIfNeeded();
   if (!String(sankalpaState.text || "").trim()) {
-    sankalpaState.text = currentLanguage === "ta"
-      ? "பக்தியுடனும் தெளிவுடனும் ஜபம் செய்கிறேன்."
-      : "Chant with devotion and clarity.";
+    sankalpaState.text = defaultSankalpaText();
   }
   sankalpaInput.value = sankalpaState.text || "";
   sankalpaTargetSelect.value = String(sankalpaState.target || 21);
@@ -3276,7 +4087,7 @@ function loadJournalEntry() {
 function populateAiDeityOptions() {
   if (!aiDeitySelect) return;
   aiDeitySelect.innerHTML = [
-    `<option value="">${currentLanguage === "ta" ? "விருப்பம் இல்லை (வாரநாள் அடிப்படையில்)" : "No preference (weekday based)"}</option>`,
+    `<option value="">${t("noPreferenceWeekday")}</option>`,
     ...mantras
       .filter((item) => item.type === "god")
       .map((item) => `<option value="${item.name}">${displayName(item.name)}</option>`),
@@ -3303,8 +4114,17 @@ function renderSlokaLibrary() {
 
   slokaLibraryBody.innerHTML = rows.map((item) => {
     const typeText = item.type === "planet" ? t("mantraTypePlanet") : item.type === "guru" ? t("typeGuru") : t("typeGod");
-    const slokaText = currentLanguage === "ta"
+    const scriptMode = preferredScriptModeForLanguage();
+    const slokaText = scriptMode === "tamil"
       ? (getTamilMantraText(item, "famous", item.famousIast || "") || item.famousIast || "-")
+      : scriptMode === "telugu"
+      ? (iastToTelugu(item.famousIast || "") || item.famousIast || "-")
+      : scriptMode === "kannada"
+      ? (iastToKannada(item.famousIast || "") || item.famousIast || "-")
+      : scriptMode === "devanagari"
+      ? (item.famousDevanagari || item.famousIast || "-")
+      : scriptMode === "hindi"
+      ? (item.famousDevanagari || item.famousIast || "-")
       : (item.famousIast || "-");
     return `
       <tr>
@@ -3450,6 +4270,69 @@ function defaultRitualGuidanceByType(type) {
       "முடிவில் நன்றியுடன் மௌனமாக சில நொடிகள் இருங்கள்."
     ];
   }
+  if (currentLanguage === "te") {
+    if (type === "planet") {
+      return [
+        "వారంలో రోజు సంప్రదాయాన్ని అనుసరించి క్రమబద్ధ సాధన చేయండి.",
+        "స్థిర సంఖ్య, స్థిర శ్వాసతో జపం చేయండి.",
+        "అనియమిత దీర్ఘ సాధన కంటే నియమిత సాధన మెరుగైనది."
+      ];
+    }
+    if (type === "guru") {
+      return [
+        "కృతజ్ఞతతో గురు స్మరణతో ప్రారంభించండి.",
+        "స్పష్ట ఉచ్చారణతో ప్రశాంత గమనంలో జపించండి.",
+        "జపం తర్వాత కాసేపు నిశ్శబ్ద ధ్యానంలో ఉండండి."
+      ];
+    }
+    return [
+      "సరళ సంకల్పంతో స్థిర సంఖ్యలో జపం ప్రారంభించండి.",
+      "నిటారుగా కూర్చొని శ్వాసను సమంగా ఉంచండి.",
+      "చివరలో కృతజ్ఞతతో కొన్ని క్షణాలు మౌనంగా ఉండండి."
+    ];
+  }
+  if (currentLanguage === "kn") {
+    if (type === "planet") {
+      return [
+        "ವಾರದ ದಿನ ಪರಂಪರೆಯಂತೆ ನಿಯಮಿತ ಜಪ ಕ್ರಮ ಪಾಲಿಸಿ.",
+        "ನಿಗದಿತ ಎಣಿಕೆ ಮತ್ತು ಸ್ಥಿರ ಉಸಿರಾಟದೊಂದಿಗೆ ಜಪಿಸಿ.",
+        "ಅನಿಯಮಿತ ದೀರ್ಘ ಅವಧಿಗಿಂತ ನಿಯಮಿತ ಅಭ್ಯಾಸ ಉತ್ತಮ."
+      ];
+    }
+    if (type === "guru") {
+      return [
+        "ಕೃತಜ್ಞತೆಯಿಂದ ಗುರುಸ್ಮರಣೆ ಮಾಡಿ ಪ್ರಾರಂಭಿಸಿ.",
+        "ಸ್ಪಷ್ಟ ಉಚ್ಚಾರಣೆ ಮತ್ತು ಶಾಂತ ವೇಗದಲ್ಲಿ ಜಪಿಸಿ.",
+        "ಜಪದ ಬಳಿಕ ಕ್ಷಣಕಾಲ ಮೌನಧ್ಯಾನದಲ್ಲಿಿರಿ."
+      ];
+    }
+    return [
+      "ಸರಳ ಸಂಕಲ್ಪದೊಂದಿಗೆ ನಿಗದಿತ ಎಣಿಕೆಯಲ್ಲಿ ಜಪ ಪ್ರಾರಂಭಿಸಿ.",
+      "ನೆಟ್ಟಗೆ ಕುಳಿತು ಉಸಿರಾಟವನ್ನು ಸಮವಾಗಿರಿಸಿ.",
+      "ಕೊನೆಯಲ್ಲಿ ಕೃತಜ್ಞತೆಯಿಂದ ಕೆಲವು ಕ್ಷಣ ಮೌನದಲ್ಲಿರಿ."
+    ];
+  }
+  if (currentLanguage === "hi") {
+    if (type === "planet") {
+      return [
+        "सप्ताह-दिन परंपरा के अनुसार नियमित जप करें।",
+        "निश्चित संख्या और स्थिर श्वास के साथ जप करें।",
+        "अनियमित लंबे सत्रों से बेहतर है नियमित अभ्यास।"
+      ];
+    }
+    if (type === "guru") {
+      return [
+        "कृतज्ञता के साथ गुरु-स्मरण करके शुरुआत करें।",
+        "स्पष्ट उच्चारण और शांत गति में जप करें।",
+        "जप के बाद थोड़ी देर मौन ध्यान में बैठें।"
+      ];
+    }
+    return [
+      "सरल संकल्प के साथ निश्चित संख्या में जप शुरू करें।",
+      "सीधी मुद्रा में बैठकर श्वास स्थिर रखें।",
+      "अंत में कृतज्ञता के साथ कुछ क्षण मौन रहें।"
+    ];
+  }
   if (type === "planet") {
     return [
       "Follow the graha weekday tradition for consistency.",
@@ -3487,11 +4370,11 @@ function renderTempleInfo(item) {
     return;
   }
 
-  const rituals = currentLanguage === "ta"
-    ? defaultRitualGuidanceByType(item.type)
-    : (ritualGuidanceByName[item.name] || defaultRitualGuidanceByType(item.type));
+  const rituals = currentLanguage === "en"
+    ? (ritualGuidanceByName[item.name] || defaultRitualGuidanceByType(item.type))
+    : defaultRitualGuidanceByType(item.type);
 
-  templeInfoTitle.textContent = t("ritualGuidanceFor", { name: item.name });
+  templeInfoTitle.textContent = t("ritualGuidanceFor", { name: displayName(item.name) });
 
   if (!rituals.length) {
     templeList.innerHTML = "";
@@ -3520,8 +4403,32 @@ function renderYouShouldKnow(item) {
       "கோவிலில் இருந்தால் எண்ணிக்கையைத் தொடங்கும் முன் சங்கல்பம் செய்யுங்கள்.",
       "தினசரி பயிற்சிக்கு 11/21/51/108 போன்ற நிலையான எண்ணிக்கையை கடைப்பிடிக்கவும்."
     ]
+    : currentLanguage === "te"
+    ? [
+      `ఉద్దేశ్య కేంద్రీకరణ: ${localizedPurpose(item)}`,
+      `${localizedMantraTitle(item.famousTitle)} తో ప్రారంభించి, తర్వాత ${localizedMantraTitle(item.gayatriTitle)} తో ఏకాగ్ర జపాన్ని కొనసాగించండి.`,
+      "వేగం కంటే స్థిర శ్వాసతో స్పష్టంగా జపించడం ముఖ్యం.",
+      "దేవాలయంలో ఉంటే లెక్క మొదలుపెట్టే ముందు సంకల్పం చేయండి.",
+      "దైనందిన సాధనకు 11/21/51/108 వంటి స్థిర సంఖ్యను పాటించండి."
+    ]
+    : currentLanguage === "kn"
+    ? [
+      `ಉದ್ದೇಶ ಕೇಂದ್ರೀಕರಣ: ${localizedPurpose(item)}`,
+      `${localizedMantraTitle(item.famousTitle)} ಮೂಲಕ ಆರಂಭಿಸಿ, ನಂತರ ${localizedMantraTitle(item.gayatriTitle)} ಮೂಲಕ ಏಕಾಗ್ರ ಜಪ ಮುಂದುವರಿಸಿ.`,
+      "ವೇಗಕ್ಕಿಂತ ಸ್ಥಿರ ಉಸಿರಾಟದೊಂದಿಗೆ ಸ್ಪಷ್ಟವಾಗಿ ಜಪಿಸುವುದು ಮುಖ್ಯ.",
+      "ದೇವಾಲಯದಲ್ಲಿದ್ದರೆ ಎಣಿಕೆ ಆರಂಭಿಸುವ ಮೊದಲು ಸಂಕಲ್ಪ ಮಾಡಿ.",
+      "ದೈನಂದಿನ ಅಭ್ಯಾಸಕ್ಕೆ 11/21/51/108 ಹಾಗಿನ ಸ್ಥಿರ ಎಣಿಕೆಯನ್ನು ಪಾಲಿಸಿ."
+    ]
+    : currentLanguage === "hi"
+    ? [
+      `उद्देश्य केंद्र: ${localizedPurpose(item)}`,
+      `${localizedMantraTitle(item.famousTitle)} से शुरुआत करें, फिर ${localizedMantraTitle(item.gayatriTitle)} से एकाग्र जप जारी रखें।`,
+      "गति से अधिक, स्थिर श्वास के साथ स्पष्ट जप करना महत्वपूर्ण है।",
+      "मंदिर में हों तो गिनती शुरू करने से पहले संकल्प करें।",
+      "दैनिक अभ्यास के लिए 11/21/51/108 जैसी निश्चित संख्या रखें।"
+    ]
     : [
-      `Purpose focus: ${item.purpose}`,
+      `Purpose focus: ${localizedPurpose(item)}`,
       `Start with ${item.famousTitle} for quick devotion, then continue with ${item.gayatriTitle} for focused chanting.`,
       "Chant with steady breathing and clear pronunciation rather than speed.",
       "If at temple, complete a sankalpa (intention) before beginning your count.",
@@ -3529,15 +4436,45 @@ function renderYouShouldKnow(item) {
     ];
 
   if (item.type === "planet") {
-    basePoints.push("Planet mantras are often chanted on the graha’s weekday with disciplined routine.");
+    basePoints.push(
+      currentLanguage === "ta"
+        ? "கிரக மந்திரங்கள் பொதுவாக அந்த கிரகத்தின் வாரநாளில் ஒழுக்கமாக ஜபிக்கப்படுகின்றன."
+        : currentLanguage === "te"
+        ? "గ్రహ మంత్రాలు సాధారణంగా ఆ గ్రహానికి అనుకూల వారంలో రోజు నియమంతో జపిస్తారు."
+        : currentLanguage === "kn"
+        ? "ಗ್ರಹ ಮಂತ್ರಗಳನ್ನು ಸಾಮಾನ್ಯವಾಗಿ ಆ ಗ್ರಹದ ವಾರದ ದಿನದಲ್ಲಿ ನಿಯಮಿತವಾಗಿ ಜಪಿಸಲಾಗುತ್ತದೆ."
+        : currentLanguage === "hi"
+        ? "ग्रह मंत्र सामान्यतः संबंधित वार-दिन पर अनुशासित रूप से जपे जाते हैं।"
+        : "Planet mantras are often chanted on the graha’s weekday with disciplined routine."
+    );
   }
 
   if (item.type === "guru") {
-    basePoints.push("For guru mantras, chant with gratitude and remember the guru’s teachings while reciting.");
+    basePoints.push(
+      currentLanguage === "ta"
+        ? "குரு மந்திரங்களுக்கு நன்றியுணர்வுடன், குருவின் உபதேசத்தை நினைத்து ஜபிக்கவும்."
+        : currentLanguage === "te"
+        ? "గురు మంత్రాలకు కృతజ్ఞతతో, గురువు ఉపదేశాలను స్మరిస్తూ జపించండి."
+        : currentLanguage === "kn"
+        ? "ಗುರು ಮಂತ್ರಗಳಿಗೆ ಕೃತಜ್ಞತೆಯಿಂದ, ಗುರು ಉಪದೇಶಗಳನ್ನು ಸ್ಮರಿಸಿ ಜಪಿಸಿ."
+        : currentLanguage === "hi"
+        ? "गुरु मंत्रों में कृतज्ञता के साथ गुरु-उपदेशों का स्मरण करते हुए जप करें।"
+        : "For guru mantras, chant with gratitude and remember the guru’s teachings while reciting."
+    );
   }
 
   if (beejMantrasByName[item.name]) {
-    basePoints.push("Beej mantra is available for this deity and can be used for short focused japa.");
+    basePoints.push(
+      currentLanguage === "ta"
+        ? "இந்த தெய்வத்திற்கு பீஜ மந்திரம் உள்ளது; குறுகிய ஒருமுக ஜபத்திற்கு பயன்படுத்தலாம்."
+        : currentLanguage === "te"
+        ? "ఈ దేవతకు బీజ మంత్రం అందుబాటులో ఉంది; సంక్షిప్త ఏకాగ్ర జపానికి ఉపయోగించవచ్చు."
+        : currentLanguage === "kn"
+        ? "ಈ ದೇವತೆಗೆ ಬೀಜ ಮಂತ್ರ ಲಭ್ಯವಿದೆ; ಚಿಕ್ಕ ಏಕಾಗ್ರ ಜಪಕ್ಕೆ ಬಳಸಬಹುದು."
+        : currentLanguage === "hi"
+        ? "इस देवता के लिए बीज मंत्र उपलब्ध है; संक्षिप्त एकाग्र जप हेतु उपयोग कर सकते हैं।"
+        : "Beej mantra is available for this deity and can be used for short focused japa."
+    );
   }
 
   youShouldKnow.classList.remove("hidden");
@@ -3577,17 +4514,26 @@ async function copyText(text, label) {
 
 function mantraBlock(title, devanagari, iast, mode) {
   const tamil = typeof iast === "object" ? iast.tamil : "";
+  const telugu = typeof iast === "object" ? iast.telugu : "";
+  const kannada = typeof iast === "object" ? iast.kannada : "";
+  const hindi = typeof iast === "object" ? iast.hindi : "";
   const iastText = typeof iast === "object" ? iast.iast : iast;
   const devText = devanagari || iastText;
   const devBlock = (mode === "both" || mode === "devanagari") && devText ? `<p class="mantra devanagari">${devText}</p>` : "";
   const tamilBlock = (mode === "both" || mode === "tamil") && tamil ? `<p class="mantra tamil-text">${tamil}</p>` : "";
+  const teluguBlock = mode === "telugu" && telugu ? `<p class="mantra">${telugu}</p>` : "";
+  const kannadaBlock = mode === "kannada" && kannada ? `<p class="mantra">${kannada}</p>` : "";
+  const hindiBlock = mode === "hindi" && hindi ? `<p class="mantra devanagari">${hindi}</p>` : "";
   const iastBlock = (mode === "both" || mode === "iast") && iastText ? `<p class="mantra">${iastText}</p>` : "";
 
   return `
     <p class="section-title">${title}</p>
     ${devBlock}
+    ${hindiBlock}
     ${iastBlock}
     ${tamilBlock}
+    ${teluguBlock}
+    ${kannadaBlock}
   `;
 }
 
@@ -3626,12 +4572,41 @@ function selectedMantraData(item) {
     ? getTamilMantraText(item, "gayatri", iast)
     : getTamilMantraText(item, "famous", iast);
 
+  const scriptKey = isBeej ? "beej" : isGayatri ? "gayatri" : "famous";
+  const telugu = isUnavailableBeej ? "" : getLanguageScriptText(item, scriptKey, iast, devanagari);
+  const kannada = isUnavailableBeej ? "" : iastToKannada(iast);
+  const hindi = isUnavailableBeej ? "" : (devanagari || iast);
+
   const meaning = currentLanguage === "ta"
     ? (isBeej
       ? `பொருள்: ${displayName(item.name)} தொடர்பான பீஜ மந்திரம் ஆழமான உள்ளார்ந்த கவனம் மற்றும் ஜப ஒத்திசைவை உருவாக்குகிறது.`
       : isGayatri
       ? `பொருள்: ${displayName(item.name)} மீது தியானித்து புத்தி ஒளிவளத்தை வேண்டுகின்றோம். இந்த மந்திரம் தெளிவு, வழிகாட்டல் மற்றும் ஆன்மிக நயத்தை வளர்க்க உதவும்.`
       : `பொருள்: இந்த மந்திரம் ${displayName(item.name)} அருளை வேண்டி பக்தி, கவனம் மற்றும் ஆன்மிக இணைப்பை வலுப்படுத்தும்.`)
+    : currentLanguage === "te"
+    ? (isBeej
+      ? (beej
+        ? `అర్థం: ${displayName(item.name)} బీజ మంత్రం ఏకాగ్ర జపం మరియు అంతర్గత ధ్యానం కోసం ఉపయుక్తం.`
+        : "అర్థం: ఈ ఎంపికకు సాధారణంగా బీజ మంత్రం అందుబాటులో ఉండదు.")
+      : isGayatri
+      ? `అర్థం: ${displayName(item.name)} పై ధ్యానం చేసి జ్ఞాన ప్రకాశం కోరబడుతుంది. ఈ మంత్రం స్పష్టత, మార్గదర్శనం మరియు అంతర్గత శ్రేయస్సుకు సహాయపడుతుంది.`
+      : `అర్థం: ఈ మంత్రం ${displayName(item.name)} అనుగ్రహాన్ని కోరుతూ భక్తి, ఏకాగ్రత మరియు ఆధ్యాత్మిక అనుసంధానాన్ని బలపరుస్తుంది.`)
+    : currentLanguage === "kn"
+    ? (isBeej
+      ? (beej
+        ? `ಅರ್ಥ: ${displayName(item.name)} ಬೀಜ ಮಂತ್ರವು ಏಕಾಗ್ರ ಜಪ ಮತ್ತು ಒಳಧ್ಯಾನಕ್ಕೆ ಸಹಾಯಕ.`
+        : "ಅರ್ಥ: ಈ ಆಯ್ಕೆಗೆ ಸಾಮಾನ್ಯವಾಗಿ ಬೀಜ ಮಂತ್ರ ಲಭ್ಯವಿರುವುದಿಲ್ಲ.")
+      : isGayatri
+      ? `ಅರ್ಥ: ${displayName(item.name)} ಮೇಲೆ ಧ್ಯಾನಿಸಿ ಜ್ಞಾನಪ್ರಕಾಶವನ್ನು ಕೋರುತ್ತೇವೆ. ಈ ಮಂತ್ರ ಸ್ಪಷ್ಟತೆ, ಮಾರ್ಗದರ್ಶನ ಮತ್ತು ಆಂತರಿಕ ಶ್ರೇಯಸ್ಸಿಗೆ ಸಹಾಯಕ.`
+      : `ಅರ್ಥ: ಈ ಮಂತ್ರವು ${displayName(item.name)} ಕೃಪೆಯನ್ನು ಕೋರಿ ಭಕ್ತಿ, ಏಕಾಗ್ರತೆ ಮತ್ತು ಆಧ್ಯಾತ್ಮಿಕ ಸಂಪರ್ಕವನ್ನು ಬಲಪಡಿಸುತ್ತದೆ.`)
+    : currentLanguage === "hi"
+    ? (isBeej
+      ? (beej
+        ? `अर्थ: ${displayName(item.name)} का बीज मंत्र एकाग्र जप और आंतरिक ध्यान के लिए उपयोगी है।`
+        : "अर्थ: इस चयन के लिए सामान्यतः बीज मंत्र उपलब्ध नहीं होता।")
+      : isGayatri
+      ? `अर्थ: ${displayName(item.name)} पर ध्यान करके बुद्धि के प्रकाश की प्रार्थना की जाती है। यह मंत्र स्पष्टता, मार्गदर्शन और आंतरिक संतुलन में सहायक है।`
+      : `अर्थ: यह मंत्र ${displayName(item.name)} की कृपा के लिए जपा जाता है और भक्ति, एकाग्रता तथा आध्यात्मिक जुड़ाव को मजबूत करता है।`)
     : isBeej
     ? (beej
       ? `Meaning: Beej mantra of ${item.name} carries the seed vibration used for concentrated japa and inner focus.`
@@ -3648,6 +4623,30 @@ function selectedMantraData(item) {
       : isGayatri
       ? "பயன்பாடு: காலை/மாலை நேரங்களில் சரியான உச்சரிப்பு மற்றும் அமைதியான சுவாசத்துடன் ஜபிக்கலாம்."
       : "பயன்பாடு: தினசரி பூஜை, முக்கிய செயல்களுக்கு முன், அல்லது மனஅமைதி மற்றும் அருள் வேண்டி ஜபிக்கலாம்.")
+    : currentLanguage === "te"
+    ? (isBeej
+      ? (beej
+        ? "వినియోగం: స్థిర సంఖ్యతో, స్థిర శ్వాసతో ఏకాగ్రంగా జపించండి."
+        : "వినియోగం: ఈ నమోదుకు ప్రసిద్ధ లేదా గాయత్రి మంత్రాన్ని ఎంచుకోండి.")
+      : isGayatri
+      ? "వినియోగం: సాధారణంగా ఉదయం/సాయంత్రం సరైన ఉచ్చారణతో, ప్రశాంత శ్వాసతో జపిస్తారు."
+      : "వినియోగం: రోజువారి పూజలో, ముఖ్య పనుల ముందు, లేదా శాంతి మరియు కృప కోసం జపించండి.")
+    : currentLanguage === "kn"
+    ? (isBeej
+      ? (beej
+        ? "ಬಳಕೆ: ಸ್ಥಿರ ಎಣಿಕೆಯಲ್ಲಿ, ಸಮ ಉಸಿರಾಟದೊಂದಿಗೆ ಏಕಾಗ್ರವಾಗಿ ಜಪಿಸಿ."
+        : "ಬಳಕೆ: ಈ ನಮೂದಿಗೆ ಪ್ರಸಿದ್ಧ ಅಥವಾ ಗಾಯತ್ರಿ ಮಂತ್ರವನ್ನು ಆಯ್ಕೆಮಾಡಿ.")
+      : isGayatri
+      ? "ಬಳಕೆ: ಸಾಮಾನ್ಯವಾಗಿ ಬೆಳಗ್ಗೆ/ಸಂಜೆ ಸರಿಯಾದ ಉಚ್ಚಾರಣೆ ಮತ್ತು ಶಾಂತ ಉಸಿರಾಟದೊಂದಿಗೆ ಜಪಿಸಲಾಗುತ್ತದೆ."
+      : "ಬಳಕೆ: ದೈನಂದಿನ ಪೂಜೆ, ಪ್ರಮುಖ ಕಾರ್ಯಗಳ ಮೊದಲು, ಅಥವಾ ಶಾಂತಿ ಮತ್ತು ಕೃಪೆಗಾಗಿ ಜಪಿಸಬಹುದು.")
+    : currentLanguage === "hi"
+    ? (isBeej
+      ? (beej
+        ? "उपयोग: निश्चित संख्या के साथ, स्थिर श्वास रखते हुए एकाग्रता से जप करें।"
+        : "उपयोग: इस प्रविष्टि के लिए प्रसिद्ध या गायत्री मंत्र चुनें।")
+      : isGayatri
+      ? "उपयोग: प्रायः सुबह/शाम सही उच्चारण और शांत श्वास के साथ जपा जाता है।"
+      : "उपयोग: दैनिक पूजा में, महत्वपूर्ण कार्यों से पहले, या शांति और कृपा की कामना से जप करें।")
     : isBeej
     ? (beej
       ? "Usage: Chant with care using a fixed count and focused breathing for subtle inner alignment."
@@ -3657,10 +4656,18 @@ function selectedMantraData(item) {
     : "Usage: Can be chanted during daily puja, before starting important tasks, or when seeking strength, peace, and blessings.";
 
   const famousCountLabel = !isGayatri && !isBeej
-    ? ` · Showing ${Math.min((famousSelection.index || 0) + 1, Math.max(famousSelection.total || 1, 1))} of ${Math.max(famousVariants.length, 1)} curated famous/traditional chants for ${item.name}.`
+    ? currentLanguage === "ta"
+      ? ` · ${Math.min((famousSelection.index || 0) + 1, Math.max(famousSelection.total || 1, 1))}/${Math.max(famousVariants.length, 1)} தொகுக்கப்பட்ட பிரபல/பாரம்பரிய மந்திரங்கள் (${displayName(item.name)}).`
+      : currentLanguage === "te"
+      ? ` · ${Math.min((famousSelection.index || 0) + 1, Math.max(famousSelection.total || 1, 1))}/${Math.max(famousVariants.length, 1)} క్యూరేట్ చేసిన ప్రసిద్ధ/సాంప్రదాయ మంత్రాలు (${displayName(item.name)}).`
+      : currentLanguage === "kn"
+      ? ` · ${Math.min((famousSelection.index || 0) + 1, Math.max(famousSelection.total || 1, 1))}/${Math.max(famousVariants.length, 1)} ಆಯ್ದ ಪ್ರಸಿದ್ಧ/ಪಾರಂಪರಿಕ ಮಂತ್ರಗಳು (${displayName(item.name)}).`
+      : currentLanguage === "hi"
+      ? ` · ${Math.min((famousSelection.index || 0) + 1, Math.max(famousSelection.total || 1, 1))}/${Math.max(famousVariants.length, 1)} संकलित प्रसिद्ध/पारंपरिक मंत्र (${displayName(item.name)}).`
+      : ` · Showing ${Math.min((famousSelection.index || 0) + 1, Math.max(famousSelection.total || 1, 1))} of ${Math.max(famousVariants.length, 1)} curated famous/traditional chants for ${item.name}.`
     : "";
 
-  return { title, devanagari, iast, tamil, meaning, usage: `${usage}${famousCountLabel}`, isEnglishOnlyFallback: isUnavailableBeej };
+  return { title, devanagari, iast, tamil, telugu, kannada, hindi, meaning, usage: `${usage}${famousCountLabel}`, isEnglishOnlyFallback: isUnavailableBeej };
 }
 
 function renderChantAssistant(item) {
@@ -3678,7 +4685,14 @@ function renderChantAssistant(item) {
   chantScriptModeLabel.textContent = scriptModeText(mode);
   chantTextDevanagari.textContent = (mode === "both" || mode === "devanagari") ? (mantra.devanagari || mantra.iast) : "";
   chantTextTamil.textContent = (mode === "both" || mode === "tamil") ? (mantra.isEnglishOnlyFallback ? "" : mantra.tamil) : "";
-  chantTextIast.textContent = (mode === "both" || mode === "iast") ? mantra.iast : "";
+  const chantMainScript = mode === "telugu"
+    ? mantra.telugu
+    : mode === "kannada"
+    ? mantra.kannada
+    : mode === "hindi"
+    ? mantra.hindi
+    : mantra.iast;
+  chantTextIast.textContent = (mode === "both" || mode === "iast" || mode === "telugu" || mode === "kannada" || mode === "hindi") ? chantMainScript : "";
   const totalForEntity = Number(chantHistory[item.name]?.total || 0);
   chantProgress.textContent = t("countProgress", { count: chantCount, target: chantTarget, total: totalForEntity });
   startBreathCue();
@@ -3699,7 +4713,14 @@ function renderMantraInfo(item) {
   scriptModeLabel.textContent = scriptModeText(mode);
   mantraInfoTextDevanagari.textContent = (mode === "both" || mode === "devanagari") ? (mantra.devanagari || mantra.iast) : "";
   mantraInfoTextTamil.textContent = (mode === "both" || mode === "tamil") ? (mantra.isEnglishOnlyFallback ? "" : mantra.tamil) : "";
-  mantraInfoTextIast.textContent = (mode === "both" || mode === "iast") ? mantra.iast : "";
+  const infoMainScript = mode === "telugu"
+    ? mantra.telugu
+    : mode === "kannada"
+    ? mantra.kannada
+    : mode === "hindi"
+    ? mantra.hindi
+    : mantra.iast;
+  mantraInfoTextIast.textContent = (mode === "both" || mode === "iast" || mode === "telugu" || mode === "kannada" || mode === "hindi") ? infoMainScript : "";
   mantraInfoMeaning.textContent = mantra.meaning;
   mantraInfoUsage.textContent = mantra.usage;
 }
@@ -3711,7 +4732,7 @@ function buildCard(item, mode) {
     <article class="card" data-entity="${item.name}">
       <h2>${displayName(item.name)}</h2>
       <p class="featured-type">${typeLabel(item.type)}</p>
-      ${mantraBlock(mantra.title, mantra.devanagari, { iast: mantra.iast, tamil: mantra.tamil }, mode)}
+      ${mantraBlock(mantra.title, mantra.devanagari, { iast: mantra.iast, tamil: mantra.tamil, telugu: mantra.telugu, kannada: mantra.kannada, hindi: mantra.hindi }, mode)}
       <p class="meaning">${localizedPurpose(item)}</p>
       <div class="actions">
         <button data-action="toggle-favorite" data-name="${item.name}">${isFavorite ? t("removeFavorite") : t("addFavorite")}</button>
@@ -3889,9 +4910,18 @@ grid.addEventListener("click", (event) => {
 
   if (button.dataset.action === "copy-selected") {
     const mantra = selectedMantraData(item);
-    if (currentLanguage === "ta") {
-      const tamilLine = mantra.tamil || mantra.iast;
-      copyText(`${displayName(item.name)}\n${tamilLine}`, `${displayName(item.name)} selected mantra`);
+    if (currentLanguage !== "en") {
+      const scriptMode = preferredScriptModeForLanguage();
+      const selectedText = scriptMode === "tamil"
+        ? (mantra.tamil || mantra.iast)
+        : scriptMode === "telugu"
+        ? (mantra.telugu || mantra.iast)
+        : scriptMode === "kannada"
+        ? (mantra.kannada || mantra.iast)
+        : scriptMode === "hindi"
+        ? (mantra.hindi || mantra.devanagari || mantra.iast)
+        : mantra.iast;
+      copyText(`${displayName(item.name)}\n${selectedText}`, `${displayName(item.name)} selected mantra`);
     } else {
       const tamilLine = mantra.tamil ? `\n${mantra.tamil}` : "";
       copyText(`${item.name}\n${mantra.devanagari}\n${mantra.iast}${tamilLine}`, `${item.name} selected mantra`);
@@ -3900,13 +4930,21 @@ grid.addEventListener("click", (event) => {
 
   if (button.dataset.action === "copy-all") {
     const beej = beejMantrasByName[item.name];
-    if (currentLanguage === "ta") {
-      const famousTamil = getTamilMantraText(item, "famous", item.famousIast || "") || item.famousIast || "";
-      const gayatriTamil = getTamilMantraText(item, "gayatri", item.gayatriIast || "") || item.gayatriIast || "";
-      const beejTamil = beej ? (getTamilMantraText(item, "beej", beej.iast || "") || beej.iast || "") : "";
-      const beejBlock = beej ? `\n\n${localizedMantraTitle(beej.title)}:\n${beejTamil}` : "";
+    if (currentLanguage !== "en") {
+      const scriptMode = preferredScriptModeForLanguage();
+      const toScriptText = (key, iastText, devanagariText = "") => {
+        if (scriptMode === "tamil") return getTamilMantraText(item, key, iastText || "") || iastText || "";
+        if (scriptMode === "telugu") return iastToTelugu(iastText || "") || iastText || "";
+        if (scriptMode === "kannada") return iastToKannada(iastText || "") || iastText || "";
+        if (scriptMode === "hindi") return devanagariText || iastText || "";
+        return iastText || "";
+      };
+      const famousText = toScriptText("famous", item.famousIast, item.famousDevanagari);
+      const gayatriText = toScriptText("gayatri", item.gayatriIast, item.gayatriDevanagari);
+      const beejText = beej ? toScriptText("beej", beej.iast, beej.devanagari) : "";
+      const beejBlock = beej ? `\n\n${localizedMantraTitle(beej.title)}:\n${beejText}` : "";
       copyText(
-        `${displayName(item.name)}\n\n${localizedMantraTitle(item.famousTitle)}:\n${famousTamil}\n\n${localizedMantraTitle(item.gayatriTitle)}:\n${gayatriTamil}${beejBlock}\n\n${t("purpose")}: ${localizedPurpose(item)}`,
+        `${displayName(item.name)}\n\n${localizedMantraTitle(item.famousTitle)}:\n${famousText}\n\n${localizedMantraTitle(item.gayatriTitle)}:\n${gayatriText}${beejBlock}\n\n${t("purpose")}: ${localizedPurpose(item)}`,
         `${displayName(item.name)} full text`
       );
     } else {
@@ -3971,6 +5009,15 @@ if (langEnglishBtn) {
 }
 if (langTamilBtn) {
   langTamilBtn.addEventListener("click", () => setLanguage("ta"));
+}
+if (langTeluguBtn) {
+  langTeluguBtn.addEventListener("click", () => setLanguage("te"));
+}
+if (langKannadaBtn) {
+  langKannadaBtn.addEventListener("click", () => setLanguage("kn"));
+}
+if (langHindiBtn) {
+  langHindiBtn.addEventListener("click", () => setLanguage("hi"));
 }
 if (experienceModeSelect) {
   experienceModeSelect.addEventListener("change", () => {
@@ -4248,9 +5295,7 @@ if (saveReminderBtn) {
 if (sankalpaSaveBtn) {
   sankalpaSaveBtn.addEventListener("click", () => {
     const nextText = (sankalpaInput.value || "").trim();
-    sankalpaState.text = nextText || (currentLanguage === "ta"
-      ? "பக்தியுடனும் தெளிவுடனும் ஜபம் செய்கிறேன்."
-      : "Chant with devotion and clarity.");
+    sankalpaState.text = nextText || defaultSankalpaText();
     sankalpaState.target = Number(sankalpaTargetSelect.value) || 21;
     resetSankalpaDailyIfNeeded();
     saveSankalpa();
