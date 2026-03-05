@@ -1471,6 +1471,9 @@ function isTamilLanguage() {
 
 function preferredScriptModeForLanguage() {
   if (currentLanguage === "ta") return "tamil";
+  if (currentLanguage === "te") return "telugu";
+  if (currentLanguage === "kn") return "kannada";
+  if (currentLanguage === "hi") return "hindi";
   if (currentLanguage !== "en") return "devanagari";
   return scriptSelect?.value || "both";
 }
@@ -2620,8 +2623,8 @@ const teluguScriptMaps = {
     ṅ: "ఙ", ñ: "ఞ", ṭ: "ట", ḍ: "డ", ṇ: "ణ", ś: "శ", ṣ: "ష", ḷ: "ళ", ḻ: "ళ", ṟ: "ర",
     k: "క", g: "గ", c: "చ", j: "జ", t: "త", d: "ద", n: "న", p: "ప", b: "బ", m: "మ", y: "య", r: "ర", l: "ల", v: "వ", w: "వ", s: "స", h: "హ"
   },
-  independentVowel: { a: "అ", ā: "ఆ", i: "ఇ", ī: "ఈ", u: "ఉ", ū: "ఊ", e: "ఎ", ē: "ఏ", o: "ఒ", ō: "ఓ", ai: "ఐ", au: "ఔ", ṛ: "ఋ", ṝ: "ౠ" },
-  vowelSign: { a: "", ā: "ా", i: "ి", ī: "ీ", u: "ు", ū: "ూ", e: "ె", ē: "ే", o: "ొ", ō: "ో", ai: "ై", au: "ౌ", ṛ: "ృ", ṝ: "ౄ" }
+  independentVowel: { a: "అ", ā: "ఆ", i: "ఇ", ī: "ఈ", u: "ఉ", ū: "ఊ", e: "ఏ", ē: "ఏ", o: "ఓ", ō: "ఓ", ai: "ఐ", au: "ఔ", ṛ: "ఋ", ṝ: "ౠ" },
+  vowelSign: { a: "", ā: "ా", i: "ి", ī: "ీ", u: "ు", ū: "ూ", e: "ే", ē: "ే", o: "ో", ō: "ో", ai: "ై", au: "ౌ", ṛ: "ృ", ṝ: "ౄ" }
 };
 
 const kannadaScriptMaps = {
@@ -2634,8 +2637,8 @@ const kannadaScriptMaps = {
     ṅ: "ಙ", ñ: "ಞ", ṭ: "ಟ", ḍ: "ಡ", ṇ: "ಣ", ś: "ಶ", ṣ: "ಷ", ḷ: "ಳ", ḻ: "ಳ", ṟ: "ರ",
     k: "ಕ", g: "ಗ", c: "ಚ", j: "ಜ", t: "ತ", d: "ದ", n: "ನ", p: "ಪ", b: "ಬ", m: "ಮ", y: "ಯ", r: "ರ", l: "ಲ", v: "ವ", w: "ವ", s: "ಸ", h: "ಹ"
   },
-  independentVowel: { a: "ಅ", ā: "ಆ", i: "ಇ", ī: "ಈ", u: "ಉ", ū: "ಊ", e: "ಎ", ē: "ಏ", o: "ಒ", ō: "ಓ", ai: "ಐ", au: "ಔ", ṛ: "ಋ", ṝ: "ೠ" },
-  vowelSign: { a: "", ā: "ಾ", i: "ಿ", ī: "ೀ", u: "ು", ū: "ೂ", e: "ೆ", ē: "ೇ", o: "ೊ", ō: "ೋ", ai: "ೈ", au: "ೌ", ṛ: "ೃ", ṝ: "ೄ" }
+  independentVowel: { a: "ಅ", ā: "ಆ", i: "ಇ", ī: "ಈ", u: "ಉ", ū: "ಊ", e: "ಏ", ē: "ಏ", o: "ಓ", ō: "ಓ", ai: "ಐ", au: "ಔ", ṛ: "ಋ", ṝ: "ೠ" },
+  vowelSign: { a: "", ā: "ಾ", i: "ಿ", ī: "ೀ", u: "ು", ū: "ೂ", e: "ೇ", ē: "ೇ", o: "ೋ", ō: "ೋ", ai: "ೈ", au: "ೌ", ṛ: "ೃ", ṝ: "ೄ" }
 };
 
 function iastToTelugu(text) {
@@ -4169,9 +4172,19 @@ function renderSlokaLibrary() {
         return `${tamilText}<br><span class="script-mode">${devanagariText}</span>`;
       })()
       : scriptMode === "telugu"
-      ? (iastToTelugu(item.famousIast || "") || item.famousIast || "-")
+      ? (() => {
+        const teluguText = iastToTelugu(item.famousIast || "") || item.famousIast || "-";
+        const devanagariText = item.famousDevanagari || "";
+        if (!devanagariText) return teluguText;
+        return `${teluguText}<br><span class="script-mode">${devanagariText}</span>`;
+      })()
       : scriptMode === "kannada"
-      ? (iastToKannada(item.famousIast || "") || item.famousIast || "-")
+      ? (() => {
+        const kannadaText = iastToKannada(item.famousIast || "") || item.famousIast || "-";
+        const devanagariText = item.famousDevanagari || "";
+        if (!devanagariText) return kannadaText;
+        return `${kannadaText}<br><span class="script-mode">${devanagariText}</span>`;
+      })()
       : scriptMode === "devanagari"
       ? (item.famousDevanagari || item.famousIast || "-")
       : scriptMode === "hindi"
