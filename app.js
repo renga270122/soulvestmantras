@@ -1521,6 +1521,14 @@ function localizedBeejUnavailableText() {
   return "Beej mantra is not available for this selection.";
 }
 
+function localizedAboutHeading(name) {
+  if (currentLanguage === "ta") return `${name} பற்றி :`;
+  if (currentLanguage === "te") return `${name} గురించి :`;
+  if (currentLanguage === "kn") return `${name} ಬಗ್ಗೆ :`;
+  if (currentLanguage === "hi") return `${name} के बारे में :`;
+  return `About ${name}:`;
+}
+
 function applyLanguageToStaticUI() {
   document.documentElement.lang = currentLanguage;
   const L = (en, ta, te, kn, hi) => ({ en, ta, te, kn, hi }[currentLanguage] || en);
@@ -4873,7 +4881,7 @@ async function renderFeatured() {
   featuredType.textContent = typeLabel(item.type);
   featuredPurpose.textContent = `${t("purpose")}: ${localizedPurpose(item)}`;
   featuredHistory.textContent = localizedBrief(item);
-  featuredMeaning.textContent = `${t("about")} ${displayName(item.name)}: ${localizedBrief(item)}`;
+  featuredMeaning.textContent = `${localizedAboutHeading(displayName(item.name))} ${localizedBrief(item)}`;
 
   const fallbackQueries = imageQueriesForItem(item);
   const cacheKey = `img:${fallbackQueries.join("|")}`;
