@@ -569,14 +569,6 @@ const langTamilBtn = document.getElementById("langTamilBtn");
 const langTeluguBtn = document.getElementById("langTeluguBtn");
 const langKannadaBtn = document.getElementById("langKannadaBtn");
 const langHindiBtn = document.getElementById("langHindiBtn");
-const langMalayalamBtn = document.getElementById("langMalayalamBtn");
-if (langMalayalamBtn) {
-  langMalayalamBtn.textContent = "മലയാളം";
-  langMalayalamBtn.classList.toggle("active", currentLanguage === "ml");
-}
-if (langMalayalamBtn) {
-  langMalayalamBtn.addEventListener("click", () => setLanguage("ml"));
-}
 
 const imageCache = new Map();
 let selectedEntity = "";
