@@ -1647,9 +1647,9 @@ function applyLanguageToStaticUI() {
   setText(".did-you-know-title", L("Do You Know?", "உங்களுக்கு தெரியுமா?", "మీకు తెలుసా?", "ನಿಮಗೆ ಗೊತ್ತೇ?", "क्या आप जानते हैं?"));
 
   const quickButtons = document.querySelectorAll("#homeQuickAccess .quick-path-btn");
-  if (quickButtons[0]) quickButtons[0].textContent = `🛕 ${L("Gods", "தெய்வங்கள்", "దేవుళ్లు", "ದೇವತೆಗಳು", "देवता")}`;
-  if (quickButtons[1]) quickButtons[1].textContent = `🪐 ${L("Planets", "கிரகங்கள்", "గ్రహాలు", "ಗ್ರಹಗಳು", "ग्रह")}`;
-  if (quickButtons[2]) quickButtons[2].textContent = `🧘 ${L("Gurus", "குருமார்கள்", "గురువులు", "ಗುರುಗಳು", "गुरु")}`;
+  if (quickButtons[0]) quickButtons[0].textContent = `🧘 ${L("Gurus", "குருமார்கள்", "గురువులు", "ಗುರುಗಳು", "गुरु")}`;
+  if (quickButtons[1]) quickButtons[1].textContent = `🛕 ${L("Gods", "தெய்வங்கள்", "దేవుళ్లు", "ದೇವತೆಗಳು", "देवता")}`;
+  if (quickButtons[2]) quickButtons[2].textContent = `🪐 ${L("Planets", "கிரகங்கள்", "గ్రహాలు", "ಗ್ರಹಗಳು", "ग्रह")}`;
 
   setText("#slokaLibrary h3", L("Sloka Library", "ஸ்லோக நூலகம்", "శ్లోక లైబ్రరీ", "ಶ್ಲೋಕ ಲೈಬ್ರರಿ", "श्लोक लाइब्रेरी"));
   const slokaMode = preferredScriptModeForLanguage();
