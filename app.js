@@ -2442,8 +2442,8 @@ function iastToTamil(text) {
     k: "க", g: "க", c: "ச", j: "ஜ", t: "த", d: "த", n: "ந", p: "ப", b: "ப", m: "ம", y: "ய", r: "ர", l: "ல", v: "வ", w: "வ", s: "ஸ", h: "ஹ"
   };
 
-  const independentVowel = { a: "அ", ā: "ஆ", i: "இ", ī: "ஈ", u: "உ", ū: "ஊ", e: "எ", ē: "ஏ", o: "ஒ", ō: "ஓ", ai: "ஐ", au: "ஔ", ṛ: "ரு", ṝ: "ரூ" };
-  const vowelSign = { a: "", ā: "ா", i: "ி", ī: "ீ", u: "ு", ū: "ூ", e: "ெ", ē: "ே", o: "ொ", ō: "ோ", ai: "ை", au: "ௌ", ṛ: "்ரு", ṝ: "்ரூ" };
+  const independentVowel = { a: "அ", ā: "ஆ", i: "இ", ī: "ஈ", u: "உ", ū: "ஊ", e: "ஏ", ē: "ஏ", o: "ஓ", ō: "ஓ", ai: "ஐ", au: "ஔ", ṛ: "ரு", ṝ: "ரூ" };
+  const vowelSign = { a: "", ā: "ா", i: "ி", ī: "ீ", u: "ு", ū: "ூ", e: "ே", ē: "ே", o: "ோ", ō: "ோ", ai: "ை", au: "ௌ", ṛ: "்ரு", ṝ: "்ரூ" };
 
   const startsWithAny = (source, index, options) => {
     for (const token of options) {
@@ -2529,14 +2529,6 @@ function iastToTamil(text) {
 }
 
 function getTamilMantraText(item, key, iastText) {
-  const tamilSet = tamilMantrasByName[item.name] || {};
-  const existing = tamilSet[key] || "";
-  const iastWordCount = String(iastText || "").trim().split(/\s+/).filter(Boolean).length;
-  const tamilWordCount = String(existing || "").trim().split(/\s+/).filter(Boolean).length;
-
-  if (existing && !existing.includes("...") && tamilWordCount >= Math.max(3, Math.floor(iastWordCount * 0.6))) {
-    return existing;
-  }
   return iastToTamil(iastText);
 }
 
