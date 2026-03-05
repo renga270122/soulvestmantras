@@ -4155,11 +4155,11 @@ function renderSlokaLibrary() {
   if (!slokaLibraryBody) return;
 
   const query = String(slokaLibrarySearch?.value || "").trim().toLowerCase();
-  const rows = mantras.filter((item) => {
+  const rows = sortByTypePriority(mantras.filter((item) => {
     if (!query) return true;
     const haystack = `${item.name} ${item.type} ${item.famousIast || ""} ${item.purpose || ""}`.toLowerCase();
     return haystack.includes(query);
-  });
+  }));
 
   slokaLibraryBody.innerHTML = rows.map((item) => {
     const typeText = item.type === "planet" ? t("mantraTypePlanet") : item.type === "guru" ? t("typeGuru") : t("typeGod");
@@ -4552,8 +4552,17 @@ function byType(list) {
   return list.filter((item) => item.type === typeSelect.value);
 }
 
+function sortByTypePriority(list) {
+  const typePriority = { guru: 0, god: 1, planet: 2 };
+  return [...list].sort((a, b) => {
+    const rankDiff = (typePriority[a.type] ?? 99) - (typePriority[b.type] ?? 99);
+    if (rankDiff !== 0) return rankDiff;
+    return displayName(a.name).localeCompare(displayName(b.name));
+  });
+}
+
 function baseList() {
-  return byType(mantras);
+  return sortByTypePriority(byType(mantras));
 }
 
 async function copyText(text, label) {
