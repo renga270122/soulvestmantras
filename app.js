@@ -1474,6 +1474,30 @@ function preferredScriptModeForLanguage() {
   return scriptSelect?.value || "both";
 }
 
+function localizedBreathPhase(isInhale) {
+  if (currentLanguage === "ta") return isInhale ? "உள்உள் மூச்சு" : "வெளி மூச்சு";
+  if (currentLanguage === "te") return isInhale ? "లోపల శ్వాస" : "బయట శ్వాస";
+  if (currentLanguage === "kn") return isInhale ? "ಒಳ ಉಸಿರು" : "ಹೊರ ಉಸಿರು";
+  if (currentLanguage === "hi") return isInhale ? "श्वास अंदर" : "श्वास बाहर";
+  return isInhale ? "Inhale" : "Exhale";
+}
+
+function localizedMoodReason(fromEmotion) {
+  if (currentLanguage === "ta") return fromEmotion ? "உங்கள் உணர்வு உள்ளீட்டின் அடிப்படையில் சரிசெய்யப்பட்டது." : "தேர்ந்தெடுத்த முறை/நேரத்தின் அடிப்படையில் சரிசெய்யப்பட்டது.";
+  if (currentLanguage === "te") return fromEmotion ? "మీ భావోద్వేగ ఇన్‌పుట్ ఆధారంగా సర్దుబాటు చేయబడింది." : "ఎంచుకున్న మోడ్/సమయం ఆధారంగా సర్దుబాటు చేయబడింది.";
+  if (currentLanguage === "kn") return fromEmotion ? "ನಿಮ್ಮ ಭಾವನೆ ಇನ್‌ಪುಟ್ ಆಧರಿಸಿ ಹೊಂದಿಸಲಾಗಿದೆ." : "ಆಯ್ದ ಮೋಡ್/ಸಮಯ ಆಧರಿಸಿ ಹೊಂದಿಸಲಾಗಿದೆ.";
+  if (currentLanguage === "hi") return fromEmotion ? "आपके भावनात्मक इनपुट के आधार पर समायोजित किया गया।" : "चयनित मोड/समय के आधार पर समायोजित किया गया।";
+  return fromEmotion ? "Adjusted from your emotional input." : "Adjusted from selected mode/time.";
+}
+
+function localizedFooterText(year) {
+  if (currentLanguage === "ta") return `© ${year} Soulvest மந்திரங்கள். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.`;
+  if (currentLanguage === "te") return `© ${year} Soulvest మంత్రాలు. అన్ని హక్కులు పరిరక్షించబడ్డాయి.`;
+  if (currentLanguage === "kn") return `© ${year} Soulvest ಮಂತ್ರಗಳು. ಎಲ್ಲಾ ಹಕ್ಕುಗಳು ಕಾಯ್ದಿರಿಸಲಾಗಿದೆ.`;
+  if (currentLanguage === "hi") return `© ${year} Soulvest मंत्र. सर्वाधिकार सुरक्षित।`;
+  return `© ${year} Soulvest Mantras. All rights reserved.`;
+}
+
 function applyLanguageToStaticUI() {
   document.documentElement.lang = currentLanguage;
   const L = (en, ta, te, kn, hi) => ({ en, ta, te, kn, hi }[currentLanguage] || en);
@@ -1683,6 +1707,21 @@ function applyLanguageToStaticUI() {
   if (voiceLoopLabel) voiceLoopLabel.lastChild.textContent = ` ${L("Loop chant audio", "ஜப ஒலியை மீண்டும் மீண்டும் இயக்கவும்", "జప ధ్వనిని లూప్‌లో ప్లే చేయి", "ಜಪ ಧ್ವನಿಯನ್ನು ಲೂಪ್‌ನಲ್ಲಿ ಪ್ಲೇ ಮಾಡಿ", "जप ऑडियो को लूप में चलाएँ")}`;
   const minimalVisualLabel = visualModeToggle?.closest("label");
   if (minimalVisualLabel) minimalVisualLabel.lastChild.textContent = ` ${L("Minimal visual mode", "குறைந்த காட்சி முறை", "కనిష్ట దృశ్య మోడ్", "ಕನಿಷ್ಠ ದೃಶ್ಯ ಮೋಡ್", "न्यूनतम दृश्य मोड")}`;
+
+  if (morningThemeBtn) morningThemeBtn.textContent = L("🌅 Morning", "🌅 காலை", "🌅 ఉదయం", "🌅 ಬೆಳಗ್ಗೆ", "🌅 सुबह");
+  if (eveningThemeBtn) eveningThemeBtn.textContent = L("🌇 Evening", "🌇 மாலை", "🌇 సాయంత్రం", "🌇 ಸಂಜೆ", "🌇 शाम");
+  if (nightThemeBtn) nightThemeBtn.textContent = L("🌙 Night", "🌙 இரவு", "🌙 రాత్రి", "🌙 ರಾತ್ರಿ", "🌙 रात");
+  if (autoThemeBtn) autoThemeBtn.textContent = L("🕒 Auto", "🕒 தானாக", "🕒 ఆటో", "🕒 ಸ್ವಯಂ", "🕒 ऑटो");
+
+  if (breathCueText) {
+    const isInhale = !breathCueDot?.classList.contains("exhale");
+    breathCueText.textContent = localizedBreathPhase(isInhale);
+  }
+
+  const footerText = document.querySelector(".site-footer p");
+  if (footerText) {
+    footerText.textContent = localizedFooterText(new Date().getFullYear());
+  }
 
   populateAiDeityOptions();
 }
@@ -3434,7 +3473,7 @@ function playSessionEndSound() {
 
 function setBreathPhase(isInhale) {
   if (!breathCueText || !breathCueDot) return;
-  breathCueText.textContent = isInhale ? "Inhale" : "Exhale";
+  breathCueText.textContent = localizedBreathPhase(isInhale);
   breathCueDot.classList.toggle("exhale", !isInhale);
 }
 
@@ -5200,7 +5239,7 @@ if (applyMoodBtn) {
     if (moodSelect) {
       moodSelect.value = targetMood;
     }
-    const reason = emotionMood ? "Adjusted from your emotional input." : "Adjusted from selected mode/time.";
+    const reason = localizedMoodReason(Boolean(emotionMood));
     applyMoodTheme(targetMood, reason);
     saveAiPrefs();
     savePrefs();
