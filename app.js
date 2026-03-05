@@ -36,7 +36,7 @@ const mantras = [
       "Vishnu is the sustainer in the Hindu trinity, associated with preserving dharma through various avatars.",
     famousTitle: "Famous Mantra",
     famousDevanagari: "ॐ नमो नारायणाय॥",
-    famousIast: "Shantakaram Bhujagashayanam Padmanabham Suresham Vishvadharam Gaganasadrisham Meghavarnam Shubhangam",
+    famousIast: "oṃ namo nārāyaṇāya ||",
     gayatriTitle: "Gayatri Mantra",
     gayatriDevanagari: "ॐ नारायणाय विद्महे वासुदेवाय धीमहि तन्नो विष्णुः प्रचोदयात्॥",
     gayatriIast: "oṃ nārāyaṇāya vidmahe vāsudevāya dhīmahi tanno viṣṇuḥ pracodayāt ||"
@@ -50,7 +50,7 @@ const mantras = [
       "Krishna, an avatar of Vishnu, is teacher of the Bhagavad Gita and symbol of divine love and wisdom.",
     famousTitle: "Famous Mantra",
     famousDevanagari: "हरे कृष्ण हरे कृष्ण कृष्ण कृष्ण हरे हरे । हरे राम हरे राम राम राम हरे हरे॥",
-    famousIast: "Vasudeva Sutam Devam Kamsa Chanura Mardanam Devaki Paramanandam Krishnam Vande Jagadgurum",
+    famousIast: "hare kṛṣṇa hare kṛṣṇa kṛṣṇa kṛṣṇa hare hare | hare rāma hare rāma rāma rāma hare hare ||",
     gayatriTitle: "Gayatri Mantra",
     gayatriDevanagari: "ॐ देवकीनन्दनाय विद्महे वासुदेवाय धीमहि तन्नः कृष्णः प्रचोदयात्॥",
     gayatriIast: "oṃ devakīnandanāya vidmahe vāsudevāya dhīmahi tannaḥ kṛṣṇaḥ pracodayāt ||"
@@ -64,7 +64,7 @@ const mantras = [
       "Rama is honored as Maryada Purushottama, the embodiment of dharma, truth, and noble leadership.",
     famousTitle: "Famous Mantra",
     famousDevanagari: "श्री राम जय राम जय जय राम॥",
-    famousIast: "Shri Rama Rama Rameti Rame Rame Manorame Sahasranama Tatulyam Ramanama Varanane",
+    famousIast: "śrī rāma jaya rāma jaya jaya rāma ||",
     gayatriTitle: "Gayatri Mantra",
     gayatriDevanagari: "ॐ दाशरथाय विद्महे सीतावल्लभाय धीमहि तन्नो रामः प्रचोदयात्॥",
     gayatriIast: "oṃ dāśarathāya vidmahe sītāvallabhāya dhīmahi tanno rāmaḥ pracodayāt ||"
@@ -78,7 +78,7 @@ const mantras = [
       "Ramar is widely worshipped in Tamil tradition as the ideal king and embodiment of truth, discipline, and compassion.",
     famousTitle: "Famous Mantra",
     famousDevanagari: "श्री राम जय राम जय जय राम॥",
-    famousIast: "Shri Rama Rama Rameti Rame Rame Manorame Sahasranama Tatulyam Ramanama Varanane",
+    famousIast: "śrī rāma jaya rāma jaya jaya rāma ||",
     gayatriTitle: "Gayatri Mantra",
     gayatriDevanagari: "ॐ दाशरथाय विद्महे सीतावल्लभाय धीमहि तन्नो रामः प्रचोदयात्॥",
     gayatriIast: "oṃ dāśarathāya vidmahe sītāvallabhāya dhīmahi tanno rāmaḥ pracodayāt ||"
@@ -92,7 +92,7 @@ const mantras = [
       "Hanuman represents supreme bhakti, courage, and selfless service, especially in the Ramayana tradition.",
     famousTitle: "Famous Mantra",
     famousDevanagari: "ॐ हं हनुमते नमः॥",
-    famousIast: "Manojavam Marutatulyavegam Jitendriyam Buddhimatam Varishtham Vatatmajam Vanarayuthamukhyam Shri Ramadutam Sharanam Prapadye",
+    famousIast: "oṃ haṃ hanumate namaḥ ||",
     gayatriTitle: "Gayatri Mantra",
     gayatriDevanagari: "ॐ आञ्जनेयाय विद्महे वायुपुत्राय धीमहि तन्नो हनुमान् प्रचोदयात्॥",
     gayatriIast: "oṃ āñjaneyāya vidmahe vāyuputrāya dhīmahi tanno hanumān pracodayāt ||"
@@ -106,7 +106,7 @@ const mantras = [
       "Durga is worshipped as the Divine Mother who destroys evil and protects devotees.",
     famousTitle: "Famous Mantra",
     famousDevanagari: "ॐ दुं दुर्गायै नमः॥",
-    famousIast: "Ya Devi Sarvabhuteshu Shakti Rupena Samsthita Namastasyai Namastasyai Namastasyai Namo Namah",
+    famousIast: "oṃ duṃ durgāyai namaḥ ||",
     gayatriTitle: "Gayatri Mantra",
     gayatriDevanagari: "ॐ कात्यायन्यै विद्महे कन्याकुमार्यै धीमहि तन्नो दुर्गिः प्रचोदयात्॥",
     gayatriIast: "oṃ kātyāyanyai vidmahe kanyakumāryai dhīmahi tanno durgiḥ pracodayāt ||"
@@ -120,7 +120,7 @@ const mantras = [
       "Lakshmi is the goddess of wealth and fortune, worshipped for abundance with purity and gratitude.",
     famousTitle: "Famous Mantra",
     famousDevanagari: "ॐ श्रीं महालक्ष्म्यै नमः॥",
-    famousIast: "Namastestu Mahamaye Shripithe Surapujite Shankha Chakra Gadahaste Mahalakshmi Namostute",
+    famousIast: "oṃ śrīṃ mahālakṣmyai namaḥ ||",
     gayatriTitle: "Gayatri Mantra",
     gayatriDevanagari: "ॐ महालक्ष्म्यै विद्महे विष्णुपत्नी च धीमहि तन्नो लक्ष्मीः प्रचोदयात्॥",
     gayatriIast: "oṃ mahālakṣmyai vidmahe viṣṇupatnī ca dhīmahi tanno lakṣmīḥ pracodayāt ||"
@@ -134,7 +134,7 @@ const mantras = [
       "Saraswati is the goddess of knowledge, music, and wisdom, invoked by students and artists.",
     famousTitle: "Famous Mantra",
     famousDevanagari: "ॐ ऐं सरस्वत्यै नमः॥",
-    famousIast: "Saraswati Namastubhyam Varade Kamarupini Vidyarambham Karishyami Siddhir Bhavatu Me Sada",
+    famousIast: "oṃ aiṃ sarasvatyai namaḥ ||",
     gayatriTitle: "Gayatri Mantra",
     gayatriDevanagari: "ॐ सरस्वत्यै विद्महे ब्रह्मपत्न्यै धीमहि तन्नो देवी प्रचोदयात्॥",
     gayatriIast: "oṃ sarasvatyai vidmahe brahmapatnyai dhīmahi tanno devī pracodayāt ||"
@@ -330,7 +330,7 @@ const mantras = [
       "Navagraha sloka invokes all nine planets together for balance, grace, and aligned karmic movement.",
     famousTitle: "Navagraha Sloka",
     famousDevanagari: "ॐ आदित्याय च सोमाय मंगलाय बुधाय च । गुरु शुक्र शनिभ्यश्च राहवे केतवे नमः॥",
-    famousIast: "Om Adityaya Cha Somaya Mangalaya Budhaya Cha Guru Shukra Shanibhyashcha Rahave Ketave Namah",
+    famousIast: "oṃ ādityāya ca somāya maṅgalāya budhāya ca | guru śukra śanibhyaśca rāhave ketave namaḥ ||",
     gayatriTitle: "Gayatri Mantra",
     gayatriDevanagari: "ॐ नवग्रहदेवताभ्यो नमः॥",
     gayatriIast: "Om Navagraha Devatabhyo Namah"
@@ -344,7 +344,7 @@ const mantras = [
       "Sai Baba of Shirdi is revered as a saint who taught universal love, service, and devotion beyond boundaries.",
     famousTitle: "Famous Mantra",
     famousDevanagari: "ॐ साईं राम॥",
-    famousIast: "Om Sai Namo Namah Shri Sai Namo Namah Sadguru Sai Namo Namah Om Sai Namo Namah",
+    famousIast: "oṃ sāīṃ rāma ||",
     gayatriTitle: "Gayatri Mantra",
     gayatriDevanagari: "ॐ शिर्डीवासाय विद्महे सच्चिदानन्दाय धीमहि तन्नः साईः प्रचोदयात्॥",
     gayatriIast: "Om Sadguru Sai Nathaya Vidmahe Vitheshwaraya Dhimahi Tanno Sai Prachodayat"
@@ -358,9 +358,9 @@ const mantras = [
       "Sri Raghavendra Swamy is a celebrated Madhva saint known for scholarship, miracles, and compassionate blessings.",
     famousTitle: "Famous Stotra Line",
     famousDevanagari: "पूज्याय राघवेन्द्राय सत्यधर्मरताय च । भजतां कल्पवृक्षाय नमतां कामधेनवे॥",
-    famousIast: "Om Sri Raghavendraya Namah",
+    famousIast: "pūjyāya rāghavendrāya satyadharmaratāya ca | bhajatāṃ kalpavṛkṣāya namatāṃ kāmadhenave ||",
     gayatriTitle: "Gayatri Mantra",
-    gayatriDevanagari: "ॐ राघवेन्द्राय विद्महे भक्तप्रियाय धीमहि तन्नो गुरुुः प्रचोदयात्॥",
+    gayatriDevanagari: "ॐ राघवेन्द्राय विद्महे भक्तप्रियाय धीमहि तन्नो गुरुः प्रचोदयात्॥",
     gayatriIast: "oṃ rāghavendrāya vidmahe bhaktapriyāya dhīmahi tanno guruḥ pracodayāt ||"
   },
   {
@@ -414,7 +414,7 @@ const mantras = [
       "Yogi Ram Surat Kumar of Tiruvannamalai is honored as a saint of deep surrender and constant divine remembrance.",
     famousTitle: "Famous Chant",
     famousDevanagari: "योगि राम सुरत कुमार जय गुरुराया॥",
-    famousIast: "Om Sri Yogi Ramsuratkumar Jaya Guru Raya",
+    famousIast: "yogi rāma surata kumāra jaya gururāyā ||",
     gayatriTitle: "Gayatri Mantra",
     gayatriDevanagari: "ॐ योगिरामसुरत्कुमाराय विद्महे तपस्विरूपाय धीमहि तन्नो गुरुः प्रचोदयात्॥",
     gayatriIast: "oṃ yogirāmasuratkumārāya vidmahe tapasvirūpāya dhīmahi tanno guruḥ pracodayāt ||"
