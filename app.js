@@ -1816,7 +1816,7 @@ function applyLanguageToStaticUI() {
 }
 
 function setLanguage(nextLanguage) {
-  const allowed = new Set(["en", "ta", "te", "kn", "hi", "ml"]);
+  const allowed = new Set(["en", "ta", "te", "kn", "hi"]);
   const next = allowed.has(nextLanguage) ? nextLanguage : "en";
   if (next === currentLanguage) return;
   currentLanguage = next;
