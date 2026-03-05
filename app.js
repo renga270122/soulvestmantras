@@ -4881,7 +4881,7 @@ async function renderFeatured() {
   featuredType.textContent = typeLabel(item.type);
   featuredPurpose.textContent = `${t("purpose")}: ${localizedPurpose(item)}`;
   featuredHistory.textContent = localizedBrief(item);
-  featuredMeaning.textContent = `${localizedAboutHeading(displayName(item.name))} ${localizedBrief(item)}`;
+  featuredMeaning.textContent = localizedAboutHeading(displayName(item.name));
 
   const fallbackQueries = imageQueriesForItem(item);
   const cacheKey = `img:${fallbackQueries.join("|")}`;
