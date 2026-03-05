@@ -1470,6 +1470,7 @@ function isTamilLanguage() {
 }
 
 function preferredScriptModeForLanguage() {
+  if (currentLanguage === "ta") return "tamil";
   if (currentLanguage !== "en") return "devanagari";
   return scriptSelect?.value || "both";
 }
@@ -4169,7 +4170,12 @@ function renderSlokaLibrary() {
     const typeText = item.type === "planet" ? t("mantraTypePlanet") : item.type === "guru" ? t("typeGuru") : t("typeGod");
     const scriptMode = preferredScriptModeForLanguage();
     const slokaText = scriptMode === "tamil"
-      ? (getTamilMantraText(item, "famous", item.famousIast || "") || item.famousIast || "-")
+      ? (() => {
+        const tamilText = getTamilMantraText(item, "famous", item.famousIast || "") || item.famousIast || "-";
+        const devanagariText = item.famousDevanagari || "";
+        if (!devanagariText) return tamilText;
+        return `${tamilText}<br><span class="script-mode">${devanagariText}</span>`;
+      })()
       : scriptMode === "telugu"
       ? (iastToTelugu(item.famousIast || "") || item.famousIast || "-")
       : scriptMode === "kannada"
