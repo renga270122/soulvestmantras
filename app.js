@@ -1470,10 +1470,7 @@ function isTamilLanguage() {
 }
 
 function preferredScriptModeForLanguage() {
-  if (currentLanguage === "ta") return "tamil";
-  if (currentLanguage === "te") return "telugu";
-  if (currentLanguage === "kn") return "kannada";
-  if (currentLanguage === "hi") return "hindi";
+  if (currentLanguage !== "en") return "devanagari";
   return scriptSelect?.value || "both";
 }
 
@@ -1617,6 +1614,8 @@ function applyLanguageToStaticUI() {
     ? "ಕನ್ನಡ"
     : slokaMode === "hindi"
     ? "हिंदी"
+    : slokaMode === "devanagari"
+    ? L("Devanagari", "தேவநாகரி", "దేవనాగరి", "ದೇವನಾಗರಿ", "देवनागरी")
     : "Transliteration";
   setText("#slokaLibrary .meaning", L("Browse all curated famous slokas.", "தொகுக்கப்பட்ட பிரபல ஸ்லோகங்களை பார்வையிடுங்கள்.", "క్యూరేట్ చేసిన ప్రసిద్ధ శ్లోకాలను వీక్షించండి.", "ಆಯ್ದ ಪ್ರಸಿದ್ಧ ಶ್ಲೋಕಗಳನ್ನು ನೋಡಿ.", "संकलित प्रसिद्ध श्लोक देखें।"));
   const slokaHeaders = document.querySelectorAll("#slokaLibrary th");
@@ -3627,10 +3626,6 @@ function typeLabel(value) {
 }
 
 function scriptModeText(mode) {
-  if (currentLanguage === "ta") return t("scriptTamil");
-  if (currentLanguage === "te") return t("scriptTelugu");
-  if (currentLanguage === "kn") return t("scriptKannada");
-  if (currentLanguage === "hi") return t("scriptHindi");
   if (mode === "devanagari") return t("scriptDevanagari");
   if (mode === "tamil") return t("scriptTamil");
   if (mode === "telugu") return t("scriptTelugu");
