@@ -1,3 +1,20 @@
+const malayalamScriptMaps = {
+  om: "ഓം",
+  anusvara: "ം",
+  visarga: "ഃ",
+  virama: "്",
+  consonantMap: {
+    kṣ: "ക്ഷ", jñ: "ജ്ഞ", kh: "ഖ", gh: "ഘ", ch: "ച", jh: "ഝ", ṭh: "ഠ", ḍh: "ഢ", th: "ഥ", dh: "ധ", ph: "ഫ", bh: "ഭ",
+    ṅ: "ങ", ñ: "ഞ", ṭ: "ട", ḍ: "ഡ", ṇ: "ണ", ś: "ശ", ṣ: "ഷ", ḷ: "ള", ḻ: "ഴ", ṟ: "റ",
+    k: "ക", g: "ഗ", c: "ച", j: "ജ", t: "ത", d: "ദ", n: "ന", p: "പ", b: "ബ", m: "മ", y: "യ", r: "ര", l: "ല", v: "വ", w: "വ", s: "സ", h: "ഹ"
+  },
+  independentVowel: { a: "അ", ā: "ആ", i: "ഇ", ī: "ഈ", u: "ഉ", ū: "ഊ", e: "എ", ē: "ഏ", o: "ഒ", ō: "ഓ", ai: "ഐ", au: "ഔ", ṛ: "ഋ", ṝ: "ൠ" },
+  vowelSign: { a: "", ā: "ാ", i: "ി", ī: "ീ", u: "ു", ū: "ൂ", e: "െ", ē: "േ", o: "ൊ", ō: "ോ", ai: "ൈ", au: "ൗ", ṛ: "ൃ", ṝ: "ൄ" }
+};
+
+function iastToMalayalam(text) {
+  return iastToBrahmic(text, malayalamScriptMaps);
+}
 const mantras = [
   {
     name: "Ganesha",
@@ -1513,6 +1530,7 @@ function preferredScriptModeForLanguage() {
   if (currentLanguage === "ta") return "tamil";
   if (currentLanguage === "te") return "telugu";
   if (currentLanguage === "kn") return "kannada";
+  if (currentLanguage === "ml") return "malayalam";
   if (currentLanguage === "hi") return "hindi";
   if (currentLanguage !== "en") return "devanagari";
   return scriptSelect?.value || "both";
@@ -4209,21 +4227,28 @@ function renderSlokaLibrary() {
         const tamilText = getTamilMantraText(item, "famous", item.famousIast || "") || item.famousIast || "-";
         const devanagariText = item.famousDevanagari || "";
         if (!devanagariText) return tamilText;
-        return `${tamilText}<br><span class="script-mode">${devanagariText}</span>`;
+        return `${tamilText}<br><span class=\"script-mode\">${devanagariText}</span>`;
       })()
       : scriptMode === "telugu"
       ? (() => {
         const teluguText = iastToTelugu(item.famousIast || "") || item.famousIast || "-";
         const devanagariText = item.famousDevanagari || "";
         if (!devanagariText) return teluguText;
-        return `${teluguText}<br><span class="script-mode">${devanagariText}</span>`;
+        return `${teluguText}<br><span class=\"script-mode\">${devanagariText}</span>`;
       })()
       : scriptMode === "kannada"
       ? (() => {
         const kannadaText = iastToKannada(item.famousIast || "") || item.famousIast || "-";
         const devanagariText = item.famousDevanagari || "";
         if (!devanagariText) return kannadaText;
-        return `${kannadaText}<br><span class="script-mode">${devanagariText}</span>`;
+        return `${kannadaText}<br><span class=\"script-mode\">${devanagariText}</span>`;
+      })()
+      : scriptMode === "malayalam"
+      ? (() => {
+        const malayalamText = iastToMalayalam ? iastToMalayalam(item.famousIast || "") : item.famousIast || "-";
+        const devanagariText = item.famousDevanagari || "";
+        if (!devanagariText) return malayalamText;
+        return `${malayalamText}<br><span class=\"script-mode\">${devanagariText}</span>`;
       })()
       : scriptMode === "devanagari"
       ? (item.famousDevanagari || item.famousIast || "-")
