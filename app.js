@@ -608,6 +608,7 @@ const SOUND_PREF_KEY = "chant_helper_sound_pref_v1";
 const AI_PREF_KEY = "chant_helper_ai_pref_v1";
 const JOURNAL_KEY = "chant_helper_ritual_journal_v1";
 const LANGUAGE_KEY = "chant_helper_language_v1";
+const LOCAL_DATA_RESET_KEY = "chant_helper_local_data_reset_v1";
 
 let currentLanguage = "en";
 
@@ -3717,6 +3718,35 @@ function savePrefs() {
   localStorage.setItem(LANGUAGE_KEY, currentLanguage);
 }
 
+function clearCachedAppDataOnce() {
+  try {
+    if (localStorage.getItem(LOCAL_DATA_RESET_KEY) === "done") {
+      return;
+    }
+
+    Object.keys(localStorage).forEach((key) => {
+      if (key.startsWith("chant_helper_")) {
+        localStorage.removeItem(key);
+      }
+    });
+
+    Object.keys(sessionStorage).forEach((key) => {
+      if (key.startsWith("chant_helper_")) {
+        sessionStorage.removeItem(key);
+      }
+    });
+
+    if ("caches" in window) {
+      caches.keys()
+        .then((keys) => Promise.all(keys.map((key) => caches.delete(key))))
+        .catch(() => {});
+    }
+
+    localStorage.setItem(LOCAL_DATA_RESET_KEY, "done");
+  } catch {
+  }
+}
+
 function saveFavorites() {
   localStorage.setItem(FAVORITES_KEY, JSON.stringify(Array.from(favorites)));
 }
@@ -5325,6 +5355,7 @@ if ("serviceWorker" in navigator) {
   });
 }
 
+clearCachedAppDataOnce();
 loadPrefs();
 loadFavorites();
 loadChantHistory();
