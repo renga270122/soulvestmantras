@@ -545,6 +545,10 @@ const ritualJournalQuote = document.getElementById("ritualJournalQuote");
 const ritualJournalEntry = document.getElementById("ritualJournalEntry");
 const saveJournalBtn = document.getElementById("saveJournalBtn");
 const journalStatus = document.getElementById("journalStatus");
+const languageSelect = document.getElementById("languageSelect");
+const languageBarLabel = document.getElementById("languageBarLabel");
+const langEnglishBtn = document.getElementById("langEnglishBtn");
+const langTamilBtn = document.getElementById("langTamilBtn");
 
 const imageCache = new Map();
 let selectedEntity = "";
@@ -555,7 +559,7 @@ let chantTarget = 11;
 let favorites = new Set();
 let chantHistory = {};
 let sankalpaState = {
-  text: "Chant with devotion and clarity.",
+  text: "",
   target: 21,
   dailyCount: 0,
   dailyDate: "",
@@ -567,7 +571,7 @@ let reminderSettings = {
   enabled: false,
   day: "daily",
   time: "06:00",
-  message: "Time for your mantra practice.",
+  message: "",
   lastTriggeredKey: "",
 };
 let reminderIntervalId = null;
@@ -600,6 +604,491 @@ const REMINDER_KEY = "chant_helper_reminder_v1";
 const SOUND_PREF_KEY = "chant_helper_sound_pref_v1";
 const AI_PREF_KEY = "chant_helper_ai_pref_v1";
 const JOURNAL_KEY = "chant_helper_ritual_journal_v1";
+const LANGUAGE_KEY = "chant_helper_language_v1";
+
+let currentLanguage = "en";
+
+const uiCopy = {
+  en: {
+    languageEnglish: "English",
+    languageTamil: "தமிழ்",
+    searchPlaceholder: "Search deity, mantra, or meaning...",
+    slokaSearchPlaceholder: "Search by deity, sloka text, or purpose...",
+    noEntries: "No entries found for your search.",
+    entriesShown: "{count} entries shown",
+    fullPageView: "Full page view for selected entry",
+    scriptDevanagari: "Script: Devanagari",
+    scriptTamil: "Script: Tamil",
+    scriptIast: "Script: IAST (Transliteration)",
+    scriptBoth: "Script: Devanagari + Tamil + IAST",
+    typeGod: "God",
+    typeGuru: "Guru",
+    typePlanet: "Planet (Navagraha)",
+    addFavorite: "Add to Favorites",
+    removeFavorite: "Remove Favorite",
+    copySelected: "Copy Selected",
+    copyAll: "Copy All",
+    blessingCard: "Blessing Card",
+    shareCard: "Share Card",
+    copied: "{label} copied",
+    copyFailed: "Copy failed",
+    favoritesAdded: "{name} added to favorites",
+    favoritesRemoved: "{name} removed from favorites",
+    justNow: "just now",
+    recently: "recently",
+    chants: "chants",
+    last: "Last",
+    today: "Today",
+    sankalpa: "Sankalpa",
+    completedToday: "Completed today",
+    currentStreak: "Current streak",
+    best: "Best",
+    days: "day(s)",
+    everyDay: "Every day",
+    reminderActive: "Reminder active: {day} at {time}",
+    reminderDisabled: "Reminder disabled.",
+    notifUnsupported: "Browser notifications are not supported.",
+    notifEnabled: "Browser notifications enabled.",
+    notifBlocked: "Notification permission is blocked in browser settings.",
+    notifPending: "Notification permission not granted yet.",
+    reminderSaved: "Reminder settings saved",
+    reminderTitle: "Soulvest Mantras Reminder",
+    defaultReminderMessage: "Time for your mantra practice.",
+    mantraUnavailable: "No mantra suggestion available right now.",
+    mantraOfDayTitle: "{day} — {name}",
+    mantraOfDayText: "{title}: {purpose}",
+    aiNoSuggestion: "No personalized suggestion available right now.",
+    aiChosenReason: "Based on your chosen deity: {name}.",
+    aiWeekdayReason: "Weekday alignment: {day} traditionally favors {name}.",
+    aiFallbackReason: "Using your current selection as the best match.",
+    aiOpened: "Suggested mantra opened: {name}",
+    light: "Light",
+    medium: "Medium",
+    deep: "Deep",
+    moodCalm: "Calm",
+    moodDevotional: "Devotional",
+    moodFestive: "Festive",
+    moodActive: "Mood active: {mood}.{reason}",
+    ambientUnsupported: "Ambient audio is not supported in this browser.",
+    ambientAlready: "Ambient audio is already playing.",
+    ambientPlaying: "Ambient tanpura-style drone playing.",
+    ambientStopped: "Ambient audio stopped.",
+    voiceStopped: "Voice chant stopped.",
+    voiceUnsupported: "Voice chanting is not supported in this browser.",
+    voiceSelectFirst: "Select a deity first to play chant audio.",
+    voicePlaying: "Playing {label} voice chant{loop} at {intensity} intensity.",
+    voiceLoopOn: " on loop",
+    meditationComplete: "Meditation session complete",
+    meditationPickEntry: "Select an entry to start meditation",
+    silenceTimer: "Silence timer: {time}",
+    meditationTitle: "{name} — Timed silent meditation",
+    meditationNotRunning: "Meditation timer not running.",
+    malaProgress: "Mala Progress: {count} / 108",
+    countProgress: "Count: {count} / {target} · Total chanted: {total}",
+    ritualGuidance: "Ritual Guidance",
+    ritualGuidanceFor: "{name} — Ritual Guidance",
+    ritualChoose: "Select a god, planet, or guru to view practical ritual guidance.",
+    ritualMissing: "No ritual guidance is available for this selection yet.",
+    slokasShown: "{count} slokas shown",
+    mantraTypePlanet: "Planet",
+    completedChants: "Completed {count} chants",
+    sankalpaComplete: "Sankalpa complete for today",
+    templeSoundsEnabled: "Temple sounds enabled",
+    templeSoundsDisabled: "Temple sounds disabled",
+    journalSavedStatus: "Journal entry saved for today.",
+    ritualJournalSaved: "Ritual journal saved",
+    sankalpaSaved: "Sankalpa saved",
+    sankalpaAlready: "Sankalpa already completed today",
+    blessingCardNotSupported: "Blessing card not supported",
+    blessingCardShared: "Blessing card shared",
+    generatedOn: "Generated on",
+    todaysMessage: "Today's Message",
+    purpose: "Purpose",
+    about: "About",
+    blessingDownloaded: "Blessing card downloaded",
+    weekdays: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    rotatingMessages: [
+      "One focused chant is stronger than many distracted chants.",
+      "Breathe deeply, chant clearly, and keep your sankalpa steady.",
+      "Consistency in 11 chants daily builds inner strength over time.",
+      "Start with gratitude; end with silence for deeper absorption.",
+      "Pronunciation with devotion matters more than speed."
+    ],
+    didYouKnowMessages: [
+      "Beej mantra means a seed sound — a compact vibration that represents the core energy of a deity.",
+      "Common beej examples: ॐ गं (Gaṃ) for Ganesha, श्रीं (Śrīṃ) for Lakshmi, and ऐं (Aiṃ) for Saraswati.",
+      "Beej mantras are usually short, but they are repeated with deep attention, correct pronunciation, and steady breath.",
+      "In practice, many devotees start with a famous mantra and then continue with beej japa for focused inner absorption.",
+      "Gayatri mantras invoke illumination of intellect, while beej mantras emphasize concentrated divine vibration.",
+      "A fixed daily count such as 11, 21, 51, or 108 helps beej mantra practice become stable and disciplined."
+    ]
+  },
+  ta: {
+    languageEnglish: "English",
+    languageTamil: "தமிழ்",
+    searchPlaceholder: "தெய்வம், மந்திரம் அல்லது பொருள் தேடுங்கள்...",
+    slokaSearchPlaceholder: "தெய்வம், ஸ்லோகம் அல்லது நோக்கம் மூலம் தேடுங்கள்...",
+    noEntries: "உங்கள் தேடலுக்கு பொருந்தும் பதிவுகள் இல்லை.",
+    entriesShown: "{count} பதிவுகள் காட்டப்படுகின்றன",
+    fullPageView: "தேர்ந்தெடுத்த பதிவுக்கான முழுப் பக்க காட்சி",
+    scriptDevanagari: "எழுத்து: தேவநாகரி",
+    scriptTamil: "எழுத்து: தமிழ்",
+    scriptIast: "எழுத்து: IAST (ஒலிபெயர்ப்பு)",
+    scriptBoth: "எழுத்து: தேவநாகரி + தமிழ் + IAST",
+    typeGod: "தெய்வம்",
+    typeGuru: "குரு",
+    typePlanet: "கிரகம் (நவகிரகம்)",
+    addFavorite: "பிடித்ததில் சேர்",
+    removeFavorite: "பிடித்ததில் இருந்து நீக்கு",
+    copySelected: "தேர்ந்ததை நகலெடு",
+    copyAll: "அனைத்தையும் நகலெடு",
+    blessingCard: "ஆசி அட்டை",
+    shareCard: "அட்டையை பகிர்",
+    copied: "{label} நகலெடுக்கப்பட்டது",
+    copyFailed: "நகலெடுக்க முடியவில்லை",
+    favoritesAdded: "{name} பிடித்ததில் சேர்க்கப்பட்டது",
+    favoritesRemoved: "{name} பிடித்ததில் இருந்து நீக்கப்பட்டது",
+    justNow: "இப்போது தான்",
+    recently: "சமீபத்தில்",
+    chants: "ஜபங்கள்",
+    last: "கடைசியாக",
+    today: "இன்று",
+    sankalpa: "சங்கல்பம்",
+    completedToday: "இன்று நிறைவு",
+    currentStreak: "தொடர்",
+    best: "சிறந்தது",
+    days: "நாள்(கள்)",
+    everyDay: "ஒவ்வொரு நாளும்",
+    reminderActive: "நினைவூட்டல் செயல்பாட்டில்: {day} {time} மணிக்கு",
+    reminderDisabled: "நினைவூட்டல் முடக்கப்பட்டுள்ளது.",
+    notifUnsupported: "இந்த உலாவியில் அறிவிப்புகள் ஆதரிக்கப்படவில்லை.",
+    notifEnabled: "உலாவி அறிவிப்புகள் இயக்கத்தில் உள்ளன.",
+    notifBlocked: "உலாவி அமைப்புகளில் அறிவிப்பு அனுமதி தடுக்கப்பட்டுள்ளது.",
+    notifPending: "அறிவிப்பு அனுமதி இன்னும் வழங்கப்படவில்லை.",
+    reminderSaved: "நினைவூட்டல் அமைப்புகள் சேமிக்கப்பட்டது",
+    reminderTitle: "Soulvest Mantras நினைவூட்டல்",
+    defaultReminderMessage: "உங்கள் மந்திரப் பயிற்சிக்கு நேரம்.",
+    mantraUnavailable: "இப்போது மந்திர பரிந்துரை கிடைக்கவில்லை.",
+    mantraOfDayTitle: "{day} — {name}",
+    mantraOfDayText: "{title}: {purpose}",
+    aiNoSuggestion: "தனிப்பட்ட பரிந்துரை இப்போது இல்லை.",
+    aiChosenReason: "நீங்கள் தேர்ந்தெடுத்த தெய்வத்தின் அடிப்படையில்: {name}.",
+    aiWeekdayReason: "வாரநாள் பொருத்தம்: {day} அன்று {name} பரிந்துரைக்கப்படுகிறது.",
+    aiFallbackReason: "உங்கள் தற்போதைய தேர்வே சிறந்ததாக பயன்படுத்தப்பட்டது.",
+    aiOpened: "பரிந்துரைக்கப்பட்ட மந்திரம் திறக்கப்பட்டது: {name}",
+    light: "இலகு",
+    medium: "மத்திய",
+    deep: "ஆழம்",
+    moodCalm: "அமைதி",
+    moodDevotional: "பக்தி",
+    moodFestive: "உற்சவம்",
+    moodActive: "நிலை செயல்பாட்டில்: {mood}.{reason}",
+    ambientUnsupported: "இந்த உலாவியில் பின்னணி ஒலி ஆதரிக்கப்படவில்லை.",
+    ambientAlready: "பின்னணி ஒலி ஏற்கனவே இயங்குகிறது.",
+    ambientPlaying: "தம்புரா பாணி பின்னணி ஒலி இயங்குகிறது.",
+    ambientStopped: "பின்னணி ஒலி நிறுத்தப்பட்டது.",
+    voiceStopped: "குரல் ஜபம் நிறுத்தப்பட்டது.",
+    voiceUnsupported: "இந்த உலாவியில் குரல் ஜபம் ஆதரிக்கப்படவில்லை.",
+    voiceSelectFirst: "முதலில் ஒரு தெய்வத்தை தேர்வு செய்யுங்கள்.",
+    voicePlaying: "{label} குரல் ஜபம்{loop} {intensity} மட்டத்தில் இயங்குகிறது.",
+    voiceLoopOn: " (மீண்டும் மீண்டும்)",
+    meditationComplete: "தியான அமர்வு நிறைவடைந்தது",
+    meditationPickEntry: "தியானம் தொடங்க ஒரு பதிவை தேர்வு செய்யுங்கள்",
+    silenceTimer: "அமைதி நேரமணி: {time}",
+    meditationTitle: "{name} — நேரமிட்ட அமைதித் தியானம்",
+    meditationNotRunning: "தியான நேரமணி இயங்கவில்லை.",
+    malaProgress: "மாலை முன்னேற்றம்: {count} / 108",
+    countProgress: "எண்ணிக்கை: {count} / {target} · மொத்த ஜபங்கள்: {total}",
+    ritualGuidance: "சடங்கு வழிகாட்டல்",
+    ritualGuidanceFor: "{name} — சடங்கு வழிகாட்டல்",
+    ritualChoose: "நடைமுறை சடங்கு வழிகாட்டலை காண தெய்வம், கிரகம் அல்லது குருவை தேர்வு செய்யுங்கள்.",
+    ritualMissing: "இந்த தேர்விற்கு சடங்கு வழிகாட்டல் இன்னும் இல்லை.",
+    slokasShown: "{count} ஸ்லோகங்கள் காட்டப்படுகின்றன",
+    mantraTypePlanet: "கிரகம்",
+    completedChants: "{count} ஜபங்கள் நிறைவு",
+    sankalpaComplete: "இன்றைய சங்கல்பம் நிறைவு",
+    templeSoundsEnabled: "கோவில் ஒலிகள் இயக்கப்பட்டது",
+    templeSoundsDisabled: "கோவில் ஒலிகள் நிறுத்தப்பட்டது",
+    journalSavedStatus: "இன்றைய ஜர்னல் பதிவு சேமிக்கப்பட்டது.",
+    ritualJournalSaved: "சடங்கு ஜர்னல் சேமிக்கப்பட்டது",
+    sankalpaSaved: "சங்கல்பம் சேமிக்கப்பட்டது",
+    sankalpaAlready: "இன்றைய சங்கல்பம் ஏற்கனவே நிறைவு செய்யப்பட்டுள்ளது",
+    blessingCardNotSupported: "ஆசி அட்டை ஆதரிக்கப்படவில்லை",
+    blessingCardShared: "ஆசி அட்டை பகிரப்பட்டது",
+    generatedOn: "உருவாக்கப்பட்ட நாள்",
+    todaysMessage: "இன்றைய செய்தி",
+    purpose: "நோக்கம்",
+    about: "பற்றி",
+    blessingDownloaded: "ஆசி அட்டை பதிவிறக்கப்பட்டது",
+    weekdays: ["ஞாயிறு", "திங்கள்", "செவ்வாய்", "புதன்", "வியாழன்", "வெள்ளி", "சனி"],
+    rotatingMessages: [
+      "ஒருமுகமான ஒரு ஜபம், கவனக்குறைவான பல ஜபங்களை விட வலிமையானது.",
+      "ஆழமாக சுவாசியுங்கள், தெளிவாக ஜபியுங்கள், உங்கள் சங்கல்பத்தை நிலையாக வைத்திருங்கள்.",
+      "தினமும் 11 ஜபம் தொடர்ந்து செய்வது உள்ளுணர்ச்சி வலிமையை வளர்க்கும்.",
+      "நன்றியுடன் தொடங்கி, அமைதியுடன் முடிக்கவும்.",
+      "வேகத்தை விட பக்தியுடன் உச்சரிப்பது முக்கியம்."
+    ],
+    didYouKnowMessages: [
+      "பீஜ மந்திரம் என்பது விதை ஒலி — தெய்வத்தின் மைய சக்தியை குறிக்கும் சுருக்கமான அதிர்வு.",
+      "பொதுவான பீஜ உதாரணங்கள்: கணேஷருக்கு ॐ गं, லக்ஷ்மிக்கு श्रीं, சரஸ்வதிக்கு ऐं.",
+      "பீஜ மந்திரங்கள் சுருக்கமானவை; ஆனால் கவனத்துடன், சரியான உச்சரிப்புடன், நிலையான சுவாசத்துடன் ஜபிக்கப்படுகின்றன.",
+      "பலர் முதலில் பிரபல மந்திரத்தை ஜபித்து பின் பீஜ ஜபத்தால் உள்ளார்ந்த கவனத்தை ஆழப்படுத்துகிறார்கள்.",
+      "காயத்ரி மந்திரம் புத்தி ஒளிவளத்தை வேண்டுகிறது; பீஜ மந்திரம் சுருக்கமான தெய்வ அதிர்வை வலுப்படுத்துகிறது.",
+      "11, 21, 51 அல்லது 108 போன்ற நிலையான எண்ணிக்கை பீஜ ஜபத்தை ஒழுங்காக மாற்றுகிறது."
+    ]
+  }
+};
+
+function t(key, vars = {}) {
+  const pack = uiCopy[currentLanguage] || uiCopy.en;
+  const fallback = uiCopy.en || {};
+  let value = pack[key] ?? fallback[key] ?? key;
+  if (typeof value !== "string") {
+    return value;
+  }
+  return value.replace(/\{(\w+)\}/g, (_, token) => String(vars[token] ?? ""));
+}
+
+const tamilNameByEntity = {
+  "Ganesha": "விநாயகர்",
+  "Shiva": "சிவபெருமான்",
+  "Vishnu": "விஷ்ணு",
+  "Krishna": "கிருஷ்ணர்",
+  "Rama": "ராமர்",
+  "Ramar": "ராமர்",
+  "Hanuman": "ஆஞ்சநேயர்",
+  "Durga": "துர்கை அம்மன்",
+  "Lakshmi": "லட்சுமி",
+  "Saraswati": "சரஸ்வதி",
+  "Dhakshinamoorthy": "தட்சிணாமூர்த்தி",
+  "Murugan": "முருகன்",
+  "Varahi Amman": "வாராகி அம்மன்",
+  "Lakshmi Narasimhar": "லட்சுமி நரசிம்மர்",
+  "Surya (Sun)": "சூரியன்",
+  "Chandra (Moon)": "சந்திரன்",
+  "Mangala (Mars)": "செவ்வாய்",
+  "Budha (Mercury)": "புதன்",
+  "Brihaspati (Jupiter)": "குரு",
+  "Shukra (Venus)": "சுக்ரன்",
+  "Shani (Saturn)": "சனி",
+  "Rahu": "ராகு",
+  "Ketu": "கேது",
+  "Navagraha (All Planets)": "நவகிரகம்",
+  "Shirdi Sai Baba": "ஷிர்டி சாய்பாபா",
+  "Raghavendra Swamy": "ராகவேந்திரர்",
+  "Adi Shankaracharya": "ஆதி சங்கரர்",
+  "Kanchi Sankaracharyar": "காஞ்சி சங்கராச்சார்யார்",
+  "Puttaparthi Sai Baba": "புட்டபர்த்தி சாய்பாபா",
+  "Yogi Ram Surat Kumar": "யோகி ராம் சுரத்குமார்",
+  "Gnanananda Giri": "ஞானானந்த கிரி"
+};
+
+function displayName(name) {
+  if (currentLanguage !== "ta") return name;
+  return tamilNameByEntity[name] || name;
+}
+
+function localizedPurpose(item) {
+  if (currentLanguage !== "ta") return item.purpose || "";
+  if (item.type === "planet") return `${displayName(item.name)} தொடர்பான ஒழுக்கம், மனநிலை சமநிலை மற்றும் ஆன்மிக முன்னேற்றத்திற்காக.`;
+  if (item.type === "guru") return `${displayName(item.name)} அருளால் ஞானம், தெளிவு மற்றும் உள அமைதிக்காக.`;
+  return `${displayName(item.name)} அருள், பாதுகாப்பு மற்றும் வாழ்வில் நன்மை பெறுவதற்காக.`;
+}
+
+function localizedBrief(item) {
+  if (currentLanguage !== "ta") return item.brief || "";
+  if (item.type === "planet") return `${displayName(item.name)} தொடர்பான ஜபம் வாழ்க்கையில் ஒழுக்கம், தன்னம்பிக்கை மற்றும் சமநிலையை வளர்க்க உதவும்.`;
+  if (item.type === "guru") return `${displayName(item.name)} ஸ்மரணம் மூலம் பணிவு, ஆன்மிக தெளிவு மற்றும் உள்ளார்ந்த நிலைத்தன்மை கிடைக்கும்.`;
+  return `${displayName(item.name)} வழிபாடு பக்தி, மனவலிமை மற்றும் உள அமைதியை வளர்க்கும்.`;
+}
+
+function localizedMantraTitle(rawTitle = "") {
+  if (currentLanguage !== "ta") return rawTitle;
+  return String(rawTitle)
+    .replace(/Famous Guru Sloka/gi, "பிரபல குரு ஸ்லோகம்")
+    .replace(/Famous Mantra/gi, "பிரபல மந்திரம்")
+    .replace(/Gayatri Mantra/gi, "காயத்ரி மந்திரம்")
+    .replace(/Beej Mantra/gi, "பீஜ மந்திரம்")
+    .replace(/Traditional Recitation/gi, "பாரம்பரிய பாராயணம்")
+    .replace(/Classical Japa/gi, "பாரம்பரிய ஜபம்");
+}
+
+function setSelectOptionText(selectElement, value, label) {
+  if (!selectElement) return;
+  const option = selectElement.querySelector(`option[value="${value}"]`);
+  if (option) {
+    option.textContent = label;
+  }
+}
+
+function applyLanguageToStaticUI() {
+  document.documentElement.lang = currentLanguage === "ta" ? "ta" : "en";
+
+  if (languageSelect) {
+    setSelectOptionText(languageSelect, "en", t("languageEnglish"));
+    setSelectOptionText(languageSelect, "ta", t("languageTamil"));
+    languageSelect.value = currentLanguage;
+  }
+
+  if (languageBarLabel) {
+    languageBarLabel.textContent = currentLanguage === "ta" ? "மொழியைத் தேர்ந்தெடுக்கவும்" : "Choose Language";
+  }
+  if (langEnglishBtn) {
+    langEnglishBtn.textContent = "English";
+    langEnglishBtn.classList.toggle("active", currentLanguage === "en");
+  }
+  if (langTamilBtn) {
+    langTamilBtn.textContent = "தமிழ்";
+    langTamilBtn.classList.toggle("active", currentLanguage === "ta");
+  }
+
+  if (searchInput) {
+    searchInput.placeholder = t("searchPlaceholder");
+  }
+  if (slokaLibrarySearch) {
+    slokaLibrarySearch.placeholder = t("slokaSearchPlaceholder");
+  }
+
+  setSelectOptionText(typeSelect, "all", currentLanguage === "ta" ? "அனைத்தும்" : "All");
+  setSelectOptionText(typeSelect, "god", currentLanguage === "ta" ? "தெய்வங்கள்" : "Gods");
+  setSelectOptionText(typeSelect, "planet", currentLanguage === "ta" ? "கிரகங்கள் (நவகிரகம்)" : "Planets (Navagraha)");
+  setSelectOptionText(typeSelect, "guru", currentLanguage === "ta" ? "குருமார்கள்" : "Gurus");
+
+  setSelectOptionText(mantraSelect, "famous", currentLanguage === "ta" ? "பிரபல மந்திரம் / ஸ்லோகம்" : "Famous Mantra / Sloka");
+  setSelectOptionText(mantraSelect, "gayatri", currentLanguage === "ta" ? "காயத்ரி மந்திரம்" : "Gayatri Mantra");
+  setSelectOptionText(mantraSelect, "beej", currentLanguage === "ta" ? "பீஜ மந்திரம்" : "Beej Mantra");
+
+  setSelectOptionText(scriptSelect, "both", currentLanguage === "ta" ? "தேவநாகரி + தமிழ் + ஒலிபெயர்ப்பு" : "Show Devanagari + Tamil + Transliteration");
+  setSelectOptionText(scriptSelect, "devanagari", currentLanguage === "ta" ? "தேவநாகரி மட்டும்" : "Show Devanagari only");
+  setSelectOptionText(scriptSelect, "tamil", currentLanguage === "ta" ? "தமிழ் மட்டும்" : "Show Tamil only");
+  setSelectOptionText(scriptSelect, "iast", currentLanguage === "ta" ? "ஒலிபெயர்ப்பு மட்டும்" : "Show Transliteration only");
+  if (scriptSelect) {
+    if (currentLanguage === "ta") {
+      scriptSelect.value = "tamil";
+      scriptSelect.disabled = true;
+      scriptSelect.hidden = true;
+    } else {
+      scriptSelect.disabled = false;
+      scriptSelect.hidden = false;
+    }
+  }
+
+  if (scriptModeLabel) {
+    scriptModeLabel.hidden = currentLanguage === "ta";
+  }
+  if (chantScriptModeLabel) {
+    chantScriptModeLabel.hidden = currentLanguage === "ta";
+  }
+
+  setSelectOptionText(reminderDaySelect, "daily", currentLanguage === "ta" ? "ஒவ்வொரு நாளும்" : "Every day");
+  setSelectOptionText(reminderDaySelect, "0", weekdayLabel(0));
+  setSelectOptionText(reminderDaySelect, "1", weekdayLabel(1));
+  setSelectOptionText(reminderDaySelect, "2", weekdayLabel(2));
+  setSelectOptionText(reminderDaySelect, "3", weekdayLabel(3));
+  setSelectOptionText(reminderDaySelect, "4", weekdayLabel(4));
+  setSelectOptionText(reminderDaySelect, "5", weekdayLabel(5));
+  setSelectOptionText(reminderDaySelect, "6", weekdayLabel(6));
+
+  if (voiceAccentSelect) {
+    setSelectOptionText(voiceAccentSelect, "tamil", currentLanguage === "ta" ? "தமிழ் குரல்" : "Tamil accent");
+    setSelectOptionText(voiceAccentSelect, "sanskrit", currentLanguage === "ta" ? "சமஸ்கிருத குரல்" : "Sanskrit accent");
+    setSelectOptionText(voiceAccentSelect, "hindi", currentLanguage === "ta" ? "ஹிந்தி குரல்" : "Hindi accent");
+  }
+
+  const rotatingList = rotatingMessagesForLanguage();
+  const knowListItems = didYouKnowMessagesForLanguage();
+  if (rotatingMessage && rotatingList.length) {
+    rotatingMessage.textContent = rotatingList[new Date().getDay() % rotatingList.length];
+  }
+  if (didYouKnowMessage && knowListItems.length) {
+    didYouKnowMessage.textContent = knowListItems[new Date().getDay() % knowListItems.length];
+  }
+
+  const setText = (selector, text) => {
+    const el = document.querySelector(selector);
+    if (el) el.textContent = text;
+  };
+
+  setText("#homeQuickAccess h3", currentLanguage === "ta" ? "எளிய முகப்பு" : "Simplified Home");
+  setText("#homeQuickAccess .meaning", currentLanguage === "ta" ? "உங்கள் பாதையை நேரடியாகத் தேர்வு செய்து ஒரே தொடுதலில் தொடங்குங்கள்." : "Pick your path directly and begin in one tap.");
+  setText(".hero-kicker", currentLanguage === "ta" ? "Soulvest புனித இடம்" : "Soulvest Sacred Space");
+  setText(".hero-copy h1", currentLanguage === "ta" ? "Soulvest மந்திரங்கள்" : "Soulvest Mantras");
+  setText(".hero-copy p:not(.hero-kicker)", currentLanguage === "ta" ? "உங்கள் புனித ஸ்லோக மற்றும் ஜப நூலகம்." : "Your sacred library of slokas and chants.");
+  setText(".welcome-kicker", currentLanguage === "ta" ? "உங்கள் தெய்வீக ஜப இடத்திற்கு வரவேற்கிறோம்" : "Welcome to your divine chanting space");
+  setText(".welcome-banner h2", currentLanguage === "ta" ? "பக்தியுடன் தொடங்கி, ஒழுக்கத்துடன் தொடருங்கள்." : "Start with devotion, continue with discipline, and grow with grace.");
+  const welcomeDesc = document.querySelector(".welcome-banner h2 + p");
+  if (welcomeDesc) welcomeDesc.textContent = currentLanguage === "ta" ? "தெய்வம், கிரகம் அல்லது குருவைத் தேர்வு செய்து தினசரி ஜபப் பயிற்சியை தொடங்குங்கள்." : "Choose a deity, planet, or guru and begin your daily practice with focused mantra recitation.";
+  setText(".did-you-know-title", currentLanguage === "ta" ? "உங்களுக்கு தெரியுமா?" : "Do You Know?");
+
+  const quickButtons = document.querySelectorAll("#homeQuickAccess .quick-path-btn");
+  if (quickButtons[0]) quickButtons[0].textContent = currentLanguage === "ta" ? "🛕 தெய்வங்கள்" : "🛕 Gods";
+  if (quickButtons[1]) quickButtons[1].textContent = currentLanguage === "ta" ? "🪐 கிரகங்கள்" : "🪐 Planets";
+  if (quickButtons[2]) quickButtons[2].textContent = currentLanguage === "ta" ? "🧘 குருமார்கள்" : "🧘 Gurus";
+
+  setText("#slokaLibrary h3", currentLanguage === "ta" ? "ஸ்லோக நூலகம்" : "Sloka Library");
+  setText("#slokaLibrary .meaning", currentLanguage === "ta" ? "ஒலிபெயர்ப்பில் தொகுக்கப்பட்ட பிரபல ஸ்லோகங்களை பார்வையிடுங்கள்." : "Browse all curated famous slokas in transliteration.");
+  const slokaHeaders = document.querySelectorAll("#slokaLibrary th");
+  if (slokaHeaders[0]) slokaHeaders[0].textContent = currentLanguage === "ta" ? "பெயர்" : "Name";
+  if (slokaHeaders[1]) slokaHeaders[1].textContent = currentLanguage === "ta" ? "வகை" : "Type";
+  if (slokaHeaders[2]) slokaHeaders[2].textContent = currentLanguage === "ta" ? "பிரபல ஸ்லோகம் (தமிழ்)" : "Famous Sloka (Transliteration)";
+  if (slokaHeaders[3]) slokaHeaders[3].textContent = currentLanguage === "ta" ? "நோக்கம்" : "Purpose";
+
+  setText("#mantraOfDay h3", currentLanguage === "ta" ? "இன்றைய மந்திரம்" : "Mantra of the Day");
+  if (mantraOfDayOpenBtn) mantraOfDayOpenBtn.textContent = currentLanguage === "ta" ? "இன்றைய மந்திரத்தைத் திற" : "Open Today’s Mantra";
+
+  setText("#aiHub h3", currentLanguage === "ta" ? "AI ஆதரித்த அம்சங்கள்" : "AI-Powered Enhancements");
+  const aiCardTitles = document.querySelectorAll("#aiHub .ai-card .script-mode");
+  if (aiCardTitles[0]) aiCardTitles[0].textContent = currentLanguage === "ta" ? "தனிப்பட்ட மந்திர பரிந்துரைகள்" : "Personalized Mantra Suggestions";
+  if (aiCardTitles[1]) aiCardTitles[1].textContent = currentLanguage === "ta" ? "குரல் AI ஜபம்" : "Voice AI Chant";
+  if (aiCardTitles[2]) aiCardTitles[2].textContent = currentLanguage === "ta" ? "மனநிலை UI" : "Mood-based UI";
+  if (aiSuggestBtn) aiSuggestBtn.textContent = currentLanguage === "ta" ? "எனக்காக பரிந்துரைக்க" : "Suggest for me";
+  if (aiApplySuggestionBtn) aiApplySuggestionBtn.textContent = currentLanguage === "ta" ? "பரிந்துரையை பயன்படுத்து" : "Apply suggestion";
+  if (voicePlayBtn) voicePlayBtn.textContent = currentLanguage === "ta" ? "குரல் ஜபம் தொடங்கு" : "Play voice chant";
+  if (voiceStopBtn) voiceStopBtn.textContent = currentLanguage === "ta" ? "குரல் ஜபம் நிறுத்து" : "Stop voice chant";
+  if (applyMoodBtn) applyMoodBtn.textContent = currentLanguage === "ta" ? "மனநிலையை பயன்படுத்து" : "Apply mood";
+  if (ambientPlayBtn) ambientPlayBtn.textContent = currentLanguage === "ta" ? "பின்னணி ஒலி தொடங்கு" : "Play Ambient";
+  if (ambientStopBtn) ambientStopBtn.textContent = currentLanguage === "ta" ? "பின்னணி ஒலி நிறுத்து" : "Stop Ambient";
+  if (emotionInput) emotionInput.placeholder = currentLanguage === "ta" ? "நீங்கள் இப்போது எப்படி உணர்கிறீர்கள்?" : "How do you feel? (e.g. calm, stressed, joyful)";
+
+  setText("#personalHub h3", currentLanguage === "ta" ? "பிடித்தவை & ஜப வரலாறு" : "Favorites & Chant History");
+  const personalLabels = document.querySelectorAll("#personalHub .script-mode");
+  if (personalLabels[0]) personalLabels[0].textContent = currentLanguage === "ta" ? "பிடித்தவை" : "Favorites";
+  if (personalLabels[1]) personalLabels[1].textContent = currentLanguage === "ta" ? "ஜப வரலாறு" : "Chant History";
+  if (favoritesEmpty) favoritesEmpty.textContent = currentLanguage === "ta" ? "இன்னும் பிடித்தவை இல்லை. மந்திர அட்டையில் “பிடித்ததில் சேர்” ஐ பயன்படுத்துங்கள்." : "No favorites yet. Use “Add to Favorites” on a mantra card.";
+  if (historyEmpty) historyEmpty.textContent = currentLanguage === "ta" ? "ஜப வரலாறு இல்லை. முன்னேற்றத்தைப் பார்க்க ஜபம் தொடங்குங்கள்." : "No chant history yet. Start chanting to track progress.";
+
+  setText("#sankalpaTracker h3", currentLanguage === "ta" ? "தினசரி சங்கல்ப கண்காணிப்பு" : "Daily Sankalpa Tracker");
+  if (sankalpaInput) sankalpaInput.placeholder = currentLanguage === "ta" ? "இன்றைய சங்கல்பத்தை அமைக்கவும்..." : "Set your sankalpa for today...";
+  if (sankalpaSaveBtn) sankalpaSaveBtn.textContent = currentLanguage === "ta" ? "சங்கல்பம் சேமி" : "Save Sankalpa";
+  if (sankalpaCompleteBtn) sankalpaCompleteBtn.textContent = currentLanguage === "ta" ? "இன்றை நாள் நிறைவு செய்" : "Mark Today Complete";
+
+  setText("#reminderSettings h3", currentLanguage === "ta" ? "நினைவூட்டல் அமைப்புகள்" : "Reminder Settings");
+  if (saveReminderBtn) saveReminderBtn.textContent = currentLanguage === "ta" ? "நினைவூட்டலை சேமி" : "Save Reminder";
+  if (reminderMessageInput) reminderMessageInput.placeholder = currentLanguage === "ta" ? "நினைவூட்டல் செய்தி" : "Reminder message";
+
+  setText("#chantAssistant h3", currentLanguage === "ta" ? "ஜப முறை" : "Chant Mode");
+  if (chantPlusBtn) chantPlusBtn.textContent = currentLanguage === "ta" ? "+1 ஜபம்" : "+1 Chant";
+  if (chantResetBtn) chantResetBtn.textContent = currentLanguage === "ta" ? "மீட்டமை" : "Reset";
+
+  setText("#meditationMode h3", currentLanguage === "ta" ? "தியான முறை" : "Meditation Mode");
+  if (startMeditationBtn) startMeditationBtn.textContent = currentLanguage === "ta" ? "தொடங்கு" : "Start";
+  if (stopMeditationBtn) stopMeditationBtn.textContent = currentLanguage === "ta" ? "நிறுத்து" : "Stop";
+
+  setText("#youShouldKnow h3", currentLanguage === "ta" ? "நீங்கள் அறிந்திருக்க வேண்டியது" : "You Should Know");
+  setText("#ritualJournal h3", currentLanguage === "ta" ? "தினசரி சடங்கு ஜர்னல்" : "Daily Ritual Journal");
+  if (saveJournalBtn) saveJournalBtn.textContent = currentLanguage === "ta" ? "பதிவை சேமி" : "Save Entry";
+
+  populateAiDeityOptions();
+}
+
+function setLanguage(nextLanguage) {
+  const next = nextLanguage === "ta" ? "ta" : "en";
+  if (next === currentLanguage) return;
+  currentLanguage = next;
+  applyLanguageToStaticUI();
+  renderReminderSettings();
+  render();
+}
 
 const mantraOfDayByWeekday = {
   0: "Surya (Sun)",
@@ -773,22 +1262,13 @@ const supplementalFamousSlokasByName = {
   "Gnanananda Giri": [{ title: "Guru Smaranam", devanagari: "ॐ श्री गुरुभ्यो नमः॥", iast: "oṃ śrī gurubhyo namaḥ ||" }]
 };
 
-const rotatingMessages = [
-  "One focused chant is stronger than many distracted chants.",
-  "Breathe deeply, chant clearly, and keep your sankalpa steady.",
-  "Consistency in 11 chants daily builds inner strength over time.",
-  "Start with gratitude; end with silence for deeper absorption.",
-  "Pronunciation with devotion matters more than speed."
-];
+function rotatingMessagesForLanguage() {
+  return uiCopy[currentLanguage]?.rotatingMessages || uiCopy.en.rotatingMessages;
+}
 
-const didYouKnowMessages = [
-  "Beej mantra means a seed sound — a compact vibration that represents the core energy of a deity.",
-  "Common beej examples: ॐ गं (Gaṃ) for Ganesha, श्रीं (Śrīṃ) for Lakshmi, and ऐं (Aiṃ) for Saraswati.",
-  "Beej mantras are usually short, but they are repeated with deep attention, correct pronunciation, and steady breath.",
-  "In practice, many devotees start with a famous mantra and then continue with beej japa for focused inner absorption.",
-  "Gayatri mantras invoke illumination of intellect, while beej mantras emphasize concentrated divine vibration.",
-  "A fixed daily count such as 11, 21, 51, or 108 helps beej mantra practice become stable and disciplined."
-];
+function didYouKnowMessagesForLanguage() {
+  return uiCopy[currentLanguage]?.didYouKnowMessages || uiCopy.en.didYouKnowMessages;
+}
 
 const dailyRitualQuotes = [
   "Steady repetition purifies thought and strengthens intention.",
@@ -1478,7 +1958,8 @@ function showToast(message) {
 }
 
 function weekdayLabel(index) {
-  return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][index] || "Today";
+  const days = t("weekdays");
+  return Array.isArray(days) ? (days[index] || t("today")) : t("today");
 }
 
 function todaySuggestedItem() {
@@ -1492,14 +1973,14 @@ function renderMantraOfDay() {
   const suggestion = todaySuggestedItem();
   if (!suggestion.item) {
     mantraOfDayTitle.textContent = "";
-    mantraOfDayText.textContent = "No mantra suggestion available right now.";
+    mantraOfDayText.textContent = t("mantraUnavailable");
     mantraOfDayOpenBtn.disabled = true;
     return;
   }
 
   mantraOfDayOpenBtn.disabled = false;
-  mantraOfDayTitle.textContent = `${weekdayLabel(suggestion.dayIndex)} — ${suggestion.item.name}`;
-  mantraOfDayText.textContent = `${suggestion.item.famousTitle}: ${suggestion.item.purpose}`;
+  mantraOfDayTitle.textContent = t("mantraOfDayTitle", { day: weekdayLabel(suggestion.dayIndex), name: displayName(suggestion.item.name) });
+  mantraOfDayText.textContent = t("mantraOfDayText", { title: localizedMantraTitle(suggestion.item.famousTitle), purpose: localizedPurpose(suggestion.item) });
 }
 
 function activeItem() {
@@ -1515,21 +1996,21 @@ function recommendationForContext() {
   if (preferredItem) {
     return {
       name: preferredItem.name,
-      reason: `Based on your chosen deity: ${preferredItem.name}.`,
+      reason: t("aiChosenReason", { name: displayName(preferredItem.name) }),
     };
   }
 
   if (weekdayItem) {
     return {
       name: weekdayItem.name,
-      reason: `Weekday alignment: ${weekdayLabel(dayIndex)} traditionally favors ${weekdayItem.name}.`,
+      reason: t("aiWeekdayReason", { day: weekdayLabel(dayIndex), name: displayName(weekdayItem.name) }),
     };
   }
 
   const fallback = activeItem() || mantras[0] || null;
   return {
     name: fallback?.name || "",
-    reason: "Using your current selection as the best match.",
+    reason: t("aiFallbackReason"),
   };
 }
 
@@ -1538,10 +2019,10 @@ function renderAiSuggestion() {
   const suggestion = recommendationForContext();
   aiCurrentSuggestionName = suggestion.name;
   if (!suggestion.name) {
-    aiSuggestionText.textContent = "No personalized suggestion available right now.";
+    aiSuggestionText.textContent = t("aiNoSuggestion");
     return;
   }
-  aiSuggestionText.textContent = `${suggestion.name} — ${suggestion.reason}`;
+  aiSuggestionText.textContent = `${displayName(suggestion.name)} — ${suggestion.reason}`;
 }
 
 function applyAiSuggestion() {
@@ -1561,7 +2042,7 @@ function applyAiSuggestion() {
   mantraSelect.value = "famous";
   chantCount = 0;
   render();
-  showToast(`Suggested mantra opened: ${item.name}`);
+  showToast(t("aiOpened", { name: displayName(item.name) }));
 }
 
 function deriveAutoMood() {
@@ -1582,9 +2063,9 @@ function moodFromEmotionInput(rawText) {
 }
 
 function moodGlyphAndLabel(mood) {
-  if (mood === "festive") return { glyph: "🔔", label: "Festive" };
-  if (mood === "devotional") return { glyph: "🪔", label: "Devotional" };
-  return { glyph: "🕉️", label: "Calm" };
+  if (mood === "festive") return { glyph: "🔔", label: t("moodFestive") };
+  if (mood === "devotional") return { glyph: "🪔", label: t("moodDevotional") };
+  return { glyph: "🕉️", label: t("moodCalm") };
 }
 
 function renderMoodIconography(mood) {
@@ -1607,9 +2088,9 @@ function applyTimeTheme(theme = "auto") {
 }
 
 function intensityLabel(level) {
-  if (level <= 1) return "Light";
-  if (level >= 3) return "Deep";
-  return "Medium";
+  if (level <= 1) return t("light");
+  if (level >= 3) return t("deep");
+  return t("medium");
 }
 
 function renderSpiritualIntensity() {
@@ -1640,7 +2121,7 @@ function applyMoodTheme(mood, reasonText = "") {
   applyTimeTheme(manualTimeTheme);
   if (moodStatus) {
     const reason = reasonText ? ` ${reasonText}` : "";
-    moodStatus.textContent = `Mood active: ${nextMood}.${reason}`;
+    moodStatus.textContent = t("moodActive", { mood: nextMood, reason });
   }
 }
 
@@ -1656,14 +2137,14 @@ function startAmbientPad() {
   const audioCtx = getAudioContext();
   if (!audioCtx) {
     if (ambientStatus) {
-      ambientStatus.textContent = "Ambient audio is not supported in this browser.";
+      ambientStatus.textContent = t("ambientUnsupported");
     }
     return;
   }
 
   if (ambientOscillatorRef && ambientGainRef) {
     if (ambientStatus) {
-      ambientStatus.textContent = "Ambient audio is already playing.";
+      ambientStatus.textContent = t("ambientAlready");
     }
     return;
   }
@@ -1700,7 +2181,7 @@ function startAmbientPad() {
   ambientOscillatorRef = oscillators;
   ambientGainRef = gainNode;
   if (ambientStatus) {
-    ambientStatus.textContent = "Ambient tanpura-style drone playing.";
+    ambientStatus.textContent = t("ambientPlaying");
   }
 }
 
@@ -1728,15 +2209,39 @@ function stopAmbientPad() {
   ambientOscillatorRef = null;
   ambientGainRef = null;
   if (ambientStatus) {
-    ambientStatus.textContent = "Ambient audio stopped.";
+    ambientStatus.textContent = t("ambientStopped");
   }
 }
 
 function quoteOfTheDay() {
+  if (currentLanguage === "ta") {
+    const tamilQuotes = [
+      "தொடர்ச்சியான ஜபம் மனதை சுத்தப்படுத்தி நோக்கத்தை வலுப்படுத்தும்.",
+      "கவனமான ஒரு சுற்று, கவனக்குறைவான பல சுற்றுகளை விட சிறந்தது.",
+      "மந்திரத்திற்குப் பின் சிறிய மௌனம் பிரார்த்தனையை உள்ளத்தில் நிலைநிறுத்தும்.",
+      "தினசரி சிறிய ஒழுக்கம் ஆழமான ஆன்மிக பலனை தரும்.",
+      "மூச்சு, மந்திரம், விழிப்புணர்வு — இவை சேர்ந்து உள்ளமைதியை தரும்.",
+      "எளிய சங்கல்பம் ஒவ்வொரு ஜபத்தையும் அர்த்தமுள்ளதாக மாற்றும்.",
+      "ஒழுங்கான, அமைதியான, உண்மையான பயிற்சியில் பக்தி வளர்கிறது."
+    ];
+    return tamilQuotes[new Date().getDay() % tamilQuotes.length];
+  }
   return dailyRitualQuotes[new Date().getDay() % dailyRitualQuotes.length];
 }
 
 function journalPromptForItem(item) {
+  if (currentLanguage === "ta") {
+    if (!item) {
+      return "இன்று நான் நிலைத்தன்மையும் நன்றியுணர்வும் கொண்டு ஜபிக்கிறேன்.";
+    }
+    if (item.type === "planet") {
+      return `இன்று ${displayName(item.name)} தொடர்பான ஒழுக்கத்துடன் நிரந்தர எண்ணிக்கையில் அமைதியாக ஜபிக்கிறேன்.`;
+    }
+    if (item.type === "guru") {
+      return `இன்று ${displayName(item.name)} அருளை நினைத்து பணிவுடனும் தெளிவுடனும் ஜபிக்கிறேன்.`;
+    }
+    return `இன்று ${displayName(item.name)} அருளை வேண்டி பக்தியுடனும் சீரான எண்ணிக்கையுடனும் ஜபிக்கிறேன்.`;
+  }
   if (!item) {
     return "Today I will chant with steadiness and gratitude.";
   }
@@ -1795,14 +2300,14 @@ function stopVoiceChant() {
     window.speechSynthesis.cancel();
   }
   if (voiceStatus) {
-    voiceStatus.textContent = "Voice chant stopped.";
+    voiceStatus.textContent = t("voiceStopped");
   }
 }
 
 function speakCurrentMantra() {
   if (!("speechSynthesis" in window)) {
     if (voiceStatus) {
-      voiceStatus.textContent = "Voice chanting is not supported in this browser.";
+      voiceStatus.textContent = t("voiceUnsupported");
     }
     return;
   }
@@ -1810,7 +2315,7 @@ function speakCurrentMantra() {
   const text = selectedVoiceText();
   if (!text) {
     if (voiceStatus) {
-      voiceStatus.textContent = "Select a deity first to play chant audio.";
+      voiceStatus.textContent = t("voiceSelectFirst");
     }
     return;
   }
@@ -1833,7 +2338,11 @@ function speakCurrentMantra() {
 
   const label = voiceProfiles[voiceAccent]?.label || "Selected";
   if (voiceStatus) {
-    voiceStatus.textContent = `Playing ${label} voice chant${voiceLoop ? " on loop" : ""} at ${intensityLabel(spiritualIntensity)} intensity.`;
+    voiceStatus.textContent = t("voicePlaying", {
+      label,
+      loop: voiceLoop ? t("voiceLoopOn") : "",
+      intensity: intensityLabel(spiritualIntensity),
+    });
   }
   window.speechSynthesis.speak(utterance);
 }
@@ -1852,14 +2361,14 @@ function stopMeditationSession(endedNaturally = false) {
   }
   if (endedNaturally) {
     playSessionEndSound();
-    showToast("Meditation session complete");
+    showToast(t("meditationComplete"));
   }
 }
 
 function startMeditationSession() {
   const item = activeItem();
   if (!item) {
-    showToast("Select an entry to start meditation");
+    showToast(t("meditationPickEntry"));
     return;
   }
 
@@ -1868,13 +2377,13 @@ function startMeditationSession() {
   playSessionStartSound();
 
   if (meditationTimerText) {
-    meditationTimerText.textContent = `Silence timer: ${formatMeditationTime(meditationRemainingSec)}`;
+    meditationTimerText.textContent = t("silenceTimer", { time: formatMeditationTime(meditationRemainingSec) });
   }
 
   meditationTimerId = setInterval(() => {
     meditationRemainingSec -= 1;
     if (meditationTimerText) {
-      meditationTimerText.textContent = `Silence timer: ${formatMeditationTime(meditationRemainingSec)}`;
+      meditationTimerText.textContent = t("silenceTimer", { time: formatMeditationTime(meditationRemainingSec) });
     }
     if (meditationRemainingSec <= 0) {
       stopMeditationSession(true);
@@ -1897,10 +2406,10 @@ function renderExperienceMode(item) {
   mantraInfo.classList.toggle("hidden", !showLearning || !item);
 
   if (showMeditation && item && mantra) {
-    meditationTitle.textContent = `${item.name} — Timed silent meditation`;
+    meditationTitle.textContent = t("meditationTitle", { name: item.name });
     meditationOverlay.textContent = mantra.iast || mantra.devanagari;
     if (!meditationTimerId) {
-      meditationTimerText.textContent = "Meditation timer not running.";
+      meditationTimerText.textContent = t("meditationNotRunning");
     }
   }
 
@@ -1992,8 +2501,10 @@ function startRotatingMessages() {
   const didYouKnowCard = didYouKnowMessage.closest(".did-you-know");
 
   const renderMessageSet = () => {
-    rotatingMessage.textContent = rotatingMessages[rotatingIndex];
-    didYouKnowMessage.textContent = didYouKnowMessages[didYouKnowIndex];
+    const rotatingMessages = rotatingMessagesForLanguage();
+    const didYouKnowMessages = didYouKnowMessagesForLanguage();
+    rotatingMessage.textContent = rotatingMessages[rotatingIndex % rotatingMessages.length];
+    didYouKnowMessage.textContent = didYouKnowMessages[didYouKnowIndex % didYouKnowMessages.length];
   };
 
   const transitionMessageSet = () => {
@@ -2012,6 +2523,8 @@ function startRotatingMessages() {
     if (isPaused) {
       return;
     }
+    const rotatingMessages = rotatingMessagesForLanguage();
+    const didYouKnowMessages = didYouKnowMessagesForLanguage();
     rotatingIndex = (rotatingIndex + 1) % rotatingMessages.length;
     didYouKnowIndex = (didYouKnowIndex + 1) % didYouKnowMessages.length;
     transitionMessageSet();
@@ -2150,7 +2663,7 @@ function renderMalaProgress() {
   const percent = Math.round((count / 108) * 100);
   malaRing.style.setProperty("--mala-progress", `${percent}%`);
   malaRingCount.textContent = String(count);
-  malaProgressText.textContent = `Mala Progress: ${count} / 108`;
+  malaProgressText.textContent = t("malaProgress", { count });
 }
 
 function wrapCanvasText(context, text, x, y, maxWidth, lineHeight) {
@@ -2175,8 +2688,9 @@ function wrapCanvasText(context, text, x, y, maxWidth, lineHeight) {
 }
 
 function blessingMessageForToday() {
-  const message = rotatingMessage?.textContent || rotatingMessages[new Date().getDay() % rotatingMessages.length];
-  return (message || "May peace and strength guide your day.").trim();
+  const list = rotatingMessagesForLanguage();
+  const message = rotatingMessage?.textContent || list[new Date().getDay() % list.length];
+  return (message || "").trim();
 }
 
 function blessingCardFilename(item) {
@@ -2190,7 +2704,7 @@ function buildBlessingCardCanvas(item) {
   canvas.height = 1350;
   const context = canvas.getContext("2d");
   if (!context) {
-    showToast("Blessing card not supported");
+    showToast(t("blessingCardNotSupported"));
     return null;
   }
 
@@ -2215,7 +2729,7 @@ function buildBlessingCardCanvas(item) {
 
   context.fillStyle = "#b14d00";
   context.font = "bold 34px 'Segoe UI'";
-  context.fillText("Today's Message", 80, cursorY + 34);
+  context.fillText(t("todaysMessage"), 80, cursorY + 34);
 
   context.fillStyle = "#625949";
   context.font = "30px 'Segoe UI'";
@@ -2223,11 +2737,11 @@ function buildBlessingCardCanvas(item) {
 
   context.fillStyle = "#625949";
   context.font = "28px 'Segoe UI'";
-  wrapCanvasText(context, `Purpose: ${item.purpose}`, 80, cursorY + 42, 920, 40);
+  wrapCanvasText(context, `${t("purpose")}: ${item.purpose}`, 80, cursorY + 42, 920, 40);
 
   context.fillStyle = "#b14d00";
   context.font = "24px 'Segoe UI'";
-  context.fillText(`Generated on ${new Date().toLocaleDateString()} · Soulvest Mantras`, 80, 1280);
+  context.fillText(`${t("generatedOn")} ${new Date().toLocaleDateString()} · Soulvest Mantras`, 80, 1280);
 
   context.save();
   context.translate(930, 180);
@@ -2256,7 +2770,7 @@ async function createBlessingCard(item) {
   link.download = blessingCardFilename(item);
   link.href = canvas.toDataURL("image/png");
   link.click();
-  showToast("Blessing card downloaded");
+  showToast(t("blessingDownloaded"));
 }
 
 async function shareBlessingCard(item) {
@@ -2291,7 +2805,7 @@ async function shareBlessingCard(item) {
 
   try {
     await navigator.share(sharePayload);
-    showToast("Blessing card shared");
+    showToast(t("blessingCardShared"));
   } catch (error) {
     const message = String(error?.message || "").toLowerCase();
     if (!message.includes("abort")) {
@@ -2302,19 +2816,27 @@ async function shareBlessingCard(item) {
 
 function typeLabel(value) {
   if (value === "planet") {
-    return "Planet (Navagraha)";
+    return t("typePlanet");
   }
   if (value === "guru") {
-    return "Guru";
+    return t("typeGuru");
   }
-  return "God";
+  return t("typeGod");
 }
 
 function scriptModeText(mode) {
-  if (mode === "devanagari") return "Script: Devanagari";
-  if (mode === "tamil") return "Script: Tamil";
-  if (mode === "iast") return "Script: IAST (Transliteration)";
-  return "Script: Devanagari + Tamil + IAST";
+  if (currentLanguage === "ta") return t("scriptTamil");
+  if (mode === "devanagari") return t("scriptDevanagari");
+  if (mode === "tamil") return t("scriptTamil");
+  if (mode === "iast") return t("scriptIast");
+  return t("scriptBoth");
+}
+
+function effectiveScriptMode() {
+  if (currentLanguage === "ta") {
+    return "tamil";
+  }
+  return scriptSelect?.value || "both";
 }
 
 function famousVariantsForItem(item) {
@@ -2384,8 +2906,10 @@ function savePrefs() {
     spiritualIntensity,
     visualMinimalMode,
     manualTimeTheme,
+    language: currentLanguage,
   };
   localStorage.setItem(PREF_KEY, JSON.stringify(payload));
+  localStorage.setItem(LANGUAGE_KEY, currentLanguage);
 }
 
 function saveFavorites() {
@@ -2398,6 +2922,11 @@ function saveChantHistory() {
 
 function loadPrefs() {
   try {
+    const savedLanguage = localStorage.getItem(LANGUAGE_KEY);
+    if (savedLanguage === "en" || savedLanguage === "ta") {
+      currentLanguage = savedLanguage;
+    }
+
     const raw = localStorage.getItem(PREF_KEY);
     if (!raw) {
       return;
@@ -2450,6 +2979,9 @@ function loadPrefs() {
     if (typeof prefs?.manualTimeTheme === "string") {
       manualTimeTheme = prefs.manualTimeTheme;
     }
+    if (prefs?.language === "en" || prefs?.language === "ta") {
+      currentLanguage = prefs.language;
+    }
   } catch {
   }
 }
@@ -2482,10 +3014,10 @@ function toggleFavorite(name) {
   if (!name) return;
   if (favorites.has(name)) {
     favorites.delete(name);
-    showToast(`${name} removed from favorites`);
+    showToast(t("favoritesRemoved", { name }));
   } else {
     favorites.add(name);
-    showToast(`${name} added to favorites`);
+    showToast(t("favoritesAdded", { name }));
   }
   saveFavorites();
   renderPersonalHub();
@@ -2503,16 +3035,16 @@ function recordChant(name, increment = 1) {
 }
 
 function formatLastChanted(isoTime) {
-  if (!isoTime) return "just now";
+  if (!isoTime) return t("justNow");
   const date = new Date(isoTime);
-  if (Number.isNaN(date.getTime())) return "recently";
+  if (Number.isNaN(date.getTime())) return t("recently");
   return date.toLocaleString();
 }
 
 function renderPersonalHub() {
   const sortedFavorites = Array.from(favorites).sort((a, b) => a.localeCompare(b));
   favoritesList.innerHTML = sortedFavorites
-    .map((name) => `<button type="button" class="pill-btn" data-action="open-favorite" data-name="${name}">${name}</button>`)
+    .map((name) => `<button type="button" class="pill-btn" data-action="open-favorite" data-name="${name}">${displayName(name)}</button>`)
     .join("");
   favoritesEmpty.classList.toggle("hidden", sortedFavorites.length > 0);
 
@@ -2522,7 +3054,7 @@ function renderPersonalHub() {
     .slice(0, 8);
 
   historyList.innerHTML = historyItems
-    .map(([name, value]) => `<li><strong>${name}</strong>: ${value.total} chants · Last: ${formatLastChanted(value.lastChantedAt)}</li>`)
+    .map(([name, value]) => `<li><strong>${displayName(name)}</strong>: ${value.total} ${t("chants")} · ${t("last")}: ${formatLastChanted(value.lastChantedAt)}</li>`)
     .join("");
   historyEmpty.classList.toggle("hidden", historyItems.length > 0);
 }
@@ -2612,14 +3144,19 @@ function renderSankalpaTracker() {
   }
 
   resetSankalpaDailyIfNeeded();
+  if (!String(sankalpaState.text || "").trim()) {
+    sankalpaState.text = currentLanguage === "ta"
+      ? "பக்தியுடனும் தெளிவுடனும் ஜபம் செய்கிறேன்."
+      : "Chant with devotion and clarity.";
+  }
   sankalpaInput.value = sankalpaState.text || "";
   sankalpaTargetSelect.value = String(sankalpaState.target || 21);
 
   const completedToday = sankalpaState.lastCompletedDate === todayDateKey();
-  sankalpaSummary.textContent = `Today: ${sankalpaState.dailyCount}/${sankalpaState.target} chants · Sankalpa: ${sankalpaState.text}`;
+  sankalpaSummary.textContent = `${t("today")}: ${sankalpaState.dailyCount}/${sankalpaState.target} ${t("chants")} · ${t("sankalpa")}: ${sankalpaState.text}`;
   sankalpaStreak.textContent = completedToday
-    ? `Completed today · Current streak: ${sankalpaState.streak} day(s) · Best: ${sankalpaState.maxStreak}`
-    : `Current streak: ${sankalpaState.streak} day(s) · Best: ${sankalpaState.maxStreak}`;
+    ? `${t("completedToday")} · ${t("currentStreak")}: ${sankalpaState.streak} ${t("days")} · ${t("best")}: ${sankalpaState.maxStreak}`
+    : `${t("currentStreak")}: ${sankalpaState.streak} ${t("days")} · ${t("best")}: ${sankalpaState.maxStreak}`;
 }
 
 function saveReminderSettings() {
@@ -2642,7 +3179,7 @@ function loadReminderSettings() {
 }
 
 function reminderDayLabel(dayValue) {
-  if (dayValue === "daily") return "Every day";
+  if (dayValue === "daily") return t("everyDay");
   return weekdayLabel(Number(dayValue));
 }
 
@@ -2668,23 +3205,23 @@ function renderReminderSettings() {
   reminderEnabled.checked = Boolean(reminderSettings.enabled);
   reminderDaySelect.value = reminderSettings.day || "daily";
   reminderTimeInput.value = reminderSettings.time || "06:00";
-  reminderMessageInput.value = reminderSettings.message || "Time for your mantra practice.";
+  reminderMessageInput.value = reminderSettings.message || t("defaultReminderMessage");
 
   const baseStatus = reminderSettings.enabled
-    ? `Reminder active: ${reminderDayLabel(reminderSettings.day)} at ${reminderSettings.time}`
-    : "Reminder disabled.";
+    ? t("reminderActive", { day: reminderDayLabel(reminderSettings.day), time: reminderSettings.time })
+    : t("reminderDisabled");
 
   if (!("Notification" in window)) {
-    reminderStatus.textContent = `${baseStatus} Browser notifications are not supported.`;
+    reminderStatus.textContent = `${baseStatus} ${t("notifUnsupported")}`;
     return;
   }
 
   if (Notification.permission === "granted") {
-    reminderStatus.textContent = `${baseStatus} Browser notifications enabled.`;
+    reminderStatus.textContent = `${baseStatus} ${t("notifEnabled")}`;
   } else if (Notification.permission === "denied") {
-    reminderStatus.textContent = `${baseStatus} Notification permission is blocked in browser settings.`;
+    reminderStatus.textContent = `${baseStatus} ${t("notifBlocked")}`;
   } else {
-    reminderStatus.textContent = `${baseStatus} Notification permission not granted yet.`;
+    reminderStatus.textContent = `${baseStatus} ${t("notifPending")}`;
   }
 }
 
@@ -2739,10 +3276,10 @@ function loadJournalEntry() {
 function populateAiDeityOptions() {
   if (!aiDeitySelect) return;
   aiDeitySelect.innerHTML = [
-    `<option value="">No preference (weekday based)</option>`,
+    `<option value="">${currentLanguage === "ta" ? "விருப்பம் இல்லை (வாரநாள் அடிப்படையில்)" : "No preference (weekday based)"}</option>`,
     ...mantras
       .filter((item) => item.type === "god")
-      .map((item) => `<option value="${item.name}">${item.name}</option>`),
+      .map((item) => `<option value="${item.name}">${displayName(item.name)}</option>`),
   ].join("");
 }
 
@@ -2765,19 +3302,22 @@ function renderSlokaLibrary() {
   });
 
   slokaLibraryBody.innerHTML = rows.map((item) => {
-    const typeText = item.type === "planet" ? "Planet" : item.type === "guru" ? "Guru" : "God";
+    const typeText = item.type === "planet" ? t("mantraTypePlanet") : item.type === "guru" ? t("typeGuru") : t("typeGod");
+    const slokaText = currentLanguage === "ta"
+      ? (getTamilMantraText(item, "famous", item.famousIast || "") || item.famousIast || "-")
+      : (item.famousIast || "-");
     return `
       <tr>
-        <td>${item.name}</td>
+        <td>${displayName(item.name)}</td>
         <td>${typeText}</td>
-        <td>${item.famousIast || "-"}</td>
-        <td>${item.purpose || "-"}</td>
+        <td>${slokaText}</td>
+        <td>${localizedPurpose(item) || "-"}</td>
       </tr>
     `;
   }).join("");
 
   if (slokaLibraryCount) {
-    slokaLibraryCount.textContent = `${rows.length} slokas shown`;
+    slokaLibraryCount.textContent = t("slokasShown", { count: rows.length });
   }
 }
 
@@ -2813,11 +3353,11 @@ function reminderShouldTrigger(now = new Date()) {
 }
 
 function triggerReminder() {
-  const message = (reminderSettings.message || "Time for your mantra practice.").trim();
+  const message = (reminderSettings.message || t("defaultReminderMessage")).trim();
   showToast(message);
 
   if ("Notification" in window && Notification.permission === "granted") {
-    new Notification("Soulvest Mantras Reminder", { body: message });
+    new Notification(t("reminderTitle"), { body: message });
   }
 }
 
@@ -2889,6 +3429,27 @@ function mantraSearchUrl(query) {
 }
 
 function defaultRitualGuidanceByType(type) {
+  if (currentLanguage === "ta") {
+    if (type === "planet") {
+      return [
+        "வாரநாளுக்கு ஏற்ப ஒழுங்கான ஜப முறையை பின்பற்றுங்கள்.",
+        "நிலையான எண்ணிக்கை மற்றும் சீரான சுவாசத்துடன் ஜபியுங்கள்.",
+        "ஒழுக்கமான தினசரி பயிற்சி நீண்டகால பலனை தரும்."
+      ];
+    }
+    if (type === "guru") {
+      return [
+        "நன்றியுடன் குரு ஸ்மரணம் செய்து தொடங்குங்கள்.",
+        "தெளிவான உச்சரிப்பு மற்றும் அமைதியான வேகத்தை பின்பற்றுங்கள்.",
+        "ஜபத்தின் முடிவில் சிறிது நேரம் மௌன தியானத்தில் இருங்கள்."
+      ];
+    }
+    return [
+      "எளிய சங்கல்பத்துடன் நிரந்தர எண்ணிக்கையில் ஜபத்தைத் தொடங்குங்கள்.",
+      "நிமிர்ந்த உட்கார்வு மற்றும் சீரான மூச்சை காக்கவும்.",
+      "முடிவில் நன்றியுடன் மௌனமாக சில நொடிகள் இருங்கள்."
+    ];
+  }
   if (type === "planet") {
     return [
       "Follow the graha weekday tradition for consistency.",
@@ -2919,21 +3480,23 @@ function renderTempleInfo(item) {
   muruganAruDetails.open = false;
 
   if (!item) {
-    templeInfoTitle.textContent = "Ritual Guidance";
+    templeInfoTitle.textContent = t("ritualGuidance");
     templeList.innerHTML = "";
     templeFallback.classList.remove("hidden");
-    templeFallback.textContent = "Select a god, planet, or guru to view practical ritual guidance.";
+    templeFallback.textContent = t("ritualChoose");
     return;
   }
 
-  const rituals = ritualGuidanceByName[item.name] || defaultRitualGuidanceByType(item.type);
+  const rituals = currentLanguage === "ta"
+    ? defaultRitualGuidanceByType(item.type)
+    : (ritualGuidanceByName[item.name] || defaultRitualGuidanceByType(item.type));
 
-  templeInfoTitle.textContent = `${item.name} — Ritual Guidance`;
+  templeInfoTitle.textContent = t("ritualGuidanceFor", { name: item.name });
 
   if (!rituals.length) {
     templeList.innerHTML = "";
     templeFallback.classList.remove("hidden");
-    templeFallback.textContent = "No ritual guidance is available for this selection yet.";
+    templeFallback.textContent = t("ritualMissing");
     return;
   }
 
@@ -2949,13 +3512,21 @@ function renderYouShouldKnow(item) {
     return;
   }
 
-  const basePoints = [
-    `Purpose focus: ${item.purpose}`,
-    `Start with ${item.famousTitle} for quick devotion, then continue with ${item.gayatriTitle} for focused chanting.`,
-    "Chant with steady breathing and clear pronunciation rather than speed.",
-    "If at temple, complete a sankalpa (intention) before beginning your count.",
-    "For daily practice, choose a fixed count (11/21/51/108) and keep consistency."
-  ];
+  const basePoints = currentLanguage === "ta"
+    ? [
+      `நோக்க மையம்: ${localizedPurpose(item)}`,
+      `${localizedMantraTitle(item.famousTitle)} மூலம் தொடங்கி, பின்னர் ${localizedMantraTitle(item.gayatriTitle)} மூலம் கவனமான ஜபத்தை தொடருங்கள்.`,
+      "வேகத்தை விட சீரான சுவாசத்துடன் தெளிவாக ஜபிப்பது முக்கியம்.",
+      "கோவிலில் இருந்தால் எண்ணிக்கையைத் தொடங்கும் முன் சங்கல்பம் செய்யுங்கள்.",
+      "தினசரி பயிற்சிக்கு 11/21/51/108 போன்ற நிலையான எண்ணிக்கையை கடைப்பிடிக்கவும்."
+    ]
+    : [
+      `Purpose focus: ${item.purpose}`,
+      `Start with ${item.famousTitle} for quick devotion, then continue with ${item.gayatriTitle} for focused chanting.`,
+      "Chant with steady breathing and clear pronunciation rather than speed.",
+      "If at temple, complete a sankalpa (intention) before beginning your count.",
+      "For daily practice, choose a fixed count (11/21/51/108) and keep consistency."
+    ];
 
   if (item.type === "planet") {
     basePoints.push("Planet mantras are often chanted on the graha’s weekday with disciplined routine.");
@@ -2998,9 +3569,9 @@ async function copyText(text, label) {
       document.execCommand("copy");
       area.remove();
     }
-    showToast(`${label} copied`);
+    showToast(t("copied", { label }));
   } catch {
-    showToast("Copy failed");
+    showToast(t("copyFailed"));
   }
 }
 
@@ -3045,6 +3616,8 @@ function selectedMantraData(item) {
     }
   }
 
+  title = localizedMantraTitle(title);
+
   const tamil = isUnavailableBeej
     ? ""
     : isBeej
@@ -3053,7 +3626,13 @@ function selectedMantraData(item) {
     ? getTamilMantraText(item, "gayatri", iast)
     : getTamilMantraText(item, "famous", iast);
 
-  const meaning = isBeej
+  const meaning = currentLanguage === "ta"
+    ? (isBeej
+      ? `பொருள்: ${displayName(item.name)} தொடர்பான பீஜ மந்திரம் ஆழமான உள்ளார்ந்த கவனம் மற்றும் ஜப ஒத்திசைவை உருவாக்குகிறது.`
+      : isGayatri
+      ? `பொருள்: ${displayName(item.name)} மீது தியானித்து புத்தி ஒளிவளத்தை வேண்டுகின்றோம். இந்த மந்திரம் தெளிவு, வழிகாட்டல் மற்றும் ஆன்மிக நயத்தை வளர்க்க உதவும்.`
+      : `பொருள்: இந்த மந்திரம் ${displayName(item.name)} அருளை வேண்டி பக்தி, கவனம் மற்றும் ஆன்மிக இணைப்பை வலுப்படுத்தும்.`)
+    : isBeej
     ? (beej
       ? `Meaning: Beej mantra of ${item.name} carries the seed vibration used for concentrated japa and inner focus.`
       : "Meaning: Beej mantra is not typically assigned for this selection.")
@@ -3061,7 +3640,15 @@ function selectedMantraData(item) {
     ? `Meaning: We meditate on ${item.name} and seek illumination of the intellect. This mantra is used for clarity, guidance, and inner refinement aligned with ${item.purpose.toLowerCase()}`
     : `Meaning: This ${item.famousTitle.toLowerCase()} invokes ${item.name} for ${item.purpose.toLowerCase()}. It is commonly chanted for devotion, focus, and spiritual connection.`;
 
-  const usage = isBeej
+  const usage = currentLanguage === "ta"
+    ? (isBeej
+      ? (beej
+        ? "பயன்பாடு: நிலையான எண்ணிக்கையில் சீரான சுவாசத்துடன் மனதை ஒருமுகப்படுத்தி ஜபிக்கவும்."
+        : "பயன்பாடு: இந்த பதிவிற்கு பிரபல அல்லது காயத்ரி மந்திரத்தை தேர்வு செய்யவும்.")
+      : isGayatri
+      ? "பயன்பாடு: காலை/மாலை நேரங்களில் சரியான உச்சரிப்பு மற்றும் அமைதியான சுவாசத்துடன் ஜபிக்கலாம்."
+      : "பயன்பாடு: தினசரி பூஜை, முக்கிய செயல்களுக்கு முன், அல்லது மனஅமைதி மற்றும் அருள் வேண்டி ஜபிக்கலாம்.")
+    : isBeej
     ? (beej
       ? "Usage: Chant with care using a fixed count and focused breathing for subtle inner alignment."
       : "Usage: Select Famous or Gayatri mantra for this entry.")
@@ -3084,16 +3671,16 @@ function renderChantAssistant(item) {
   }
 
   const mantra = selectedMantraData(item);
-  const mode = scriptSelect.value;
+  const mode = effectiveScriptMode();
 
   chantAssistant.classList.remove("hidden");
-  chantTitle.textContent = `${item.name} — ${mantra.title}`;
+  chantTitle.textContent = `${displayName(item.name)} — ${mantra.title}`;
   chantScriptModeLabel.textContent = scriptModeText(mode);
   chantTextDevanagari.textContent = (mode === "both" || mode === "devanagari") ? (mantra.devanagari || mantra.iast) : "";
   chantTextTamil.textContent = (mode === "both" || mode === "tamil") ? (mantra.isEnglishOnlyFallback ? "" : mantra.tamil) : "";
   chantTextIast.textContent = (mode === "both" || mode === "iast") ? mantra.iast : "";
   const totalForEntity = Number(chantHistory[item.name]?.total || 0);
-  chantProgress.textContent = `Count: ${chantCount} / ${chantTarget} · Total chanted: ${totalForEntity}`;
+  chantProgress.textContent = t("countProgress", { count: chantCount, target: chantTarget, total: totalForEntity });
   startBreathCue();
   renderMalaProgress();
 }
@@ -3106,9 +3693,9 @@ function renderMantraInfo(item) {
 
   const mantra = selectedMantraData(item);
   mantraInfo.classList.remove("hidden");
-  mantraInfoTitle.textContent = `${item.name} — ${mantra.title}`;
+  mantraInfoTitle.textContent = `${displayName(item.name)} — ${mantra.title}`;
 
-  const mode = scriptSelect.value;
+  const mode = effectiveScriptMode();
   scriptModeLabel.textContent = scriptModeText(mode);
   mantraInfoTextDevanagari.textContent = (mode === "both" || mode === "devanagari") ? (mantra.devanagari || mantra.iast) : "";
   mantraInfoTextTamil.textContent = (mode === "both" || mode === "tamil") ? (mantra.isEnglishOnlyFallback ? "" : mantra.tamil) : "";
@@ -3122,16 +3709,16 @@ function buildCard(item, mode) {
   const isFavorite = favorites.has(item.name);
   return `
     <article class="card" data-entity="${item.name}">
-      <h2>${item.name}</h2>
+      <h2>${displayName(item.name)}</h2>
       <p class="featured-type">${typeLabel(item.type)}</p>
       ${mantraBlock(mantra.title, mantra.devanagari, { iast: mantra.iast, tamil: mantra.tamil }, mode)}
-      <p class="meaning">${item.purpose}</p>
+      <p class="meaning">${localizedPurpose(item)}</p>
       <div class="actions">
-        <button data-action="toggle-favorite" data-name="${item.name}">${isFavorite ? "Remove Favorite" : "Add to Favorites"}</button>
-        <button data-action="copy-selected" data-name="${item.name}">Copy Selected</button>
-        <button data-action="copy-all" data-name="${item.name}">Copy All</button>
-        <button data-action="blessing-card" data-name="${item.name}">Blessing Card</button>
-        <button data-action="share-card" data-name="${item.name}">Share Card</button>
+        <button data-action="toggle-favorite" data-name="${item.name}">${isFavorite ? t("removeFavorite") : t("addFavorite")}</button>
+        <button data-action="copy-selected" data-name="${item.name}">${t("copySelected")}</button>
+        <button data-action="copy-all" data-name="${item.name}">${t("copyAll")}</button>
+        <button data-action="blessing-card" data-name="${item.name}">${t("blessingCard")}</button>
+        <button data-action="share-card" data-name="${item.name}">${t("shareCard")}</button>
       </div>
     </article>
   `;
@@ -3155,7 +3742,7 @@ function filteredList() {
 
 function populateEntityOptions() {
   const list = baseList();
-  entitySelect.innerHTML = list.map((item) => `<option value="${item.name}">${item.name}</option>`).join("");
+  entitySelect.innerHTML = list.map((item) => `<option value="${item.name}">${displayName(item.name)}</option>`).join("");
 
   if (!list.length) {
     selectedEntity = "";
@@ -3177,11 +3764,11 @@ async function renderFeatured() {
   }
 
   featured.classList.remove("hidden");
-  featuredTitle.textContent = item.name;
+  featuredTitle.textContent = displayName(item.name);
   featuredType.textContent = typeLabel(item.type);
-  featuredPurpose.textContent = `Purpose: ${item.purpose}`;
-  featuredHistory.textContent = item.brief;
-  featuredMeaning.textContent = `About ${item.name}: ${item.brief}`;
+  featuredPurpose.textContent = `${t("purpose")}: ${localizedPurpose(item)}`;
+  featuredHistory.textContent = localizedBrief(item);
+  featuredMeaning.textContent = `${t("about")} ${displayName(item.name)}: ${localizedBrief(item)}`;
 
   const fallbackQueries = imageQueriesForItem(item);
   const cacheKey = `img:${fallbackQueries.join("|")}`;
@@ -3231,13 +3818,13 @@ async function renderFeatured() {
 }
 
 function render() {
-  const mode = scriptSelect.value;
+  const mode = effectiveScriptMode();
   experienceMode = experienceModeSelect?.value || "chant";
   const list = filteredList();
 
   if (!list.length) {
-    grid.innerHTML = `<div class="empty">No entries found for your search.</div>`;
-    resultCount.textContent = "0 entries shown";
+    grid.innerHTML = `<div class="empty">${t("noEntries")}</div>`;
+    resultCount.textContent = t("entriesShown", { count: 0 });
     renderMantraInfo(null);
     renderChantAssistant(null);
     renderExperienceMode(null);
@@ -3254,7 +3841,7 @@ function render() {
     }
 
     grid.innerHTML = buildCard(selectedItem, mode);
-    resultCount.textContent = "Full page view for selected entry";
+    resultCount.textContent = t("fullPageView");
     renderExperienceMode(selectedItem);
     renderMantraInfo(selectedItem);
     renderChantAssistant(selectedItem);
@@ -3302,17 +3889,33 @@ grid.addEventListener("click", (event) => {
 
   if (button.dataset.action === "copy-selected") {
     const mantra = selectedMantraData(item);
-    const tamilLine = mantra.tamil ? `\n${mantra.tamil}` : "";
-    copyText(`${item.name}\n${mantra.devanagari}\n${mantra.iast}${tamilLine}`, `${item.name} selected mantra`);
+    if (currentLanguage === "ta") {
+      const tamilLine = mantra.tamil || mantra.iast;
+      copyText(`${displayName(item.name)}\n${tamilLine}`, `${displayName(item.name)} selected mantra`);
+    } else {
+      const tamilLine = mantra.tamil ? `\n${mantra.tamil}` : "";
+      copyText(`${item.name}\n${mantra.devanagari}\n${mantra.iast}${tamilLine}`, `${item.name} selected mantra`);
+    }
   }
 
   if (button.dataset.action === "copy-all") {
     const beej = beejMantrasByName[item.name];
-    const beejBlock = beej ? `\n\n${beej.title}:\n${beej.devanagari}\n${beej.iast}` : "";
-    copyText(
-      `${item.name}\n\n${item.famousTitle}:\n${item.famousDevanagari}\n${item.famousIast}\n\n${item.gayatriTitle}:\n${item.gayatriDevanagari}\n${item.gayatriIast}${beejBlock}\n\nPurpose: ${item.purpose}`,
-      `${item.name} full text`
-    );
+    if (currentLanguage === "ta") {
+      const famousTamil = getTamilMantraText(item, "famous", item.famousIast || "") || item.famousIast || "";
+      const gayatriTamil = getTamilMantraText(item, "gayatri", item.gayatriIast || "") || item.gayatriIast || "";
+      const beejTamil = beej ? (getTamilMantraText(item, "beej", beej.iast || "") || beej.iast || "") : "";
+      const beejBlock = beej ? `\n\n${localizedMantraTitle(beej.title)}:\n${beejTamil}` : "";
+      copyText(
+        `${displayName(item.name)}\n\n${localizedMantraTitle(item.famousTitle)}:\n${famousTamil}\n\n${localizedMantraTitle(item.gayatriTitle)}:\n${gayatriTamil}${beejBlock}\n\n${t("purpose")}: ${localizedPurpose(item)}`,
+        `${displayName(item.name)} full text`
+      );
+    } else {
+      const beejBlock = beej ? `\n\n${beej.title}:\n${beej.devanagari}\n${beej.iast}` : "";
+      copyText(
+        `${item.name}\n\n${item.famousTitle}:\n${item.famousDevanagari}\n${item.famousIast}\n\n${item.gayatriTitle}:\n${item.gayatriDevanagari}\n${item.gayatriIast}${beejBlock}\n\nPurpose: ${item.purpose}`,
+        `${item.name} full text`
+      );
+    }
   }
 
   if (button.dataset.action === "blessing-card") {
@@ -3358,6 +3961,17 @@ mantraSelect.addEventListener("change", () => {
   render();
 });
 scriptSelect.addEventListener("change", render);
+if (languageSelect) {
+  languageSelect.addEventListener("change", () => {
+    setLanguage(languageSelect.value);
+  });
+}
+if (langEnglishBtn) {
+  langEnglishBtn.addEventListener("click", () => setLanguage("en"));
+}
+if (langTamilBtn) {
+  langTamilBtn.addEventListener("click", () => setLanguage("ta"));
+}
 if (experienceModeSelect) {
   experienceModeSelect.addEventListener("change", () => {
     experienceMode = experienceModeSelect.value;
@@ -3382,13 +3996,13 @@ chantPlusBtn.addEventListener("click", () => {
   renderPersonalHub();
   renderSankalpaTracker();
   if (chantCount >= chantTarget) {
-    showToast(`Completed ${chantTarget} chants`);
+    showToast(t("completedChants", { count: chantTarget }));
     if (chantCount === chantTarget) {
       playSessionEndSound();
     }
   }
   if (completedSankalpa) {
-    showToast("Sankalpa complete for today");
+    showToast(t("sankalpaComplete"));
   }
   savePrefs();
 });
@@ -3407,7 +4021,7 @@ if (sessionSoundToggle) {
   sessionSoundToggle.addEventListener("change", () => {
     soundSettings.enabled = sessionSoundToggle.checked;
     saveSoundPrefs();
-    showToast(soundSettings.enabled ? "Temple sounds enabled" : "Temple sounds disabled");
+    showToast(soundSettings.enabled ? t("templeSoundsEnabled") : t("templeSoundsDisabled"));
   });
 }
 
@@ -3555,9 +4169,9 @@ if (saveJournalBtn) {
   saveJournalBtn.addEventListener("click", () => {
     saveJournalEntry();
     if (journalStatus) {
-      journalStatus.textContent = "Journal entry saved for today.";
+      journalStatus.textContent = t("journalSavedStatus");
     }
-    showToast("Ritual journal saved");
+    showToast(t("ritualJournalSaved"));
   });
 }
 
@@ -3571,7 +4185,7 @@ if (stopMeditationBtn) {
   stopMeditationBtn.addEventListener("click", () => {
     stopMeditationSession(false);
     if (meditationTimerText) {
-      meditationTimerText.textContent = "Meditation timer not running.";
+      meditationTimerText.textContent = t("meditationNotRunning");
     }
   });
 }
@@ -3618,7 +4232,7 @@ if (saveReminderBtn) {
     reminderSettings.enabled = reminderEnabled.checked;
     reminderSettings.day = reminderDaySelect.value;
     reminderSettings.time = reminderTimeInput.value || "06:00";
-    reminderSettings.message = (reminderMessageInput.value || "").trim() || "Time for your mantra practice.";
+    reminderSettings.message = (reminderMessageInput.value || "").trim() || t("defaultReminderMessage");
 
     if (reminderSettings.enabled) {
       await ensureNotificationPermission();
@@ -3627,19 +4241,21 @@ if (saveReminderBtn) {
     saveReminderSettings();
     renderReminderSettings();
     startReminderScheduler();
-    showToast("Reminder settings saved");
+    showToast(t("reminderSaved"));
   });
 }
 
 if (sankalpaSaveBtn) {
   sankalpaSaveBtn.addEventListener("click", () => {
     const nextText = (sankalpaInput.value || "").trim();
-    sankalpaState.text = nextText || "Chant with devotion and clarity.";
+    sankalpaState.text = nextText || (currentLanguage === "ta"
+      ? "பக்தியுடனும் தெளிவுடனும் ஜபம் செய்கிறேன்."
+      : "Chant with devotion and clarity.");
     sankalpaState.target = Number(sankalpaTargetSelect.value) || 21;
     resetSankalpaDailyIfNeeded();
     saveSankalpa();
     renderSankalpaTracker();
-    showToast("Sankalpa saved");
+    showToast(t("sankalpaSaved"));
   });
 }
 
@@ -3647,11 +4263,11 @@ if (sankalpaCompleteBtn) {
   sankalpaCompleteBtn.addEventListener("click", () => {
     const completedNow = markSankalpaComplete();
     if (!completedNow) {
-      showToast("Sankalpa already completed today");
+      showToast(t("sankalpaAlready"));
     } else {
       sankalpaState.dailyCount = Math.max(sankalpaState.dailyCount, sankalpaState.target);
       saveSankalpa();
-      showToast("Sankalpa complete for today");
+      showToast(t("sankalpaComplete"));
     }
     renderSankalpaTracker();
   });
@@ -3674,6 +4290,7 @@ populateAiDeityOptions();
 loadAiPrefs();
 loadJournalEntry();
 populateEntityOptions();
+applyLanguageToStaticUI();
 renderSpiritualIntensity();
 setMinimalVisualMode(visualMinimalMode);
 applyMoodTheme(selectedMood);

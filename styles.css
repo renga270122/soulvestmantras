@@ -115,6 +115,45 @@ body.minimal-visual-mode .welcome-banner {
   overflow: hidden;
 }
 
+.language-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 10px 0 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.language-bar-label {
+  margin: 0;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.language-bar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.language-quick-btn {
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.language-quick-btn.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
 .hero::before,
 .hero::after {
   pointer-events: none;
