@@ -4827,16 +4827,27 @@ function filteredList() {
 
 function populateEntityOptions() {
   const list = baseList();
-  entitySelect.innerHTML = list.map((item) => `<option value="${item.name}">${displayName(item.name)}</option>`).join("");
+  const dedupedList = [];
+  const seenLabels = new Set();
+  for (const item of list) {
+    const labelKey = String(displayName(item.name) || "").trim().toLowerCase();
+    if (seenLabels.has(labelKey)) {
+      continue;
+    }
+    seenLabels.add(labelKey);
+    dedupedList.push(item);
+  }
 
-  if (!list.length) {
+  entitySelect.innerHTML = dedupedList.map((item) => `<option value="${item.name}">${displayName(item.name)}</option>`).join("");
+
+  if (!dedupedList.length) {
     selectedEntity = "";
     return;
   }
 
-  const stillValid = list.some((item) => item.name === selectedEntity);
+  const stillValid = dedupedList.some((item) => item.name === selectedEntity);
   if (!stillValid) {
-    selectedEntity = list[0].name;
+    selectedEntity = dedupedList[0].name;
   }
   entitySelect.value = selectedEntity;
 }
