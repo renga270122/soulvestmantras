@@ -3131,7 +3131,7 @@ function renderRitualJournal(item) {
   if (ritualJournalQuote) {
     ritualJournalQuote.textContent = `“${quoteOfTheDay()}”`;
   }
-  if (ritualJournalEntry && !ritualJournalEntry.value.trim()) {
+  if (ritualJournalEntry) {
     ritualJournalEntry.value = journalPromptForItem(item);
   }
 }
