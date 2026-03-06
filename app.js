@@ -1364,6 +1364,7 @@ const kannadaNameByEntity = {
 };
 
 const hindiNameByEntity = {
+  "Ayyapa": "अय्यप्पा",
   "Ganesha": "गणेश",
   "Shiva": "शिव",
   "Vishnu": "विष्णु",
