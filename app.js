@@ -1,4 +1,18 @@
 const mantras = [
+    {
+      name: "Ayyapa",
+      type: "god",
+      wikiQuery: "Ayyappan",
+      purpose: "For discipline, devotion, and protection on the spiritual path.",
+      brief:
+        "Ayyapa is revered as the son of Shiva and Vishnu (as Mohini), symbolizing dharma, self-control, and compassion.",
+      famousTitle: "Famous Sloka",
+      famousDevanagari: "ॐ भूतनाथ सदानन्द सर्वभूत दयापार ।\nरक्ष रक्ष महाबाहो शास्ता तुभ्यं नमो नमः॥",
+      famousIast: "om bhūtanātha sadānanda sarva-bhūta dayāpāra |\nrakṣa rakṣa mahābāho śāstā tubhyam namo namah ||",
+      gayatriTitle: "Gayatri Mantra",
+      gayatriDevanagari: "ॐ अय्यापाय विद्महे धर्मशास्त्राय धीमहि तन्नो शास्ता प्रचोदयात्॥",
+      gayatriIast: "oṃ ayyāpāya vidmahe dharmaśāstrāya dhīmahi tanno śāstā pracodayāt ||"
+    },
   {
     name: "Ganesha",
     type: "god",
