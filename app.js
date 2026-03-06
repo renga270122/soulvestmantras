@@ -716,6 +716,9 @@ const uiCopy = {
     purpose: "Purpose",
     about: "About",
     blessingDownloaded: "Blessing card downloaded",
+    heroChipDailyPractice: "Daily Practice",
+    heroChipNavagrahaWisdom: "Navagraha Wisdom",
+    heroChipGuruGuidance: "Guru Guidance",
     weekdays: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     rotatingMessages: [
       "One focused chant is stronger than many distracted chants.",
@@ -837,6 +840,9 @@ const uiCopy = {
     purpose: "நோக்கம்",
     about: "பற்றி",
     blessingDownloaded: "ஆசி அட்டை பதிவிறக்கப்பட்டது",
+    heroChipDailyPractice: "தினசரி பயிற்சி",
+    heroChipNavagrahaWisdom: "நவகிரக ஞானம்",
+    heroChipGuruGuidance: "குரு வழிகாட்டல்",
     weekdays: ["ஞாயிறு", "திங்கள்", "செவ்வாய்", "புதன்", "வியாழன்", "வெள்ளி", "சனி"],
     rotatingMessages: [
       "ஒருமுகமான ஒரு ஜபம், கவனக்குறைவான பல ஜபங்களை விட வலிமையானது.",
@@ -958,6 +964,9 @@ const uiCopy = {
     purpose: "ఉద్దేశ్యం",
     about: "గురించి",
     blessingDownloaded: "ఆశీర్వాద కార్డ్ డౌన్‌లోడ్ అయింది",
+    heroChipDailyPractice: "దైనందిన సాధన",
+    heroChipNavagrahaWisdom: "నవగ్రహ జ్ఞానం",
+    heroChipGuruGuidance: "గురు మార్గదర్శనం",
     weekdays: ["ఆది", "సోమ", "మంగళ", "బుధ", "గురు", "శుక్ర", "శని"]
     ,
     rotatingMessages: [
@@ -1080,6 +1089,9 @@ const uiCopy = {
     purpose: "ಉದ್ದೇಶ",
     about: "ಬಗ್ಗೆ",
     blessingDownloaded: "ಆಶೀರ್ವಾದ ಕಾರ್ಡ್ ಡೌನ್‌ಲೋಡ್ ಆಗಿದೆ",
+    heroChipDailyPractice: "ದೈನಂದಿನ ಅಭ್ಯಾಸ",
+    heroChipNavagrahaWisdom: "ನವಗ್ರಹ ಜ್ಞಾನ",
+    heroChipGuruGuidance: "ಗುರು ಮಾರ್ಗದರ್ಶನ",
     weekdays: ["ಭಾನು", "ಸೋಮ", "ಮಂಗಳ", "ಬುಧ", "ಗುರು", "ಶುಕ್ರ", "ಶನಿ"]
     ,
     rotatingMessages: [
@@ -1202,6 +1214,9 @@ const uiCopy = {
     purpose: "उद्देश्य",
     about: "के बारे में",
     blessingDownloaded: "आशीर्वाद कार्ड डाउनलोड किया गया",
+    heroChipDailyPractice: "दैनिक अभ्यास",
+    heroChipNavagrahaWisdom: "नवग्रह ज्ञान",
+    heroChipGuruGuidance: "गुरु मार्गदर्शन",
     weekdays: ["रवि", "सोम", "मंगल", "बुध", "गुरु", "शुक्र", "शनि"],
     rotatingMessages: [
       "एकाग्र होकर किया गया एक जप, बिखरे ध्यान वाले कई जपों से अधिक प्रभावी होता है।",
@@ -1663,6 +1678,11 @@ function applyLanguageToStaticUI() {
   const welcomeDesc = document.querySelector(".welcome-banner h2 + p");
   if (welcomeDesc) welcomeDesc.textContent = L("Choose a deity, planet, or guru and begin your daily practice with focused mantra recitation.", "தெய்வம், கிரகம் அல்லது குருவைத் தேர்வு செய்து தினசரி ஜபப் பயிற்சியை தொடங்குங்கள்.", "దేవుడు, గ్రహం లేదా గురువును ఎంచుకుని దైనందిన సాధన ప్రారంభించండి.", "ದೇವತೆ, ಗ್ರಹ ಅಥವಾ ಗುರುವನ್ನೆ ಆರಿಸಿ ದೈನಂದಿನ ಸಾಧನೆ ಆರಂಭಿಸಿ.", "देवता, ग्रह या गुरु चुनकर दैनिक साधना शुरू करें।");
   setText(".did-you-know-title", L("Do You Know?", "உங்களுக்கு தெரியுமா?", "మీకు తెలుసా?", "ನಿಮಗೆ ಗೊತ್ತೇ?", "क्या आप जानते हैं?"));
+
+  // Set hero chip translations
+  setText("#chipDailyPractice", t("heroChipDailyPractice"));
+  setText("#chipNavagrahaWisdom", t("heroChipNavagrahaWisdom"));
+  setText("#chipGuruGuidance", t("heroChipGuruGuidance"));
 
   const quickButtons = document.querySelectorAll("#homeQuickAccess .quick-path-btn");
   if (quickButtons[0]) quickButtons[0].textContent = `🧘 ${L("Gurus", "குருமார்கள்", "గురువులు", "ಗುರುಗಳು", "गुरु")}`;
