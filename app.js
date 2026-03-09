@@ -1,30 +1,4 @@
 const mantras = [
-        {
-          name: "Hayagreevar",
-          type: "god",
-          wikiQuery: "Hayagriva",
-          purpose: "For wisdom, clarity, and learning.",
-          brief: "Hayagreevar is the horse-headed avatar of Vishnu, worshipped for knowledge and intellect.",
-          famousTitle: "Famous Mantra",
-          famousDevanagari: "ॐ हयग्रीवाय नमः",
-          famousIast: "om hayagrīvāya namah",
-          gayatriTitle: "Hayagriva Sloka",
-          gayatriDevanagari: "ज्ञानानन्दमयं देवं निर्मलस्पटिकाकृतिम्।\nआदारं सर्वविद्यानां हयग्रीवं उपास्महे॥",
-          gayatriIast: "jñānānandamayaṃ devaṃ nirmalaspatikākṛtim |\nādāraṃ sarvavidyānāṃ hayagrīvaṃ upāsmahe ||"
-        },
-        {
-          name: "Sudarshan",
-          type: "god",
-          wikiQuery: "Sudarshana Chakra",
-          purpose: "For protection and removal of obstacles.",
-          brief: "Sudarshan is the divine discus of Vishnu, invoked for safety and overcoming negativity.",
-          famousTitle: "Famous Mantra",
-          famousDevanagari: "ॐ सुदर्शनाय नमः",
-          famousIast: "om sudarshanāya namah",
-          gayatriTitle: "Gayatri Mantra",
-          gayatriDevanagari: "ॐ सुदर्शनाय विद्महे महाज्वालाय धीमहि । तन्नः चक्रः प्रचोदयात् ॥",
-          gayatriIast: "Om Sudarshanāya Vidmahe Mahājvālāya Dhīmahi Tanno Cakraḥ Prachodayāt ||"
-        },
       {
         name: "Hayagreevar",
         type: "god",
@@ -51,22 +25,16 @@ const mantras = [
         gayatriDevanagari: "ॐ सुदर्शन चक्राय नमः",
         gayatriIast: "om sudarshana chakrāya namah"
       },
-    {
-      name: "Ayyapa",
-      type: "god",
-      wikiQuery: "Ayyappan",
-      purpose: "For discipline, devotion, and protection on the spiritual path.",
-      brief:
-        "Ayyapa is revered as the son of Shiva and Vishnu (as Mohini), symbolizing dharma, self-control, and compassion.",
+      {
+        name: "Ayyapa",
+        type: "god",
         famousTitle: "🕉️ Bhūtanātha Sadananda Sloka",
         famousDevanagari: "भूतनाथ सदानन्द सर्वभूतदयापरे ।\nभवपुत्र महावीर शास्त्रे तव नमो नमः ॥",
         famousIast: "bhūtanātha sadānanda sarvabhūtadayāpāre\nbhavaputra mahāvīra śāstre tava namo namaḥ ||",
         famousTamil: "பூதநாத சதானந்த ஸர்வபூத தயாபரே\nபவபுத்ர மஹாவீர சாஸ்த்ரே தவ நமோ நமஃ ॥",
-      gayatriTitle: "Gayatri Mantra",
-      gayatriDevanagari: "ॐ भूतनाथाय विद्महे भवपुत्राय धीमहि तन्नो शास्ता प्रचोदयात्॥",
-      gayatriIast: "oṃ bhūtanāthāya vidmahe bhavaputrāya dhīmahi tanno śāstā pracodayāt ||",
-      gayatriEnglish: "Boodha Naathaya Vidmahe, Bhavaputhraaya Dheemahi, Thanno Saastha Prachodayaath"
-    },
+        purpose: "For devotion to Ayyapa and reflection on compassion, strength, and wisdom.",
+        brief: "A revered sloka for Lord Ayyapa, invoking his qualities as Bhūtanātha (Lord of beings), Sadananda (ever-blissful), and Mahavira (great hero), expressing deep reverence and surrender."
+      },
   {
     name: "Ganesha",
     type: "god",
@@ -130,20 +98,6 @@ const mantras = [
     purpose: "For righteousness, courage, and ideal conduct.",
     brief:
       "Rama is honored as Maryada Purushottama, the embodiment of dharma, truth, and noble leadership.",
-    famousTitle: "Famous Mantra",
-    famousDevanagari: "श्री राम जय राम जय जय राम॥",
-    famousIast: "śrī rāma jaya rāma jaya jaya rāma ||",
-    gayatriTitle: "Gayatri Mantra",
-    gayatriDevanagari: "ॐ दाशरथाय विद्महे सीतावल्लभाय धीमहि तन्नो रामः प्रचोदयात्॥",
-    gayatriIast: "oṃ dāśarathāya vidmahe sītāvallabhāya dhīmahi tanno rāmaḥ pracodayāt ||"
-  },
-  {
-    name: "Ramar",
-    type: "god",
-    wikiQuery: "Rama",
-    purpose: "For dharma, courage, family harmony, and righteous success.",
-    brief:
-      "Ramar is widely worshipped in Tamil tradition as the ideal king and embodiment of truth, discipline, and compassion.",
     famousTitle: "Famous Mantra",
     famousDevanagari: "श्री राम जय राम जय जय राम॥",
     famousIast: "śrī rāma jaya rāma jaya jaya rāma ||",
