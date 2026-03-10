@@ -18,6 +18,12 @@
 </head>
 <body>
   <main class="container">
+    <nav class="main-nav" style="margin-bottom: 1.5rem;">
+      <ul style="display: flex; gap: 1.5rem; list-style: none; padding: 0; justify-content: center;">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="abhirami.html">Abhirami Andhadhi Slokas</a></li>
+      </ul>
+    </nav>
     <header class="hero">
       <div class="hero-head">
         <div class="hero-brand">
@@ -339,14 +345,18 @@
       </div>
       <p id="journalStatus" class="meaning"></p>
     </section>
-  </main>
 
-  <footer class="site-footer" aria-label="Copyright footer">
-    <p>© <span id="footerYear"></span> Soulvest Mantras. All rights reserved.</p>
-  </footer>
+    <section id="abhiramiAndhadhi" class="mantra-info hidden" aria-live="polite">
+      <h3>Abhirami Andhadhi Slokas</h3>
+      <p id="abhiramiAndhadhiText" class="meaning"></p>
+    </section>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <footer class="site-footer" aria-label="Copyright footer">
+      <p>© <span id="footerYear"></span> Soulvest Mantras. All rights reserved.</p>
+    </footer>
 
-  <script src="app.js?v=20260305-1"></script>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="app.js?v=20260305-1"></script>
 </body>
 </html>
