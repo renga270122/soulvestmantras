@@ -1,3 +1,29 @@
+@media (max-width: 760px) {
+  #all-slokas, #kolaru-slokas {
+    font-size: 1.12rem;
+    padding: 2px 0;
+    word-break: break-word;
+  }
+  .sloka-image {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    display: block;
+    margin: 0 auto 18px auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(48,40,30,0.10);
+  }
+}
+
+.sloka-image {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  display: block;
+  margin: 0 auto 24px auto;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(48,40,30,0.13);
+}
 :root {
   --bg: #f6f2e8;
   --surface: #fffdf8;
