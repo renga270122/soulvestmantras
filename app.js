@@ -457,6 +457,32 @@ const mantras = [
     gayatriIast: "oṃ satyadevaya vidmahe nārāyaṇāya dhīmahi tanno viṣṇuḥ pracodayāt ||"
   },
   {
+    name: "Vasuki (Nagaraj)",
+    type: "god",
+    wikiQuery: "Vasuki",
+    purpose: "For protection from poisons, overcoming fears, and blessings of the serpent king.",
+    brief: "Vasuki is the king of serpents (Nagaraj), revered for his role in the churning of the ocean and as a symbol of strength and protection.",
+    famousTitle: "Famous Mantra",
+    famousDevanagari: "ॐ वासुकये नमः",
+    famousIast: "oṃ vāsukaye namaḥ",
+    gayatriTitle: "Gayatri Mantra",
+    gayatriDevanagari: "ॐ नागराजाय विद्महे वासुकये धीमहि तन्नो सर्पः प्रचोदयात्॥",
+    gayatriIast: "oṃ nāgarājāya vidmahe vāsukaye dhīmahi tanno sarpaḥ pracodayāt ||"
+  },
+  {
+    name: "Kamdev",
+    type: "god",
+    wikiQuery: "Kamadeva",
+    purpose: "For love, attraction, harmony in relationships, and desire fulfillment.",
+    brief: "Kamdev is the Hindu god of love and desire, invoked for harmony, attraction, and fulfillment in relationships.",
+    famousTitle: "Famous Mantra",
+    famousDevanagari: "ॐ कामदेवाय नमः",
+    famousIast: "oṃ kāmadevāya namaḥ",
+    gayatriTitle: "Gayatri Mantra",
+    gayatriDevanagari: "ॐ कामदेवाय विद्महे पुष्पबाणाय धीमहि तन्नो अनंगः प्रचोदयात्॥",
+    gayatriIast: "oṃ kāmadevāya vidmahe puṣpabāṇāya dhīmahi tanno anaṅgaḥ pracodayāt ||"
+  },
+  {
     name: "Lakshmi Narasimhar",
     type: "god",
     wikiQuery: "Lakshmi Narasimha",
