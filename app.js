@@ -28,6 +28,7 @@ const mantras = [
       {
         name: "Ayyapa",
         type: "god",
+        wikiQuery: "Ayyappan",
         famousTitle: "🕉️ Bhūtanātha Sadananda Sloka",
         famousDevanagari: "भूतनाथ सदानन्द सर्वभूतदयापरे ।\nभवपुत्र महावीर शास्त्रे तव नमो नमः ॥",
         famousIast: "bhūtanātha sadānanda sarvabhūtadayāpāre\nbhavaputra mahāvīra śāstre tava namo namaḥ ||",
