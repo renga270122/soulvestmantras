@@ -483,6 +483,20 @@ const mantras = [
     gayatriIast: "oṃ kāmadevāya vidmahe puṣpabāṇāya dhīmahi tanno anaṅgaḥ pracodayāt ||"
   },
   {
+    name: "Jyeshta Devi",
+    type: "god",
+    wikiQuery: "Jyeshtha (goddess)",
+    purpose: "For removal of misfortune, overcoming adversity, and protection from negativity.",
+    brief: "Jyeshta Devi is the elder sister of Lakshmi, worshipped for relief from poverty, misfortune, and to ward off negative influences.",
+    famousTitle: "Famous Mantra",
+    famousDevanagari: "ॐ ज्येष्ठायै नमः",
+    famousIast: "oṃ jyeṣṭhāyai namaḥ",
+    gayatriTitle: "Gayatri Mantra",
+    gayatriDevanagari: "ॐ ज्येष्ठायै विद्महे अलक्ष्म्यै धीमहि तन्नो देवी प्रचोदयात्॥",
+    gayatriIast: "oṃ jyeṣṭhāyai vidmahe alakṣmyai dhīmahi tanno devī pracodayāt ||",
+    image: "assets/Jyeshta_Devi.jfif"
+  },
+  {
     name: "Lakshmi Narasimhar",
     type: "god",
     wikiQuery: "Lakshmi Narasimha",
