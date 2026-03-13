@@ -1,4 +1,257 @@
 const mantras = [
+                  // --- 21 TARAS (TIBETAN BUDDHISM) ---
+                  {
+                    name: "Green Tara",
+                    type: "tara",
+                    wikiQuery: "Green Tara",
+                    purpose: "For compassion, swift help, and overcoming fears.",
+                    brief: "Green Tara is the most popular Tara, known for her quick compassion and ability to remove obstacles and fears.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ तारे तुत्तारे तुरे स्वाहा",
+                    famousIast: "oṃ tāre tuttāre ture svāhā",
+                    slokaDevanagari: "ॐ स्वधिष्टितवज्रपद्मस्थितायै नमः।",
+                    slokaIast: "oṃ svadhiṣṭhitavajrapadmasthitāyai namaḥ."
+                  },
+                  {
+                    name: "White Tara",
+                    type: "tara",
+                    wikiQuery: "White Tara",
+                    purpose: "For long life, healing, and serenity.",
+                    brief: "White Tara is revered for her blessings of longevity, healing, and peaceful compassion.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ तारे तुत्तारे तुरे मम आयुः पुण्यं पुष्टिं कुरु स्वाहा",
+                    famousIast: "oṃ tāre tuttāre ture mama āyuḥ puṇyaṃ puṣṭiṃ kuru svāhā",
+                    slokaDevanagari: "ॐ शुद्धशुभ्रवर्णायै नमः।",
+                    slokaIast: "oṃ śuddhaśubhravarṇāyai namaḥ."
+                  },
+                  {
+                    name: "Red Tara",
+                    type: "tara",
+                    wikiQuery: "Red Tara",
+                    purpose: "For magnetism, power, and subduing negativity.",
+                    brief: "Red Tara is invoked for her powers of attraction, subjugation of obstacles, and dynamic energy.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ तारे तुत्तारे तुरे सर्वदुष्टान् भयं हर हर स्वाहा",
+                    famousIast: "oṃ tāre tuttāre ture sarvaduṣṭān bhayaṃ hara hara svāhā",
+                    slokaDevanagari: "ॐ रक्तवर्णायै नमः।",
+                    slokaIast: "oṃ raktavarṇāyai namaḥ."
+                  },
+                  {
+                    name: "Blue Tara",
+                    type: "tara",
+                    wikiQuery: "Ekajati",
+                    purpose: "For protection, power, and overcoming obstacles.",
+                    brief: "Blue Tara (Ekajati) is a fierce form of Tara, invoked for protection and subduing negative forces.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ एकजात्यै नमः",
+                    famousIast: "oṃ ekajātyai namaḥ",
+                    slokaDevanagari: "ॐ नीलवर्णायै नमः।",
+                    slokaIast: "oṃ nīlavarṇāyai namaḥ."
+                  },
+                  {
+                    name: "Yellow Tara",
+                    type: "tara",
+                    wikiQuery: "Yellow Tara",
+                    purpose: "For prosperity, abundance, and merit.",
+                    brief: "Yellow Tara is associated with wealth, abundance, and increasing merit.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ तारे तुत्तारे तुरे पुष्टिं कुरु स्वाहा",
+                    famousIast: "oṃ tāre tuttāre ture puṣṭiṃ kuru svāhā",
+                    slokaDevanagari: "ॐ पीतवर्णायै नमः।",
+                    slokaIast: "oṃ pītavarṇāyai namaḥ."
+                  },
+                  {
+                    name: "Black Tara",
+                    type: "tara",
+                    wikiQuery: "Black Tara",
+                    purpose: "For power, wrathful protection, and subduing negativity.",
+                    brief: "Black Tara is a fierce form invoked for protection and overcoming obstacles.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ तारे तुत्तारे तुरे कालि स्वाहा",
+                    famousIast: "oṃ tāre tuttāre ture kāli svāhā",
+                    slokaDevanagari: "ॐ कृष्णवर्णायै नमः।",
+                    slokaIast: "oṃ kṛṣṇavarṇāyai namaḥ."
+                  },
+                  {
+                    name: "Orange Tara",
+                    type: "tara",
+                    wikiQuery: "Orange Tara",
+                    purpose: "For energy, creativity, and overcoming obstacles.",
+                    brief: "Orange Tara is invoked for creative energy and removing obstacles.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ तारे तुत्तारे तुरे रक्ते स्वाहा",
+                    famousIast: "oṃ tāre tuttāre ture rakte svāhā",
+                    slokaDevanagari: "ॐ नारङ्गवर्णायै नमः।",
+                    slokaIast: "oṃ nāraṅgavarṇāyai namaḥ."
+                  },
+                  {
+                    name: "Vajra Tara",
+                    type: "tara",
+                    wikiQuery: "Vajra Tara",
+                    purpose: "For indestructibility and spiritual power.",
+                    brief: "Vajra Tara is associated with the vajra (diamond/thunderbolt) and spiritual strength.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ वज्र तारे स्वाहा",
+                    famousIast: "oṃ vajra tāre svāhā",
+                    slokaDevanagari: "ॐ वज्रपाणये नमः।",
+                    slokaIast: "oṃ vajrapāṇaye namaḥ."
+                  },
+                  {
+                    name: "Cittamani Tara",
+                    type: "tara",
+                    wikiQuery: "Cittamani Tara",
+                    purpose: "For wish-fulfillment and spiritual realization.",
+                    brief: "Cittamani Tara is a wish-fulfilling form, central in Tibetan practice.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ तारे तुत्तारे चित्तमणि स्वाहा",
+                    famousIast: "oṃ tāre tuttāre cittamaṇi svāhā",
+                    slokaDevanagari: "ॐ चित्तमणये नमः।",
+                    slokaIast: "oṃ cittamaṇaye namaḥ."
+                  },
+                  {
+                    name: "Kurukulla Tara",
+                    type: "tara",
+                    wikiQuery: "Kurukulla",
+                    purpose: "For enchantment, magnetism, and influence.",
+                    brief: "Kurukulla Tara is a red form associated with magnetizing and influence.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ कुरुकुल्ले ह्रीं स्वाहा",
+                    famousIast: "oṃ kurukulle hrīṃ svāhā",
+                    slokaDevanagari: "ॐ कुरुकुल्लायै नमः।",
+                    slokaIast: "oṃ kurukullāyai namaḥ."
+                  },
+                  {
+                    name: "Ugra Tara",
+                    type: "tara",
+                    wikiQuery: "Ugra Tara",
+                    purpose: "For fierce protection and subduing obstacles.",
+                    brief: "Ugra Tara is a wrathful form invoked for protection and overcoming negativity.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ उग्र तारे स्वाहा",
+                    famousIast: "oṃ ugra tāre svāhā",
+                    slokaDevanagari: "ॐ उग्रतारायै नमः।",
+                    slokaIast: "oṃ ugratārāyai namaḥ."
+                  },
+                  {
+                    name: "Mahashanti Tara",
+                    type: "tara",
+                    wikiQuery: "Mahashanti Tara",
+                    purpose: "For great peace and pacification.",
+                    brief: "Mahashanti Tara is invoked for deep peace and calming disturbances.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ महाशान्ति तारे स्वाहा",
+                    famousIast: "oṃ mahāśānti tāre svāhā",
+                    slokaDevanagari: "ॐ महाशान्तये नमः।",
+                    slokaIast: "oṃ mahāśāntaye namaḥ."
+                  },
+                  {
+                    name: "Pishaci Tara",
+                    type: "tara",
+                    wikiQuery: "Pishaci Tara",
+                    purpose: "For protection from spirits and negative influences.",
+                    brief: "Pishaci Tara is invoked for protection from harmful spirits.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ पिशाचि तारे स्वाहा",
+                    famousIast: "oṃ piśāci tāre svāhā",
+                    slokaDevanagari: "ॐ पिशाचितारायै नमः।",
+                    slokaIast: "oṃ piśācitārāyai namaḥ."
+                  },
+                  {
+                    name: "Janguli Tara",
+                    type: "tara",
+                    wikiQuery: "Janguli",
+                    purpose: "For protection from poisons and snakebites.",
+                    brief: "Janguli Tara is invoked for protection from poisons and snakebites.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ जाङ्गुलि तारे स्वाहा",
+                    famousIast: "oṃ jāṅguli tāre svāhā",
+                    slokaDevanagari: "ॐ जाङ्गुलितारायै नमः।",
+                    slokaIast: "oṃ jāṅgulitārāyai namaḥ."
+                  },
+                  {
+                    name: "Sita Tara",
+                    type: "tara",
+                    wikiQuery: "Sita Tara",
+                    purpose: "For purity and clarity.",
+                    brief: "Sita Tara is a white form associated with purity and clarity.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ सीता तारे स्वाहा",
+                    famousIast: "oṃ sītā tāre svāhā",
+                    slokaDevanagari: "ॐ सितातारायै नमः।",
+                    slokaIast: "oṃ sitātārāyai namaḥ."
+                  },
+                  {
+                    name: "Khadiravani Tara",
+                    type: "tara",
+                    wikiQuery: "Khadiravani Tara",
+                    purpose: "For forest protection and healing.",
+                    brief: "Khadiravani Tara is associated with forests and healing powers.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ खदिरावनि तारे स्वाहा",
+                    famousIast: "oṃ khadirāvani tāre svāhā",
+                    slokaDevanagari: "ॐ खदिरावनितारायै नमः।",
+                    slokaIast: "oṃ khadirāvanitārāyai namaḥ."
+                  },
+                  {
+                    name: "Marici Tara",
+                    type: "tara",
+                    wikiQuery: "Marici (Buddhism)",
+                    purpose: "For light, protection, and overcoming darkness.",
+                    brief: "Marici Tara is associated with light and protection from harm.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ मारीचि तारे स्वाहा",
+                    famousIast: "oṃ mārīci tāre svāhā",
+                    slokaDevanagari: "ॐ मारीचितारायै नमः।",
+                    slokaIast: "oṃ mārīcitārāyai namaḥ."
+                  },
+                  {
+                    name: "Parnashabari Tara",
+                    type: "tara",
+                    wikiQuery: "Parnashabari",
+                    purpose: "For protection from epidemics and diseases.",
+                    brief: "Parnashabari Tara is invoked for protection from diseases and epidemics.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ पर्णशबरी तारे स्वाहा",
+                    famousIast: "oṃ parṇaśabarī tāre svāhā",
+                    slokaDevanagari: "ॐ पर्णशबरीतारायै नमः।",
+                    slokaIast: "oṃ parṇaśabarītārāyai namaḥ."
+                  },
+                  {
+                    name: "Chintamani Tara",
+                    type: "tara",
+                    wikiQuery: "Chintamani Tara",
+                    purpose: "For wish-fulfillment and spiritual realization.",
+                    brief: "Chintamani Tara is a wish-fulfilling form, similar to Cittamani Tara.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ चिन्तामणि तारे स्वाहा",
+                    famousIast: "oṃ cintāmaṇi tāre svāhā",
+                    slokaDevanagari: "ॐ चिन्तामणितारायै नमः।",
+                    slokaIast: "oṃ cintāmaṇitārāyai namaḥ."
+                  },
+                  {
+                    name: "Arya Tara",
+                    type: "tara",
+                    wikiQuery: "Arya Tara",
+                    purpose: "For noble qualities and spiritual progress.",
+                    brief: "Arya Tara is the noble Tara, embodying enlightened qualities.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ आर्य तारे स्वाहा",
+                    famousIast: "oṃ ārya tāre svāhā",
+                    slokaDevanagari: "ॐ आर्यातारायै नमः।",
+                    slokaIast: "oṃ āryātārāyai namaḥ."
+                  },
+                  {
+                    name: "Samaya Tara",
+                    type: "tara",
+                    wikiQuery: "Samaya Tara",
+                    purpose: "For vows, commitments, and spiritual discipline.",
+                    brief: "Samaya Tara is associated with spiritual vows and discipline.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ समय तारे स्वाहा",
+                    famousIast: "oṃ samaya tāre svāhā",
+                    slokaDevanagari: "ॐ समयतारायै नमः।",
+                    slokaIast: "oṃ samayatārāyai namaḥ."
+                  },
             {
               name: "Kamakhya Devi",
               type: "god",
@@ -1948,6 +2201,7 @@ function applyLanguageToStaticUI() {
 
   setSelectOptionText(typeSelect, "all", L("All", "அனைத்தும்", "అన్నీ", "ಎಲ್ಲಾ", "सभी"));
   setSelectOptionText(typeSelect, "god", L("Gods", "தெய்வங்கள்", "దేవుళ్లు", "ದೇವತೆಗಳು", "देवता"));
+  setSelectOptionText(typeSelect, "tara", L("Taras", "தாரா தேவிகள்", "తార దేవతలు", "ತಾರಾ ದೇವಿಯರು", "तारा देवियाँ"));
   setSelectOptionText(typeSelect, "planet", L("Planets (Navagraha)", "கிரகங்கள் (நவகிரகம்)", "గ్రహాలు (నవగ్రహం)", "ಗ್ರಹಗಳು (ನವಗ್ರಹ)", "ग्रह (नवग्रह)"));
   setSelectOptionText(typeSelect, "guru", L("Gurus", "குருமார்கள்", "గురువులు", "ಗುರುಗಳು", "गुरु"));
 
@@ -4935,7 +5189,7 @@ function byType(list) {
 }
 
 function sortByTypePriority(list) {
-  const typePriority = { guru: 0, god: 1, planet: 2 };
+  const typePriority = { guru: 0, god: 1, tara: 2, planet: 3 };
   return [...list].sort((a, b) => {
     const rankDiff = (typePriority[a.type] ?? 99) - (typePriority[b.type] ?? 99);
     if (rankDiff !== 0) return rankDiff;
