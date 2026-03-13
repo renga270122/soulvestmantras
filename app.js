@@ -1,4 +1,32 @@
 const mantras = [
+            {
+              name: "Kamakhya Devi",
+              type: "god",
+              wikiQuery: "Kamakhya",
+              purpose: "For fertility, desire fulfillment, and spiritual power.",
+              brief: "Kamakhya Devi is a powerful Tantric goddess worshipped at the Kamakhya Temple in Assam, known as the goddess of desire, fertility, and creative power.",
+              famousTitle: "Famous Mantra",
+              famousDevanagari: "ॐ ऐं ह्रीं क्लीं कामाख्यै नमः",
+              famousIast: "oṃ aiṃ hrīṃ klīṃ kāmākhyai namaḥ",
+              gayatriTitle: "Gayatri Mantra",
+              gayatriDevanagari: "ॐ कामाख्यायै विद्महे कामरूपिण्यै धीमहि तन्नो देवी प्रचोदयात्॥",
+              gayatriIast: "oṃ kāmākhyāyai vidmahe kāmārūpiṇyai dhīmahi tanno devī pracodayāt ||",
+              image: "assets/Kamakhya.jfif"
+            },
+      {
+        name: "Indra",
+        type: "god",
+        wikiQuery: "Indra",
+        purpose: "For strength, rain, leadership, and protection.",
+        brief: "Indra is the king of the Devas and lord of Svarga, associated with rain, thunder, and war. He is celebrated in the Rigveda for slaying Vritra and releasing the waters.",
+        famousTitle: "Famous Mantra",
+        famousDevanagari: "ॐ इन्द्राय नमः",
+        famousIast: "oṃ indrāya namaḥ",
+        gayatriTitle: "Gayatri Mantra",
+        gayatriDevanagari: "ॐ इन्द्राय विद्महे वज्रहस्ताय धीमहि तन्नो देवः प्रचोदयात्॥",
+        gayatriIast: "oṃ indrāya vidmahe vajrahastāya dhīmahi tanno devaḥ pracodayāt ||",
+        image: "assets/Indra.jfif"
+      },
       {
         name: "Hayagreevar",
         type: "god",
@@ -5229,6 +5257,12 @@ async function renderFeatured() {
   featuredHistory.textContent = localizedBrief(item);
   featuredMeaning.textContent = "";
   featuredMeaning.classList.add("hidden");
+
+  // Prefer local image if available
+  if (item.image) {
+    featuredImage.src = item.image;
+    return;
+  }
 
   const fallbackQueries = imageQueriesForItem(item);
   const cacheKey = `img:${fallbackQueries.join("|")}`;
