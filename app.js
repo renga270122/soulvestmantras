@@ -252,6 +252,20 @@ const mantras = [
                     slokaDevanagari: "ॐ समयतारायै नमः।",
                     slokaIast: "oṃ samayatārāyai namaḥ."
                   },
+                  {
+                    name: "Lalita Maha Tripurasundari",
+                    type: "god",
+                    wikiQuery: "Tripura Sundari",
+                    purpose: "For supreme beauty, grace, spiritual wisdom, and fulfillment of desires.",
+                    brief: "Lalita Maha Tripurasundari is the supreme goddess of Sri Vidya tradition, embodying beauty, compassion, and the creative power of the universe. She is worshipped as the Divine Mother and the ruler of the Sri Chakra.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ श्री मातायै नमः",
+                    famousIast: "oṃ śrī mātāyai namaḥ",
+                    gayatriTitle: "Gayatri Mantra",
+                    gayatriDevanagari: "ॐ त्रिपुरायै विद्महे क्लेशहरिण्यै धीमहि तन्नो ललिता प्रचोदयात्॥",
+                    gayatriIast: "oṃ tripurāyai vidmahe kleśahariṇyai dhīmahi tanno lalitā pracodayāt ||",
+                    image: "assets/TripuraSundari.jfif"
+                  },
             {
               name: "Kamakhya Devi",
               type: "god",
@@ -265,6 +279,20 @@ const mantras = [
               gayatriDevanagari: "ॐ कामाख्यायै विद्महे कामरूपिण्यै धीमहि तन्नो देवी प्रचोदयात्॥",
               gayatriIast: "oṃ kāmākhyāyai vidmahe kāmārūpiṇyai dhīmahi tanno devī pracodayāt ||",
               image: "assets/Kamakhya.jfif"
+                            },
+                            {
+                              name: "Angala Parameswari",
+                              type: "god",
+                              wikiQuery: "Angala Parameswari",
+                              purpose: "For protection, removal of fear, and blessings for well-being.",
+                              brief: "Angala Parameswari is a fierce and compassionate form of the Divine Mother, worshipped especially in Tamil Nadu for her power to remove obstacles, protect devotees, and grant boons.",
+                              famousTitle: "Famous Mantra",
+                              famousDevanagari: "ॐ अङ्गालायै नमः",
+                              famousIast: "oṃ aṅgālāyai namaḥ",
+                              gayatriTitle: "Gayatri Mantra",
+                              gayatriDevanagari: "ॐ अङ्गालायै विद्महे शक्ति रूपिण्यै धीमहि तन्नो देवी प्रचोदयात्॥",
+                              gayatriIast: "oṃ aṅgālāyai vidmahe śakti rūpiṇyai dhīmahi tanno devī pracodayāt ||",
+                              image: "assets/angalaparameswari.jfif"
             },
       {
         name: "Indra",
