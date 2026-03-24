@@ -1,6 +1,25 @@
 const mantras = [
                   // --- 6 TARAS (ESSENTIAL) ---
                   {
+                    name: "Sarabeswarar",
+                    type: "god",
+                    wikiQuery: "Sarabeswarar",
+                    purpose: "For protection from negative forces, overcoming anger, and spiritual transformation.",
+                    brief: "Sarabeswarar is a fierce form of Shiva, manifested to pacify Narasimha and subdue destructive energies. He is worshipped for protection, peace, and the removal of extreme negativity.",
+                    famousTitle: "Moola Mantra",
+                    famousDevanagari: "ॐ शरभेश्वराय नमः ॥",
+                    famousIast: "oṃ śarabheśvarāya namaḥ ||",
+                    famousTamil: "ஓம் சரபேஷ்வராய நமஃ",
+                    gayatriTitle: "Gayatri Mantra",
+                    gayatriDevanagari: "ॐ उग्राय विद्महे महावीराय धीमहि तन्नः सरभः प्रचोदयात् ॥",
+                    gayatriIast: "oṃ ugrāya vidmahe mahāvīrāya dhīmahi tannaḥ sarabhaḥ pracodayāt ||",
+                    slokaTitle: "Sloka for Pacification",
+                    slokaDevanagari: "सर्वभूतप्रशान्ताय सर्वरोगनिवारिणे ।\nसर्वदुःखनाशाय सरभेश्वराय ते नमः ॥",
+                    slokaIast: "sarvabhūtapraśāntāya sarvaroganivāriṇe |\nsarvaduḥkhanāśāya śarabheśvarāya te namaḥ ||",
+                    slokaTamil: "சர்வபூதப்ரசாந்தாய சர்வரோகநிவாரணே |\nசர்வதுக்கநாசாய சரபேஷ்வராய தே நமஃ ||",
+                    image: "assets/sarabeshwarar.jfif"
+                  },
+                  {
                     name: "Green Tara",
                     type: "tara",
                     wikiQuery: "Green Tara",
