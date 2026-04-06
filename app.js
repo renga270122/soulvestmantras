@@ -662,6 +662,21 @@ const mantras = [
     gayatriIast: "oṃ vajranakhāya vidmahe tīkṣṇadaṃṣṭrāya dhīmahi tanno nṛsiṃhaḥ pracodayāt ||"
   },
   {
+    name: "Suka Brahma Maharishi",
+    type: "god",
+    wikiQuery: "Shuka",
+    purpose: "For scriptural wisdom, inner clarity, devotion, and guidance on the path of liberation.",
+    brief:
+      "Suka Brahma Maharishi, also revered as Sri Shukadeva, is the enlightened sage associated with the transmission of the Bhagavata Purana. He is honored for detachment, direct knowledge of Brahman, and devotion rooted in wisdom.",
+    famousTitle: "Nama Mantra",
+    famousDevanagari: "ॐ श्री शुकब्रह्म महर्षये नमः॥",
+    famousIast: "oṃ śrī śukabrahma maharṣaye namaḥ ||",
+    gayatriTitle: "Gayatri Mantra",
+    gayatriDevanagari: "ॐ शुकाय विद्महे ब्रह्मरूपाय धीमहि तन्नः शुकः प्रचोदयात्॥",
+    gayatriIast: "oṃ śukāya vidmahe brahmarūpāya dhīmahi tannaḥ śukaḥ pracodayāt ||",
+    image: "assets/sukar.jfif"
+  },
+  {
     name: "Surya (Sun)",
     type: "planet",
     wikiQuery: "Sun",
