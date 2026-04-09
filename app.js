@@ -675,7 +675,7 @@ const mantras = [
                     gayatriDevanagari: "ॐ शुक रूपाय विद्महे सुभिक्ष कारकाय धीमहि तन्नो शुक प्रचोदयात्।।",
     gayatriIast: "om sukha roopaya vidmahe subhiksha karakaya dhimahi tanno sukha prachodayat ||",
                     gayatriTamil: "ஓம் சுக ரூபாய வித்மஹே\nசுபிக்ஷ காரகாய தீமஹி\nதந்நோ சுக ப்ரசோதயாத்",
-    gayatriTamil: "ஓம் சுக ரூபாய வித்மஹே சுபிக்ஷ கரகாய தீமஹி தன்னோ சுக ப்ரசோதயாத் ||",
+    gayatriTamil: ""ஓம் சுக ரூபாய வித்மஹே\nசுபிக்ஷ காரகாய தீமஹி\nதந்நோ சுக ப்ரசோதயாத் ||",
     moolaTitle: "Moola Mantra",
     moolaDevanagari: "ॐ नमो सुख देवाय नमः",
     moolaIast: "om namo sukha devaya namaha",
