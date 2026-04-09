@@ -5178,15 +5178,18 @@ function selectedMantraData(item) {
 
   title = localizedMantraTitle(title);
 
-  const tamil = isUnavailableBeej
-    ? ""
-    : isBeej
-    ? getTamilMantraText(item, "beej", iast)
-    : isGayatri
-    ? getTamilMantraText(item, "gayatri", iast)
-    : isMoola
-    ? ""
-    : getTamilMantraText(item, "famous", iast);
+  let tamil = "";
+  if (isUnavailableBeej) {
+    tamil = "";
+  } else if (isBeej) {
+    tamil = getTamilMantraText(item, "beej", iast);
+  } else if (isGayatri) {
+    tamil = item.gayatriTamil ? item.gayatriTamil.replace(/\n/g, "<br>") : getTamilMantraText(item, "gayatri", iast);
+  } else if (isMoola) {
+    tamil = item.moolaTamil ? item.moolaTamil.replace(/\n/g, "<br>") : "";
+  } else {
+    tamil = getTamilMantraText(item, "famous", iast);
+  }
 
   const scriptKey = isBeej ? "beej" : isGayatri ? "gayatri" : isMoola ? "moola" : "famous";
   const telugu = isUnavailableBeej ? "" : getLanguageScriptText(item, scriptKey, iast, devanagari);
