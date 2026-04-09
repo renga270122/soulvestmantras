@@ -672,8 +672,11 @@ const mantras = [
     famousDevanagari: "ॐ श्री शुकब्रह्म महर्षये नमः॥",
     famousIast: "oṃ śrī śukabrahma maharṣaye namaḥ ||",
     gayatriTitle: "Gayatri Mantra",
-    gayatriDevanagari: "ॐ शुकाय विद्महे ब्रह्मरूपाय धीमहि तन्नः शुकः प्रचोदयात्॥",
-    gayatriIast: "oṃ śukāya vidmahe brahmarūpāya dhīmahi tannaḥ śukaḥ pracodayāt ||",
+    gayatriDevanagari: "ॐ शुक रूपाय विद्महे सुभिक्ष कारकाय धीमहि तन्नो शुक प्रचोदयात्।।",
+    gayatriIast: "om sukha roopaya vidmahe subhiksha karakaya dhimahi tanno sukha prachodayat ||",
+    moolaTitle: "Moola Mantra",
+    moolaDevanagari: "ॐ नमो सुख देवाय नमः",
+    moolaIast: "om namo sukha devaya namaha",
     image: "assets/sukar.jfif"
   },
   {
