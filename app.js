@@ -2096,6 +2096,7 @@ function applyLanguageToStaticUI() {
   setSelectOptionText(mantraSelect, "famous", L("Famous Mantra / Sloka", "பிரபல மந்திரம் / ஸ்லோகம்", "ప్రసిద్ధ మంత్రం / శ్లోకం", "ಪ್ರಸಿದ್ಧ ಮಂತ್ರ / ಶ್ಲೋಕ", "प्रसिद्ध मंत्र / श्लोक"));
   setSelectOptionText(mantraSelect, "gayatri", L("Gayatri Mantra", "காயத்ரி மந்திரம்", "గాయత్రి మంత్రం", "ಗಾಯತ್ರಿ ಮಂತ್ರ", "गायत्री मंत्र"));
   setSelectOptionText(mantraSelect, "beej", L("Beej Mantra", "பீஜ மந்திரம்", "బీజ మంత్రం", "ಬೀಜ ಮಂತ್ರ", "बीज मंत्र"));
+  setSelectOptionText(mantraSelect, "moola", L("Moola Mantra", "மூல மந்திரம்", "మూల మంత్రం", "ಮೂಲ ಮಂತ್ರ", "मूल मंत्र"));
 
   setSelectOptionText(scriptSelect, "both", isTamilLanguage() ? "தேவநாகரி + தமிழ் + ஒலிபெயர்ப்பு" : "Show Devanagari + Tamil + Transliteration");
   setSelectOptionText(scriptSelect, "devanagari", isTamilLanguage() ? "தேவநாகரி மட்டும்" : "Show Devanagari only");
@@ -5136,16 +5137,30 @@ function mantraBlock(title, devanagari, iast, mode) {
 
 function selectedMantraData(item) {
   const beej = beejMantrasByName[item.name];
+
   const isGayatri = selectedMantraKey === "gayatri";
   const isBeej = selectedMantraKey === "beej";
+  const isMoola = selectedMantraKey === "moola";
   const isUnavailableBeej = isBeej && !beej;
   const famousSelection = currentFamousVariant(item);
   const famousVariant = famousSelection.variant;
   const famousVariants = famousVariantsForItem(item);
 
-  let title = isGayatri ? item.gayatriTitle : (famousVariant?.title || item.famousTitle);
-  let devanagari = isGayatri ? item.gayatriDevanagari : (famousVariant?.devanagari || item.famousDevanagari);
-  let iast = isGayatri ? item.gayatriIast : (famousVariant?.iast || item.famousIast);
+  let title = isGayatri
+    ? item.gayatriTitle
+    : isMoola
+    ? item.moolaTitle || "Moola Mantra"
+    : (famousVariant?.title || item.famousTitle);
+  let devanagari = isGayatri
+    ? item.gayatriDevanagari
+    : isMoola
+    ? item.moolaDevanagari || ""
+    : (famousVariant?.devanagari || item.famousDevanagari);
+  let iast = isGayatri
+    ? item.gayatriIast
+    : isMoola
+    ? item.moolaIast || ""
+    : (famousVariant?.iast || item.famousIast);
 
   if (isBeej) {
     if (beej) {
@@ -5167,9 +5182,11 @@ function selectedMantraData(item) {
     ? getTamilMantraText(item, "beej", iast)
     : isGayatri
     ? getTamilMantraText(item, "gayatri", iast)
+    : isMoola
+    ? ""
     : getTamilMantraText(item, "famous", iast);
 
-  const scriptKey = isBeej ? "beej" : isGayatri ? "gayatri" : "famous";
+  const scriptKey = isBeej ? "beej" : isGayatri ? "gayatri" : isMoola ? "moola" : "famous";
   const telugu = isUnavailableBeej ? "" : getLanguageScriptText(item, scriptKey, iast, devanagari);
   const kannada = isUnavailableBeej ? "" : iastToKannada(iast);
   const hindi = isUnavailableBeej ? "" : (devanagari || iast);
