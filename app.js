@@ -181,9 +181,9 @@ const mantras = [
         type: "god",
         wikiQuery: "Ayyappan",
         famousTitle: "🕉️ Bhūtanātha Sadananda Sloka",
-        famousDevanagari: "भूतनाथ सदानन्द सर्वभूतदयापरे ।\nभवपुत्र महावीर शास्त्रे तव नमो नमः ॥",
-        famousIast: "bhūtanātha sadānanda sarvabhūtadayāpāre\nbhavaputra mahāvīra śāstre tava namo namaḥ ||",
-        famousTamil: "பூதநாத சதானந்த ஸர்வபூத தயாபரே\nபவபுத்ர மஹாவீர சாஸ்த்ரே தவ நமோ நமஃ ॥",
+        famousDevanagari: "भूतनाथ सदानन्द सर्वभूत दयापर ।\nरक्ष रक्ष महाबाहो शास्त्रे तुभ्यं नमो नमः ॥",
+        famousIast: "Bhoothanatha Sadananda Sarva Bhootha Dayapara |\nRaksha Raksha Maha-baaho Shastre Thubhyam Namo Namah ||",
+        famousTamil: "பூதநாத ஸதானந்த ஸர்வபூத தயாபர |\nரக்ஷ ரக்ஷ மஹாபாஹோ சாஸ்த்ரே துப்யம் நமோ நம: ||",
         purpose: "For devotion to Ayyapa and reflection on compassion, strength, and wisdom.",
         brief: "A revered sloka for Lord Ayyapa, invoking his qualities as Bhūtanātha (Lord of beings), Sadananda (ever-blissful), and Mahavira (great hero), expressing deep reverence and surrender."
       },
