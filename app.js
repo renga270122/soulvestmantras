@@ -5188,7 +5188,7 @@ function selectedMantraData(item) {
   } else if (isMoola) {
     tamil = item.moolaTamil ? item.moolaTamil.replace(/\n/g, "<br>") : "";
   } else {
-    tamil = getTamilMantraText(item, "famous", iast);
+    tamil = item.famousTamil ? item.famousTamil.replace(/\n/g, "<br>") : getTamilMantraText(item, "famous", iast);
   }
 
   const scriptKey = isBeej ? "beej" : isGayatri ? "gayatri" : isMoola ? "moola" : "famous";
