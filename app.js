@@ -1,3 +1,35 @@
+// --- Calendarific Festival Integration ---
+async function fetchTodayFestival() {
+  const apiKey = "QZY1nBDJACdYtWiKy7GeEQ6SXNGKHY5D";
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
+  const url = `https://calendarific.com/api/v2/holidays?&api_key=${apiKey}&country=IN&year=${year}&month=${month}&day=${day}`;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data && data.response && data.response.holidays && data.response.holidays.length > 0) {
+      // Filter for religious festivals (optional)
+      const festivals = data.response.holidays.filter(h => h.type.includes("Religious") || h.type.includes("Hindu Holiday") || h.type.includes("Observance"));
+      let festivalText = "No major festival today.";
+      if (festivals.length > 0) {
+        festivalText = festivals.map(f => `<b>${f.name}</b><br><span style='font-size:0.95em;'>${f.description || ''}</span>`).join('<hr style="margin:0.5em 0;">');
+      } else if (data.response.holidays.length > 0) {
+        // Show all holidays if no religious ones
+        festivalText = data.response.holidays.map(f => `<b>${f.name}</b><br><span style='font-size:0.95em;'>${f.description || ''}</span>`).join('<hr style="margin:0.5em 0;">');
+      }
+      document.getElementById("festivalText").innerHTML = festivalText;
+    } else {
+      document.getElementById("festivalText").textContent = "No festival or occasion today.";
+    }
+  } catch (e) {
+    document.getElementById("festivalText").textContent = "Unable to fetch festival info.";
+  }
+}
+
+// Call on page load
+if (document.getElementById("festivalText")) fetchTodayFestival();
 const mantras = [
                   // --- 6 TARAS (ESSENTIAL) ---
                   {
