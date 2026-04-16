@@ -142,6 +142,27 @@
       <h2>Start with devotion, continue with discipline, and grow with grace.</h2>
       <p>Choose a deity, planet, or guru and begin your daily practice with focused mantra recitation.</p>
       <p id="rotatingMessage" class="rotating-message" aria-live="polite"></p>
+      <div class="info-row">
+        <div id="dailyMantraBox" class="info-box mantra-box">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5em;gap:1em;">
+            <h3 style="color:#b14d00;margin:0;">Today's Mantra</h3>
+            <span id="dateTimeNow" style="font-size:1em;color:#625949;"></span>
+          </div>
+          <div id="dailyMantraText" style="font-size:1.15em;line-height:1.7;"></div>
+        </div>
+        <div id="todaysTipBox" class="info-box tip-box">
+          <h4 style="color:#00897b;margin-bottom:0.5em;">Today's Tip</h4>
+          <div id="todaysTipText" style="font-size:1.08em;line-height:1.6;"></div>
+        </div>
+        <div id="festivalBox" class="info-box festival-box">
+          <h4 style="color:#e65100;margin-bottom:0.5em;">Festival/Occasion</h4>
+          <div id="festivalText" style="font-size:1.08em;line-height:1.6;"></div>
+        </div>
+        <div id="quoteBox" class="info-box quote-box">
+          <h4 style="color:#5e35b1;margin-bottom:0.5em;">Quote of the Day</h4>
+          <div id="quoteText" style="font-size:1.08em;line-height:1.6;font-style:italic;"></div>
+        </div>
+      </div>
       <div class="did-you-know" aria-live="polite">
         <div class="did-you-know-text" style="background:#fff8e1; border:1px solid #eadcc9; border-radius:10px; padding:10px 14px; margin-bottom:10px;">
           <strong>Importance of Worshipping Family Deity:</strong><br>
@@ -266,6 +287,40 @@
     </section>
 
     <section id="featured" class="featured hidden" aria-live="polite">
+            .info-row {
+              display: flex;
+              flex-direction: row;
+              gap: 1.5em;
+              justify-content: center;
+              align-items: stretch;
+              margin: 1.5em auto 0 auto;
+              max-width: 1400px;
+              flex-wrap: nowrap;
+            }
+            .info-box {
+              flex: 1 1 0;
+              min-width: 0;
+              max-width: 340px;
+              border-radius: 14px;
+              padding: 1.2em 1em 1.2em 1em;
+              box-shadow: 0 4px 18px rgba(48,40,30,0.08);
+              text-align: center;
+              align-self: stretch;
+              background: #fff;
+              box-sizing: border-box;
+            }
+            .mantra-box { background: #fff8e1; max-width: 420px; }
+            .tip-box { background: #e6f7f1; }
+            .festival-box { background: #fff3e0; }
+            .quote-box { background: #ede7f6; }
+            @media (max-width: 1200px) {
+              .info-row { flex-wrap: wrap; }
+              .info-box { max-width: 100%; }
+            }
+            @media (max-width: 900px) {
+              .info-row { flex-direction: column; gap: 1em; }
+              .info-box { min-width: 0; }
+            }
       <img id="featuredImage" alt="Selected deity or planet" loading="lazy" />
       <div class="featured-content">
         <h2 id="featuredTitle"></h2>
@@ -432,5 +487,71 @@
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
     <script src="app.js?v=20260305-1"></script>
+    <script>
+      // Rotating mantra for each day (Sun-Sat)
+      const dailyMantras = [
+        { name: "Surya (Sun)", mantra: "ॐ सूर्याय नमः ||", meaning: "For vitality and clarity." },
+        { name: "Chandra (Moon)", mantra: "ॐ चन्द्राय नमः ||", meaning: "For peace and emotional balance." },
+        { name: "Mangala (Mars)", mantra: "ॐ अंगारकाय नमः ||", meaning: "For courage and energy." },
+        { name: "Budha (Mercury)", mantra: "ॐ बुधाय नमः ||", meaning: "For intellect and communication." },
+        { name: "Guru (Jupiter)", mantra: "ॐ गुरवे नमः ||", meaning: "For wisdom and growth." },
+        { name: "Shukra (Venus)", mantra: "ॐ शुक्राय नमः ||", meaning: "For love and harmony." },
+        { name: "Shani (Saturn)", mantra: "ॐ शनैश्चराय नमः ||", meaning: "For discipline and patience." }
+      ];
+      const today = new Date().getDay(); // 0=Sun, 1=Mon, ...
+      const m = dailyMantras[today];
+      document.getElementById('dailyMantraText').innerHTML = `<b>${m.name}</b><br><span style="font-size:1.2em;">${m.mantra}</span><br><span style=\"font-size:0.98em;color:#b14d00;\">${m.meaning}</span>`;
+
+      // Tips for each day
+      const dailyTips = [
+        "Light a lamp facing east and recite the Surya mantra for energy.",
+        "Wear white or light blue and practice calmness; honor your ancestors.",
+        "Offer red flowers to Hanuman or Kartikeya for courage and strength.",
+        "Read or listen to spiritual wisdom; green is auspicious today.",
+        "Donate yellow food (like bananas or dal) for Guru's blessings.",
+        "Chant for harmony in relationships; offer white flowers to Lakshmi.",
+        "Practice patience and discipline; meditate for 10 minutes in silence."
+      ];
+      document.getElementById('todaysTipText').textContent = dailyTips[today];
+
+      // Simple festival/occasion reminder (demo, not a real panchangam)
+      const festivalDays = [
+        { name: "Ekadashi", days: [2, 16, 30] }, // Example: 2nd, 16th, 30th
+        { name: "Pradosham", days: [5, 20] },
+        { name: "Amavasya", days: [8] },
+        { name: "Pournami", days: [22] }
+      ];
+      const todayDate = new Date().getDate();
+      let festMsg = "No major festival today.";
+      for (const fest of festivalDays) {
+        if (fest.days.includes(todayDate)) {
+          festMsg = `Today is <b>${fest.name}</b>! Special prayers are recommended.`;
+          break;
+        }
+      }
+      document.getElementById('festivalText').innerHTML = festMsg;
+
+      // Quote of the Day (rotates by weekday)
+      const quotes = [
+        "Let noble thoughts come to us from every side. — Rig Veda",
+        "The mind is everything. What you think, you become. — Buddha",
+        "Where there is faith, there is love. Where there is love, there is peace. — St. Francis of Assisi",
+        "You are what your deep, driving desire is. — Chandogya Upanishad",
+        "Peace begins with a smile. — Mother Teresa",
+        "The best way to find yourself is to lose yourself in the service of others. — Gandhi",
+        "Be the change you wish to see in the world. — Gandhi"
+      ];
+      document.getElementById('quoteText').textContent = quotes[today];
+      // Real-time date and time
+      function updateDateTimeNow() {
+        const now = new Date();
+        const opts = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+        const dateStr = now.toLocaleDateString(undefined, opts);
+        const timeStr = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        document.getElementById('dateTimeNow').textContent = dateStr + ' ' + timeStr;
+      }
+      updateDateTimeNow();
+      setInterval(updateDateTimeNow, 1000);
+    </script>
 </body>
 </html>
