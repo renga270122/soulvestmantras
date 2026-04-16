@@ -23,68 +23,7 @@
     <section class="mantra-text" style="white-space: pre-wrap; background: #fffbe7; padding: 1.5rem; border-radius: 1rem; box-shadow: 0 2px 8px #0001;">
       <!-- Hanuman Chalisa text will be loaded here by JS -->
     </section>
-    <div style="text-align:center;margin:2em 0;">
-      <button id="chantModeBtn" style="background:#b14d00;color:#fff;padding:0.7em 2em;font-size:1.1em;border:none;border-radius:8px;box-shadow:0 2px 8px #0001;cursor:pointer;">🕉️ Chant Mode</button>
-    </div>
-    <!-- Guided Chanting Overlay -->
-    <div id="chantOverlay" style="display:none;position:fixed;z-index:1000;top:0;left:0;width:100vw;height:100vh;background:rgba(36,32,26,0.92);color:#fff;align-items:center;justify-content:center;flex-direction:column;">
-      <div style="background:#fffbe7;color:#24201a;padding:2em 1.5em;border-radius:1.5em;max-width:95vw;width:400px;box-shadow:0 4px 24px #0006;text-align:center;">
-        <h2 style="color:#b14d00;">Guided Chanting</h2>
-        <div id="chantStep" style="font-size:1.2em;margin:1.2em 0 1.5em 0;white-space:pre-line;"></div>
-        <div style="margin-bottom:1.5em;">
-          <button id="prevChant" style="margin-right:1em;padding:0.5em 1.2em;border-radius:8px;border:none;background:#eadcc9;color:#b14d00;font-weight:600;">⏮️ Prev</button>
-          <button id="nextChant" style="padding:0.5em 1.2em;border-radius:8px;border:none;background:#b14d00;color:#fff;font-weight:600;">Next ⏭️</button>
-        </div>
-        <div id="chantProgress" style="margin-bottom:1em;font-size:1em;color:#b14d00;"></div>
-        <button id="closeChant" style="background:none;border:none;color:#b14d00;font-size:1.1em;text-decoration:underline;cursor:pointer;">✖ Close</button>
-      </div>
-    </div>
   </main>
   <script src="hanuman.js"></script>
-  <script>
-    // Guided Chanting Mode for Hanuman Chalisa
-    const chantBtn = document.getElementById('chantModeBtn');
-    const chantOverlay = document.getElementById('chantOverlay');
-    const chantStepDiv = document.getElementById('chantStep');
-    const chantProgress = document.getElementById('chantProgress');
-    const closeChant = document.getElementById('closeChant');
-    const nextChant = document.getElementById('nextChant');
-    const prevChant = document.getElementById('prevChant');
-    // Example: Split Hanuman Chalisa into 5 guided steps (replace with full split as needed)
-    const hanumanChalisaSteps = [
-      'श्रीगुरु चरण सरोज रज, निज मन मुकुर सुधारि\nबरनऊं रघुबर बिमल जसु, जो दायक फल चारि',
-      'बुद्धिहीन तनु जानिके, सुमिरौं पवन-कुमार\nबल बुद्धि विद्या देहु मोहिं, हरहु कलेश विकार',
-      'जय हनुमान ज्ञान गुन सागर\nजय कपीस तिहुँ लोक उजागर',
-      'राम दूत अतुलित बल धामा\nअंजनि-पुत्र पवनसुत नामा',
-      'महाबीर बिक्रम बजरंगी\nकुमति निवार सुमति के संगी'
-    ];
-    let chantIndex = 0;
-    function showChantStep(idx) {
-      chantStepDiv.textContent = hanumanChalisaSteps[idx];
-      chantProgress.textContent = `Sloka ${idx+1} of ${hanumanChalisaSteps.length}`;
-      prevChant.disabled = idx === 0;
-      nextChant.disabled = idx === hanumanChalisaSteps.length-1;
-    }
-    chantBtn.onclick = () => {
-      chantOverlay.style.display = 'flex';
-      chantIndex = 0;
-      showChantStep(chantIndex);
-    };
-    closeChant.onclick = () => {
-      chantOverlay.style.display = 'none';
-    };
-    nextChant.onclick = () => {
-      if (chantIndex < hanumanChalisaSteps.length-1) {
-        chantIndex++;
-        showChantStep(chantIndex);
-      }
-    };
-    prevChant.onclick = () => {
-      if (chantIndex > 0) {
-        chantIndex--;
-        showChantStep(chantIndex);
-      }
-    };
-  </script>
 </body>
 </html>
