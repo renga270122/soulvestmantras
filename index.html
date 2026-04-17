@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#b14d00" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Soulvest Mantras" />
   <title>Soulvest Mantras</title>
@@ -15,6 +16,43 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  </head>
+  <style>
+    .info-row {
+      display: flex;
+      flex-direction: row;
+      gap: 1.5em;
+      justify-content: center;
+      align-items: stretch;
+      margin: 1.5em auto 0 auto;
+      max-width: 1400px;
+      flex-wrap: nowrap;
+    }
+    .info-box {
+      flex: 1 1 0;
+      min-width: 0;
+      max-width: 340px;
+      border-radius: 14px;
+      padding: 1.2em 1em 1.2em 1em;
+      box-shadow: 0 4px 18px rgba(48,40,30,0.08);
+      text-align: center;
+      align-self: stretch;
+      background: #fff;
+      box-sizing: border-box;
+    }
+    .mantra-box { background: #fff8e1; max-width: 420px; }
+    .tip-box { background: #e6f7f1; }
+    .festival-box { background: #fff3e0; }
+    .quote-box { background: #ede7f6; }
+    @media (max-width: 1200px) {
+      .info-row { flex-wrap: wrap; }
+      .info-box { max-width: 100%; }
+    }
+    @media (max-width: 900px) {
+      .info-row { flex-direction: column; gap: 1em; }
+      .info-box { min-width: 0; }
+    }
+  </style>
 </head>
 <body>
   <main class="container">
@@ -124,15 +162,19 @@
       }
     </style>
 
-    <section class="language-bar" aria-label="Language quick switch">
-      <p id="languageBarLabel" class="language-bar-label">Choose Language</p>
-      <div class="language-bar-actions">
-        <button id="langEnglishBtn" type="button" class="language-quick-btn" aria-label="Switch to English">English</button>
-        <button id="langTamilBtn" type="button" class="language-quick-btn" aria-label="தமிழுக்கு மாற்று">தமிழ்</button>
-        <button id="langTeluguBtn" type="button" class="language-quick-btn" aria-label="తెలుగుకు మార్చండి">తెలుగు</button>
-        <button id="langKannadaBtn" type="button" class="language-quick-btn" aria-label="ಕನ್ನಡಕ್ಕೆ ಬದಲಿಸಿ">ಕನ್ನಡ</button>
-        <button id="langHindiBtn" type="button" class="language-quick-btn" aria-label="हिंदी में बदलें">हिंदी</button>
+
+    <section class="language-bar" aria-label="Language quick switch" style="display:flex;align-items:center;gap:2em;">
+      <div style="display:flex;align-items:center;gap:1.5em;">
+        <p id="languageBarLabel" class="language-bar-label" style="margin:0;">Choose Language</p>
+        <div class="language-bar-actions">
+          <button id="langEnglishBtn" type="button" class="language-quick-btn" aria-label="Switch to English">English</button>
+          <button id="langTamilBtn" type="button" class="language-quick-btn" aria-label="தமிழுக்கு மாற்று">தமிழ்</button>
+          <button id="langTeluguBtn" type="button" class="language-quick-btn" aria-label="తెలుగుకు మార్చండి">తెలుగు</button>
+          <button id="langKannadaBtn" type="button" class="language-quick-btn" aria-label="ಕನ್ನಡಕ್ಕೆ ಬದಲಿಸಿ">ಕನ್ನಡ</button>
+          <button id="langHindiBtn" type="button" class="language-quick-btn" aria-label="हिंदी में बदलें">हिंदी</button>
+        </div>
       </div>
+      <span id="dateTimeNow" style="font-size:1em;color:#625949;"></span>
     </section>
 
     <div class="sacred-divider" aria-hidden="true">✦ ॐ ✦</div>
@@ -144,10 +186,21 @@
       <p id="rotatingMessage" class="rotating-message" aria-live="polite"></p>
       <div class="info-row">
         <div id="dailyMantraBox" class="info-box mantra-box">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5em;gap:1em;">
+          <div style="display:flex;align-items:center;justify-content:center;margin-bottom:0.5em;gap:1em;">
             <h3 style="color:#b14d00;margin:0;">Today's Mantra</h3>
-            <span id="dateTimeNow" style="font-size:1em;color:#625949;"></span>
           </div>
+              <script>
+              // --- Date/Time updater ---
+              function updateDateTimeNow() {
+                const el = document.getElementById('dateTimeNow');
+                if (!el) return;
+                const now = new Date();
+                const opts = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                el.textContent = now.toLocaleString('en-US', opts);
+              }
+              setInterval(updateDateTimeNow, 1000);
+              updateDateTimeNow();
+              </script>
           <div id="dailyMantraText" style="font-size:1.15em;line-height:1.7;"></div>
         </div>
         <div id="todaysTipBox" class="info-box tip-box">
@@ -287,40 +340,7 @@
     </section>
 
     <section id="featured" class="featured hidden" aria-live="polite">
-            .info-row {
-              display: flex;
-              flex-direction: row;
-              gap: 1.5em;
-              justify-content: center;
-              align-items: stretch;
-              margin: 1.5em auto 0 auto;
-              max-width: 1400px;
-              flex-wrap: nowrap;
-            }
-            .info-box {
-              flex: 1 1 0;
-              min-width: 0;
-              max-width: 340px;
-              border-radius: 14px;
-              padding: 1.2em 1em 1.2em 1em;
-              box-shadow: 0 4px 18px rgba(48,40,30,0.08);
-              text-align: center;
-              align-self: stretch;
-              background: #fff;
-              box-sizing: border-box;
-            }
-            .mantra-box { background: #fff8e1; max-width: 420px; }
-            .tip-box { background: #e6f7f1; }
-            .festival-box { background: #fff3e0; }
-            .quote-box { background: #ede7f6; }
-            @media (max-width: 1200px) {
-              .info-row { flex-wrap: wrap; }
-              .info-box { max-width: 100%; }
-            }
-            @media (max-width: 900px) {
-              .info-row { flex-direction: column; gap: 1em; }
-              .info-box { min-width: 0; }
-            }
+        <!-- ...existing code... -->
       <img id="featuredImage" alt="Selected deity or planet" loading="lazy" />
       <div class="featured-content">
         <h2 id="featuredTitle"></h2>

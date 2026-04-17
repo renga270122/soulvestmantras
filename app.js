@@ -1,5 +1,70 @@
 // --- Calendarific Festival Integration ---
 async function fetchTodayFestival() {
+}
+// --- Today's Mantra Display Logic ---
+function getTodayMantraEntity() {
+  // Use weekday-based mapping (default)
+  const today = new Date();
+  const weekday = today.getDay();
+  const entityName = mantraOfDayByWeekday[weekday] || "Shukra (Venus)";
+  return mantras.find(m => m.name === entityName);
+}
+
+function getMantraTextForLang(mantraObj) {
+  // Default to IAST (English-friendly)
+  if (!mantraObj) return "";
+  if (currentLanguage === "en") return mantraObj.famousIast || mantraObj.famousDevanagari || "";
+  if (currentLanguage === "ta" && mantraObj.famousTamil) return mantraObj.famousTamil;
+  if (currentLanguage === "hi") return mantraObj.famousDevanagari || mantraObj.famousIast || "";
+  // Telugu/Kannada: fallback to IAST or Devanagari
+  return mantraObj.famousIast || mantraObj.famousDevanagari || "";
+}
+
+function renderTodayMantra() {
+  const mantraObj = getTodayMantraEntity();
+  const mantraBox = document.getElementById("dailyMantraText");
+  if (!mantraObj || !mantraBox) {
+    if (mantraBox) mantraBox.innerHTML = "";
+    return;
+  }
+
+  // Always clear before rendering
+  mantraBox.innerHTML = "";
+
+  if (currentLanguage === "en") {
+    // Show IAST (English) and Devanagari if available
+    let html = "";
+    if (mantraObj.famousIast) {
+      html += `<div style='font-size:1.15em;'>${mantraObj.famousIast}</div>`;
+    }
+    if (mantraObj.famousDevanagari) {
+      html += `<div style='font-size:1.1em;color:#a77a2d;'>${mantraObj.famousDevanagari}</div>`;
+    }
+    mantraBox.innerHTML = html;
+  } else if (currentLanguage === "ta" && mantraObj.famousTamil) {
+    mantraBox.innerHTML = `<div style='font-size:1.15em;'>${mantraObj.famousTamil}</div>`;
+  } else if (currentLanguage === "hi" && mantraObj.famousDevanagari) {
+    mantraBox.innerHTML = `<div style='font-size:1.15em;'>${mantraObj.famousDevanagari}</div>`;
+  } else {
+    // Telugu/Kannada/other: fallback to IAST or Devanagari
+    mantraBox.innerHTML = `<div style='font-size:1.15em;'>${mantraObj.famousIast || mantraObj.famousDevanagari || ""}</div>`;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", renderTodayMantra);
+
+// Attach language switch event listeners and initial render on page load
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof langEnglishBtn !== "undefined" && langEnglishBtn) langEnglishBtn.addEventListener("click", () => { setLanguage("en"); renderTodayMantra(); });
+  if (typeof langTamilBtn !== "undefined" && langTamilBtn) langTamilBtn.addEventListener("click", () => { setLanguage("ta"); renderTodayMantra(); });
+  if (typeof langTeluguBtn !== "undefined" && langTeluguBtn) langTeluguBtn.addEventListener("click", () => { setLanguage("te"); renderTodayMantra(); });
+  if (typeof langKannadaBtn !== "undefined" && langKannadaBtn) langKannadaBtn.addEventListener("click", () => { setLanguage("kn"); renderTodayMantra(); });
+  if (typeof langHindiBtn !== "undefined" && langHindiBtn) langHindiBtn.addEventListener("click", () => { setLanguage("hi"); renderTodayMantra(); });
+  renderTodayMantra();
+  fetchTodayFestival();
+});
+
+async function fetchTodayFestival() {
   const apiKey = "QZY1nBDJACdYtWiKy7GeEQ6SXNGKHY5D";
   const today = new Date();
   const year = today.getFullYear();
@@ -23,6 +88,7 @@ async function fetchTodayFestival() {
     } else {
       document.getElementById("festivalText").textContent = "No festival or occasion today.";
     }
+
   } catch (e) {
     document.getElementById("festivalText").textContent = "Unable to fetch festival info.";
   }
@@ -791,7 +857,7 @@ const mantras = [
       "Shukra is associated with aesthetics, enjoyment, and refined worldly wisdom.",
     famousTitle: "Famous Mantra",
     famousDevanagari: "ॐ शुं शुक्राय नमः॥",
-    famousIast: "oṃ śuṃ śukrāya namaḥ ||",
+    famousIast: "om shum shukraya namah ||",
     gayatriTitle: "Gayatri Mantra",
     gayatriDevanagari: "ॐ शुक्राय विद्महे दैत्याचार्याय धीमहि तन्नः शुक्रः प्रचोदयात्॥",
     gayatriIast: "oṃ śukrāya vidmahe daityācāryāya dhīmahi tannaḥ śukraḥ pracodayāt ||"
