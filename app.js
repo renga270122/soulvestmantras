@@ -1,4 +1,30 @@
 // --- Calendarific Festival Integration ---
+// --- Built-in Hindu Festivals & Jayanthis ---
+const hinduFestivalsAndJayanthis = [
+  // Fixed-date events (Gregorian calendar)
+  { name: "Adi Shankara Jayanthi", month: 4, day: 21, description: "Birth anniversary of Adi Shankaracharya, the great Advaita philosopher." },
+  { name: "Rama Navami", month: 3, day: 27, description: "Birthday of Lord Rama." },
+  { name: "Hanuman Jayanthi", month: 4, day: 6, description: "Birthday of Lord Hanuman." },
+  { name: "Krishna Janmashtami", month: 8, day: 14, description: "Birthday of Lord Krishna." },
+  { name: "Ganesh Chaturthi", month: 9, day: 16, description: "Birthday of Lord Ganesha." },
+  { name: "Maha Shivaratri", month: 2, day: 17, description: "Great Night of Shiva." },
+  { name: "Deepavali", month: 10, day: 14, description: "Festival of Lights." },
+  { name: "Navaratri Start", month: 10, day: 7, description: "Start of Navaratri festival." },
+  { name: "Vijayadashami", month: 10, day: 15, description: "Victory of good over evil (end of Navaratri)." },
+  { name: "Skanda Shashti", month: 11, day: 15, description: "Festival dedicated to Lord Murugan." },
+  { name: "Guru Purnima", month: 7, day: 10, description: "Day to honor spiritual teachers." },
+  // Add more fixed-date events as needed
+  // Movable events can be added with year-specific entries or calculated
+];
+
+function getTodayHinduEvents() {
+  const today = new Date();
+  const m = today.getMonth() + 1;
+  const d = today.getDate();
+  // Find all events matching today
+  return hinduFestivalsAndJayanthis.filter(e => e.month === m && e.day === d);
+}
+
 async function fetchTodayFestival() {
 }
 // --- Today's Mantra Display Logic ---
@@ -71,26 +97,44 @@ async function fetchTodayFestival() {
   const month = today.getMonth() + 1;
   const day = today.getDate();
   const url = `https://calendarific.com/api/v2/holidays?&api_key=${apiKey}&country=IN&year=${year}&month=${month}&day=${day}`;
+  let builtInEvents = getTodayHinduEvents();
+  let builtInHtml = "";
+  if (builtInEvents.length > 0) {
+    builtInHtml = builtInEvents.map(e => `<b>${e.name}</b><br><span style='font-size:0.95em;'>${e.description || ''}</span>`).join('<hr style="margin:0.5em 0;">');
+  }
   try {
     const res = await fetch(url);
     const data = await res.json();
+    let festivalText = "";
     if (data && data.response && data.response.holidays && data.response.holidays.length > 0) {
       // Filter for religious festivals (optional)
       const festivals = data.response.holidays.filter(h => h.type.includes("Religious") || h.type.includes("Hindu Holiday") || h.type.includes("Observance"));
-      let festivalText = "No major festival today.";
       if (festivals.length > 0) {
         festivalText = festivals.map(f => `<b>${f.name}</b><br><span style='font-size:0.95em;'>${f.description || ''}</span>`).join('<hr style="margin:0.5em 0;">');
       } else if (data.response.holidays.length > 0) {
         // Show all holidays if no religious ones
         festivalText = data.response.holidays.map(f => `<b>${f.name}</b><br><span style='font-size:0.95em;'>${f.description || ''}</span>`).join('<hr style="margin:0.5em 0;">');
       }
-      document.getElementById("festivalText").innerHTML = festivalText;
-    } else {
-      document.getElementById("festivalText").textContent = "No festival or occasion today.";
     }
-
+    // Merge built-in and API results
+    let combined = "";
+    if (builtInHtml && festivalText) {
+      combined = builtInHtml + '<hr style="border-top:2px dashed #ccc;">' + festivalText;
+    } else if (builtInHtml) {
+      combined = builtInHtml;
+    } else if (festivalText) {
+      combined = festivalText;
+    } else {
+      combined = "No festival or occasion today.";
+    }
+    document.getElementById("festivalText").innerHTML = combined;
   } catch (e) {
-    document.getElementById("festivalText").textContent = "Unable to fetch festival info.";
+    // If API fails, fallback to built-in
+    if (builtInHtml) {
+      document.getElementById("festivalText").innerHTML = builtInHtml;
+    } else {
+      document.getElementById("festivalText").textContent = "Unable to fetch festival info.";
+    }
   }
 }
 
@@ -98,6 +142,28 @@ async function fetchTodayFestival() {
 if (document.getElementById("festivalText")) fetchTodayFestival();
 const mantras = [
                   // --- 6 TARAS (ESSENTIAL) ---
+                  {
+                    name: "Kamadhenu",
+                    type: "god",
+                    wikiQuery: "Kamadhenu",
+                    purpose: "For wish fulfillment, abundance, and nurturing support.",
+                    brief: "Kamadhenu is the divine wish-fulfilling cow, the mother of all cows in Hindu tradition, symbolizing abundance, nourishment, and generosity.",
+                    famousTitle: "Famous Mantra",
+                    famousDevanagari: "ॐ कामधेनवे नमः",
+                    famousIast: "oṃ kāmadhenave namaḥ",
+                    famousTamil: "ஓம் காமதேனவே நமஹ",
+                    famousTelugu: "ఓం కామధేనవే నమః",
+                    famousKannada: "ಓಂ ಕಾಮಧೇನವೇ ನಮಃ",
+                    famousHindi: "ॐ कामधेनवे नमः",
+                    gayatriTitle: "Gayatri Mantra",
+                    gayatriDevanagari: "ॐ कामधेनवे विद्महे सुरभ्यै धीमहि तन्नो धेनुः प्रचोदयात्॥",
+                    gayatriIast: "oṃ kāmadhenave vidmahe surabhyai dhīmahi tanno dhenuḥ pracodayāt ||",
+                    gayatriTamil: "ஓம் காமதேனவே வித்மஹே சுரப்யை தீமஹி தன்னோ தேனு ப்ரசோதயாத் ||",
+                    gayatriTelugu: "ఓం కామధేనవే విద్మహే సురభ్యై ధీమహి తన్నో ధేను ప్రచోదయాత్ ||",
+                    gayatriKannada: "ಓಂ ಕಾಮಧೇನವೇ ವಿದ್ಯಮಹೇ ಸುರಭ್ಯೈ ಧೀಮಹಿ ತನ್ನೋ ಧೇನು ಪ್ರಚೋದಯಾತ್ ||",
+                    gayatriHindi: "ॐ कामधेनवे विद्महे सुरभ्यै धीमहि तन्नो धेनुः प्रचोदयात्॥",
+                    image: "assets/kamadhenu.jfif"
+                  },
                   {
                     name: "Sarabeswarar",
                     type: "god",
