@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sloka Library</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Sloka Library</h1>
+    <nav>
+      <a href="index.html">Home</a>
+    </nav>
+  </header>
+  <main>
+    <section id="slokaLibrarySection">
+      <!-- The sloka library table will be injected here by JS -->
+      <div id="slokaLibraryContainer"></div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+  <script>
+    // On this page, only render the sloka library
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderSlokaLibrary === "function") {
+        // Hide everything else and only show sloka library
+        document.body.classList.add("sloka-library-page");
+        renderSlokaLibrary();
+      }
+    });
+  </script>
+</body>
+</html>
