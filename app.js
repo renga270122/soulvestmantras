@@ -162,7 +162,7 @@ const mantras = [
                     gayatriTelugu: "ఓం కామధేనవే విద్మహే సురభ్యై ధీమహి తన్నో ధేను ప్రచోదయాత్ ||",
                     gayatriKannada: "ಓಂ ಕಾಮಧೇನವೇ ವಿದ್ಯಮಹೇ ಸುರಭ್ಯೈ ಧೀಮಹಿ ತನ್ನೋ ಧೇನು ಪ್ರಚೋದಯಾತ್ ||",
                     gayatriHindi: "ॐ कामधेनवे विद्महे सुरभ्यै धीमहि तन्नो धेनुः प्रचोदयात्॥",
-                    image: "assets/kamadhenu.jfif"
+                    image: "assets/Kamadhenu.jfif"
                   },
                   {
                     name: "Sarabeswarar",
