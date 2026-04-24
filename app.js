@@ -400,6 +400,32 @@ const mantras = [
     }
   },
   {
+    name: "Swarna Akarshana Bhairavar",
+    type: "god",
+    wikiQuery: "Swarna Akarshana Bhairava",
+    purpose: "For attracting prosperity, wealth, and removing poverty and debts.",
+    brief: "Swarna Akarshana Bhairavar is a golden form of Bhairava, worshipped for material abundance, prosperity, and protection from financial troubles.",
+    famousTitle: "Famous Mantra",
+    famousDevanagari: "ॐ स्वर्णाकरषण भैरवाय नमः",
+    famousIast: "oṃ svarṇākarṣaṇa bhairavāya namaḥ",
+    gayatriTitle: "Gayatri Mantra",
+    gayatriDevanagari: "ॐ स्वर्णाकरषण भैरवाय विद्महे धनदाय धीमहि तन्नो भैरवः प्रचोदयात्॥",
+    gayatriIast: "oṃ svarṇākarṣaṇa bhairavāya vidmahe dhanadāya dhīmahi tanno bhairavaḥ pracodayāt ||",
+    beeja: {
+      devanagari: "ॐ श्रीं ह्रीं क्लीं स्वर्णाकरषण भैरवाय नमः",
+      iast: "oṃ śrīṃ hrīṃ klīṃ svarṇākarṣaṇa bhairavāya namaḥ",
+      english: "Om Shreem Hreem Kleem Swarnaakarshana Bhairavaya Namah"
+      },
+      gayatriTamil: "ஓம் பைரவாய வித்மஹே\nஹரிஹர ப்ரஹ்மாத்மஹாய தீமஹி\nதன்னோ ஸ்வர்ண ஆகர்ஷண பைரவ: ப்ரசோதயாத் ॥",
+      gayatriDevanagari: "ॐ भैरवाय विद्महे हरिहरब्रह्मात्मनये धीमहि तन्नः स्वर्णाकरषण भैरवः प्रचोदयात् ॥",
+      gayatriIast: "oṃ bhairavāya vidmahe harihara-brahmātmanaye dhīmahi tannaḥ svarṇākarṣaṇa bhairavaḥ pracodayāt ||",
+      gayatriEnglish: "Om Bhairavaya Vidmahe Harihara Brahmatmanaya Dhimahi Tanno Swarna Akarshana Bhairavah Prachodayat ||",
+      gayatriTelugu: "ఓం భైరవాయ విద్యమహే హరిహర బ్రహ్మాత్మనయే ధీమహి తన్నః స్వర్ణాకర్షణ భైరవః ప్రచోదయాత్ ॥",
+      gayatriKannada: "ಓಂ ಭೈರವಾಯ ವಿದ್ಯಮಹೇ ಹರಿಹರ ಬ್ರಹ್ಮಾತ್ಮನಯೇ ಧೀಮಹಿ ತನ್ನಃ ಸ್ವರ್ಣಾಕರ್ಷಣ ಭೈರವಃ ಪ್ರಚೋದಯಾತ್ ॥",
+      gayatriHindi: "ॐ भैरवाय विद्महे हरिहरब्रह्मात्मनये धीमहि तन्नः स्वर्णाकरषण भैरवः प्रचोदयात् ॥",
+      image: "assets/SwarnaAkarshanaBhairavar.jfif"
+    },
+  {
     name: "Ganesha",
     type: "god",
     wikiQuery: "Ganesha",
