@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pitha Pirai Sooda</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="container">
+      <nav class="main-nav">
+        <ul style="display: flex; gap: 1.5rem; list-style: none; padding: 0; justify-content: center;">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="#" onclick="history.back();return false;">Back</a></li>
+        </ul>
+      </nav>
+      <header class="hero">
+        <img src="assets/Siva.jfif" alt="Siva" style="max-width:180px;display:block;margin:0 auto 1.2em auto;border-radius:16px;box-shadow:0 2px 12px #eadcc9;" loading="lazy" />
+        <h1>Pitha Pirai Soodi</h1>
+        <p class="subtitle">பித்தா பிறை சூடீ பாடல்</p>
+      </header>
+    <section class="sloka-content">
+      <pre id="pithaPiraiText" style="white-space: pre-wrap; font-size: 1.1em; background: #fff8e1; padding: 1.5em; border-radius: 12px; box-shadow: 0 2px 8px #eadcc9; margin: 2em 0;"></pre>
+    </section>
+  </main>
+  <script>
+    fetch('assets/Pitha_Pirai.txt')
+      .then(r => r.text())
+      .then(txt => {
+        document.getElementById('pithaPiraiText').textContent = txt;
+      });
+  </script>
+</body>
+</html>
