@@ -141,6 +141,28 @@ async function fetchTodayFestival() {
 // Call on page load
 if (document.getElementById("festivalText")) fetchTodayFestival();
 const mantras = [
+  {
+    name: "Uchishta Ganapathi",
+    type: "god",
+    wikiQuery: "Uchishta Ganapati",
+    purpose: "For breaking taboos, creative power, and blessings in unconventional situations.",
+    brief: "Uchishta Ganapathi is a unique form of Ganesha, worshipped for overcoming obstacles related to purity, taboos, and to invoke creative, transformative energies.",
+    famousTitle: "Famous Mantra",
+    famousDevanagari: "ॐ उच्छिष्ट गणपतये नमः",
+    famousIast: "oṃ ucchiṣṭa gaṇapataye namaḥ",
+    famousTamil: "ஓம் உச்சிஷ்ட கணபதயே நம:",
+    famousTelugu: "ఓం ఉచ్చిష్ట గణపతయే నమః",
+    famousKannada: "ಓಂ ಉಚ್ಚಿಷ್ಟ ಗಣಪತಯೇ ನಮಃ",
+    famousHindi: "ॐ उच्छिष्ट गणपतये नमः",
+    gayatriTitle: "Gayatri Mantra",
+    gayatriDevanagari: "ॐ उच्छिष्ट गणपतये विद्महे रक्तवर्णाय धीमहि तन्नो गणः प्रचोदयात्॥",
+    gayatriIast: "oṃ ucchiṣṭa gaṇapataye vidmahe raktavarṇāya dhīmahi tanno gaṇaḥ pracodayāt ||",
+    gayatriTamil: "ஓம் உச்சிஷ்ட கணபதயே வித்மஹே ரக்தவர்ணாய தீமஹி தன்னோ கண: ப்ரசோதயாத் ||",
+    gayatriTelugu: "ఓం ఉచ్చిష్ట గణపతయే విద్మహే రక్తవర్ణాయ ధీమహి తన్నో గణః ప్రచోదయాత్ ||",
+    gayatriKannada: "ಓಂ ಉಚ್ಚಿಷ್ಟ ಗಣಪತಯೇ ವಿದ್ಯಮಹೇ ರಕ್ತವರ್ಣಾಯ ಧೀಮಹಿ ತನ್ನೋ ಗಣಃ ಪ್ರಚೋದಯಾತ್ ||",
+    gayatriHindi: "ॐ उच्छिष्ट गणपतये विद्महे रक्तवर्णाय धीमहि तन्नो गणः प्रचोदयात्॥",
+    image: "assets/Uchishta_Ganapathy.jfif"
+  },
                   // --- 6 TARAS (ESSENTIAL) ---
                   {
                     name: "Kamadhenu",
