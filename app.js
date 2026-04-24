@@ -1,10 +1,4 @@
-  beejTitle: "Beej Mantra",
-  beejDevanagari: "ॐ ग्लौं गम् उच्छिष्ट गणपतये नमः॥",
-  beejIast: "oṃ glauṁ gam ucchiṣṭa gaṇapataye namaḥ ||",
-  beejTamil: "ஓம் க்லௌம் கம் உச்சிஷ்ட கணபதயே நமஃ ||",
-  beejTelugu: "ఓం గ్లోం గమ్ ఉచ్చిష్ట గణపతయే నమః ||",
-  beejKannada: "ಓಂ ಗ್ಲೌಂ ಗಮ್ ಉಚ್ಚಿಷ್ಟ ಗಣಪತಯೇ ನಮಃ ||",
-  beejHindi: "ॐ ग्लौं गम् उच्छिष्ट गणपतये नमः॥",
+// --- Calendarific Festival Integration ---
 // --- Calendarific Festival Integration ---
 // --- Built-in Hindu Festivals & Jayanthis ---
 const hinduFestivalsAndJayanthis = [
@@ -168,6 +162,13 @@ const mantras = [
     gayatriTelugu: "ఓం ఉచ్చిష్ట గణపతయే విద్మహే రక్తవర్ణాయ ధీమహి తన్నో గణః ప్రచోదయాత్ ||",
     gayatriKannada: "ಓಂ ಉಚ್ಚಿಷ್ಟ ಗಣಪತಯೇ ವಿದ್ಯಮಹೇ ರಕ್ತವರ್ಣಾಯ ಧೀಮಹಿ ತನ್ನೋ ಗಣಃ ಪ್ರಚೋದಯಾತ್ ||",
     gayatriHindi: "ॐ उच्छिष्ट गणपतये विद्महे रक्तवर्णाय धीमहि तन्नो गणः प्रचोदयात्॥",
+      beejTitle: "Beej Mantra",
+      beejDevanagari: "ॐ ग्लौं गम् उच्छिष्ट गणपतये नमः॥",
+      beejIast: "oṃ glauṁ gam ucchiṣṭa gaṇapataye namaḥ ||",
+      beejTamil: "ஓம் க்லௌம் கம் உச்சிஷ்ட கணபதயே நமஃ ||",
+      beejTelugu: "ఓం గ్లోం గమ్ ఉచ్చిష్ట గణపతయే నమః ||",
+      beejKannada: "ಓಂ ಗ್ಲೌಂ ಗಮ್ ಉಚ್ಚಿಷ್ಟ ಗಣಪತಯೇ ನಮಃ ||",
+      beejHindi: "ॐ ग्लौं गम् उच्छिष्ट गणपतये नमः॥",
     image: "assets/Uchishta_Ganapathy.jfif"
   },
                   // --- 6 TARAS (ESSENTIAL) ---
