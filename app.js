@@ -1,3 +1,10 @@
+  beejTitle: "Beej Mantra",
+  beejDevanagari: "ॐ ग्लौं गम् उच्छिष्ट गणपतये नमः॥",
+  beejIast: "oṃ glauṁ gam ucchiṣṭa gaṇapataye namaḥ ||",
+  beejTamil: "ஓம் க்லௌம் கம் உச்சிஷ்ட கணபதயே நமஃ ||",
+  beejTelugu: "ఓం గ్లోం గమ్ ఉచ్చిష్ట గణపతయే నమః ||",
+  beejKannada: "ಓಂ ಗ್ಲೌಂ ಗಮ್ ಉಚ್ಚಿಷ್ಟ ಗಣಪತಯೇ ನಮಃ ||",
+  beejHindi: "ॐ ग्लौं गम् उच्छिष्ट गणपतये नमः॥",
 // --- Calendarific Festival Integration ---
 // --- Built-in Hindu Festivals & Jayanthis ---
 const hinduFestivalsAndJayanthis = [
