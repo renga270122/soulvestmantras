@@ -366,9 +366,11 @@ const mantras = [
         famousTitle: "Famous Mantra",
         famousDevanagari: "ॐ सुदर्शनाय नमः",
         famousIast: "om sudarshanāya namah",
-        gayatriTitle: "Sudarshana Sloka",
-        gayatriDevanagari: "ॐ सुदर्शन चक्राय नमः",
-        gayatriIast: "om sudarshana chakrāya namah"
+          gayatriTitle: "Sudarshana Gayatri Mantra",
+          gayatriDevanagari: "ॐ सुदर्शनाय विद्महे\nमहा ज्वालाय धीमहि\nतन्नो चक्र प्रचोदयात्",
+          gayatriIast: "om sudarshanāya vidmahe\nmahā jvālāya dhīmahi\ntanno chakra pracodayāt",
+          gayatriTamil: "ஓம் சுதர்சனாய வித்மஹே\nமஹா ஜ்வாலாய தீமஹி\nதந்நோ சக்ர பிரச்சோதயாத்",
+          gayatriHindi: "ॐ सुदर्शनाय विद्महे\nमहाज्वालाय धीमहि\nतन्नो चक्र प्रचोदयात्"
       },
       {
         name: "Ayyapa",
