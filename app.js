@@ -101,7 +101,7 @@ async function fetchTodayFestival() {
   let builtInEvents = getTodayHinduEvents();
   let builtInHtml = "";
   if (builtInEvents.length > 0) {
-    builtInHtml = builtInEvents.map(e => `<b>${e.name}</b><br><span style='font-size:0.95em;'>${e.description || ''}</span>`).join('<hr style="margin:0.5em 0;">');
+    builtInHtml = builtInEvents.map(e => `<b>${e.name}</b><span style='font-size:0.95em;display:block;'>${e.description || ''}</span>`).join('<hr style="margin:0.5em 0;">');
   }
   try {
     const res = await fetch(url);
@@ -111,10 +111,10 @@ async function fetchTodayFestival() {
       // Filter for religious festivals (optional)
       const festivals = data.response.holidays.filter(h => h.type.includes("Religious") || h.type.includes("Hindu Holiday") || h.type.includes("Observance"));
       if (festivals.length > 0) {
-        festivalText = festivals.map(f => `<b>${f.name}</b><br><span style='font-size:0.95em;'>${f.description || ''}</span>`).join('<hr style="margin:0.5em 0;">');
+        festivalText = festivals.map(f => `<b>${f.name}</b><span style='font-size:0.95em;display:block;'>${f.description || ''}</span>`).join('<hr style="margin:0.5em 0;">');
       } else if (data.response.holidays.length > 0) {
         // Show all holidays if no religious ones
-        festivalText = data.response.holidays.map(f => `<b>${f.name}</b><br><span style='font-size:0.95em;'>${f.description || ''}</span>`).join('<hr style="margin:0.5em 0;">');
+        festivalText = data.response.holidays.map(f => `<b>${f.name}</b><span style='font-size:0.95em;display:block;'>${f.description || ''}</span>`).join('<hr style="margin:0.5em 0;">');
       }
     }
     // Merge built-in and API results
@@ -4918,21 +4918,21 @@ function renderSlokaLibrary() {
         const tamilText = getTamilMantraText(item, "famous", item.famousIast || "") || item.famousIast || "-";
         const devanagariText = item.famousDevanagari || "";
         if (!devanagariText) return tamilText;
-        return `${tamilText}<br><span class="script-mode">${devanagariText}</span>`;
+        return `${tamilText}\n<span class="script-mode">${devanagariText}</span>`;
       })()
       : scriptMode === "telugu"
       ? (() => {
         const teluguText = iastToTelugu(item.famousIast || "") || item.famousIast || "-";
         const devanagariText = item.famousDevanagari || "";
         if (!devanagariText) return teluguText;
-        return `${teluguText}<br><span class="script-mode">${devanagariText}</span>`;
+        return `${teluguText}\n<span class="script-mode">${devanagariText}</span>`;
       })()
       : scriptMode === "kannada"
       ? (() => {
         const kannadaText = iastToKannada(item.famousIast || "") || item.famousIast || "-";
         const devanagariText = item.famousDevanagari || "";
         if (!devanagariText) return kannadaText;
-        return `${kannadaText}<br><span class="script-mode">${devanagariText}</span>`;
+        return `${kannadaText}\n<span class="script-mode">${devanagariText}</span>`;
       })()
       : scriptMode === "devanagari"
       ? (item.famousDevanagari || item.famousIast || "-")
@@ -5406,11 +5406,11 @@ function selectedMantraData(item) {
   } else if (isBeej) {
     tamil = getTamilMantraText(item, "beej", iast);
   } else if (isGayatri) {
-    tamil = item.gayatriTamil ? item.gayatriTamil.replace(/\n/g, "<br>") : getTamilMantraText(item, "gayatri", iast);
+    tamil = item.gayatriTamil ? item.gayatriTamil : getTamilMantraText(item, "gayatri", iast);
   } else if (isMoola) {
-    tamil = item.moolaTamil ? item.moolaTamil.replace(/\n/g, "<br>") : "";
+    tamil = item.moolaTamil ? item.moolaTamil : "";
   } else {
-    tamil = item.famousTamil ? item.famousTamil.replace(/\n/g, "<br>") : getTamilMantraText(item, "famous", iast);
+    tamil = item.famousTamil ? item.famousTamil : getTamilMantraText(item, "famous", iast);
   }
 
   const scriptKey = isBeej ? "beej" : isGayatri ? "gayatri" : isMoola ? "moola" : "famous";

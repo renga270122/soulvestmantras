@@ -219,7 +219,7 @@
       </div>
       <div class="did-you-know" aria-live="polite">
         <div class="did-you-know-text" style="background:#fff8e1; border:1px solid #eadcc9; border-radius:10px; padding:10px 14px; margin-bottom:10px;">
-          <strong>Importance of Worshipping Family Deity:</strong><br>
+          <strong>Importance of Worshipping Family Deity:</strong>
           Worshipping your family deity (Kula Deivam) is believed to bring protection, prosperity, and harmony to the entire lineage. Honoring the family deity strengthens ancestral blessings, removes obstacles, and ensures the well-being of future generations. Regular prayers and offerings to your Kula Deivam are considered a powerful tradition in many Indian families.
         </div>
         <p class="did-you-know-title">Do You Know?</p>
@@ -503,7 +503,7 @@
       ];
       const today = new Date().getDay(); // 0=Sun, 1=Mon, ...
       const m = dailyMantras[today];
-      document.getElementById('dailyMantraText').innerHTML = `<b>${m.name}</b><br><span style="font-size:1.2em;">${m.mantra}</span><br><span style=\"font-size:0.98em;color:#b14d00;\">${m.meaning}</span>`;
+      document.getElementById('dailyMantraText').innerHTML = `<b>${m.name}</b><span style="font-size:1.2em;display:block;">${m.mantra}</span><span style=\"font-size:0.98em;color:#b14d00;display:block;\">${m.meaning}</span>`;
 
       // Tips for each day
       const dailyTips = [
