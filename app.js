@@ -1141,6 +1141,21 @@ const mantras = [
     gayatriIast: "oṃ jñānānandāya vidmahe brahmaniṣṭhāya dhīmahi tanno guruḥ pracodayāt ||",
     image: "assets/Gnanananda.jfif"
   }
+  {
+  name: "Dattatreya",
+  type: "guru",
+  wikiQuery: "Dattatreya",
+  purpose: "For universal harmony, self‑realization, and divine guidance.",
+  brief:
+    "Sri Dattatreya is revered as the combined incarnation of the Trimurti (Brahma, Vishnu, Shiva) and a master of yoga, compassion, and spontaneous wisdom.",
+  famousTitle: "Famous Chant",
+  famousDevanagari: "ॐ श्री दत्तात्रये नमः॥",
+  famousIast: "oṃ śrī dattātreye namaḥ ||",
+  gayatriTitle: "Gayatri Mantra",
+  gayatriDevanagari: "ॐ दत्तात्रेयाय विद्महे त्रिनेत्राय धीमहि तन्नो दत्तात्रेयः प्रचोदयात्॥",
+  gayatriIast: "oṃ dattātreyāya vidmahe trinetrāya dhīmahi tanno dattātreyaḥ pracodayāt ||",
+  image: "assets/datta.jfif"
+}
 ];
 
 const grid = document.getElementById("mantraGrid");
