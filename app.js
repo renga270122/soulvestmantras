@@ -2462,20 +2462,6 @@ function applyLanguageToStaticUI() {
   setText("#mantraOfDay h3", L("Mantra of the Day", "இன்றைய மந்திரம்", "నేటి మంత్రం", "ಇಂದಿನ ಮಂತ್ರ", "आज का मंत्र"));
   if (mantraOfDayOpenBtn) mantraOfDayOpenBtn.textContent = L("Open Today’s Mantra", "இன்றைய மந்திரத்தைத் திற", "ఈరోజు మంత్రాన్ని తెరువు", "ಇಂದಿನ ಮಂತ್ರ ತೆರೆಯಿರಿ", "आज का मंत्र खोलें");
 
-  setText("#aiHub h3", L("AI-Powered Enhancements", "AI ஆதரித்த அம்சங்கள்", "AI ఆధారిత మెరుగుదలలు", "AI ಆಧಾರಿತ ವೈಶಿಷ್ಟ್ಯಗಳು", "AI आधारित सुधार"));
-  const aiCardTitles = document.querySelectorAll("#aiHub .ai-card .script-mode");
-  if (aiCardTitles[0]) aiCardTitles[0].textContent = L("Personalized Mantra Suggestions", "தனிப்பட்ட மந்திர பரிந்துரைகள்", "వ్యక్తిగత మంత్ర సూచనలు", "ವೈಯಕ್ತಿಕ ಮಂತ್ರ ಸೂಚನೆಗಳು", "व्यक्तिगत मंत्र सुझाव");
-  if (aiCardTitles[1]) aiCardTitles[1].textContent = L("Voice AI Chant", "குரல் AI ஜபம்", "వాయిస్ AI జపం", "ವಾಯ್ಸ್ AI ಜಪ", "वॉइस AI जप");
-  if (aiCardTitles[2]) aiCardTitles[2].textContent = L("Mood-based UI", "மனநிலை UI", "మూడ్ ఆధారిత UI", "ಮೂಡ್ ಆಧಾರಿತ UI", "मूड आधारित UI");
-  if (aiSuggestBtn) aiSuggestBtn.textContent = L("Suggest for me", "எனக்காக பரிந்துரைக்க", "నాకు సూచించు", "ನನಗಾಗಿ ಸೂಚಿಸಿ", "मेरे लिए सुझाव दें");
-  if (aiApplySuggestionBtn) aiApplySuggestionBtn.textContent = L("Apply suggestion", "பரிந்துரையை பயன்படுத்து", "సూచనను వర్తింపజేయి", "ಸೂಚನೆಯನ್ನು ಅನ್ವಯಿಸಿ", "सुझाव लागू करें");
-  if (voicePlayBtn) voicePlayBtn.textContent = L("Play voice chant", "குரல் ஜபம் தொடங்கு", "వాయిస్ జపం ప్రారంభించు", "ವಾಯ್ಸ್ ಜಪ ಆರಂಭಿಸಿ", "वॉइस जप चलाएँ");
-  if (voiceStopBtn) voiceStopBtn.textContent = L("Stop voice chant", "குரல் ஜபம் நிறுத்து", "వాయిస్ జపం ఆపు", "ವಾಯ್ಸ್ ಜಪ ನಿಲ್ಲಿಸಿ", "वॉइस जप रोकें");
-  if (applyMoodBtn) applyMoodBtn.textContent = L("Apply mood", "மனநிலையை பயன்படுத்து", "మూడ్‌ను వర్తింపజేయి", "ಮೂಡ್ ಅನ್ವಯಿಸಿ", "मूड लागू करें");
-  if (ambientPlayBtn) ambientPlayBtn.textContent = L("Play Ambient", "பின்னணி ஒலி தொடங்கு", "అంబియెంట్ ప్రారంభించు", "ಅಂಬಿಯೆಂಟ್ ಚಾಲನೆ ಮಾಡಿ", "एंबियंट चलाएँ");
-  if (ambientStopBtn) ambientStopBtn.textContent = L("Stop Ambient", "பின்னணி ஒலி நிறுத்து", "అంబియెంట్ ఆపు", "ಅಂಬಿಯೆಂಟ್ ನಿಲ್ಲಿಸಿ", "एंबियंट रोकें");
-  if (emotionInput) emotionInput.placeholder = L("How do you feel? (e.g. calm, stressed, joyful)", "நீங்கள் இப்போது எப்படி உணர்கிறீர்கள்?", "మీరు ఎలా అనుభవిస్తున్నారు? (ఉదా: calm, stressed, joyful)", "ನೀವು ಹೇಗೆ ಭಾವಿಸುತ್ತಿದ್ದೀರಿ? (ಉದಾ: calm, stressed, joyful)", "आप कैसा महसूस कर रहे हैं? (जैसे: calm, stressed, joyful)");
-
   setText("#personalHub h3", L("Favorites & Chant History", "பிடித்தவை & ஜப வரலாறு", "ఇష్టాలు & జప చరిత్ర", "ಮೆಚ್ಚಿನವುಗಳು & ಜಪ ಇತಿಹಾಸ", "पसंदीदा और जप इतिहास"));
   const personalLabels = document.querySelectorAll("#personalHub .script-mode");
   if (personalLabels[0]) personalLabels[0].textContent = L("Favorites", "பிடித்தவை", "ఇష్టాలు", "ಮೆಚ್ಚಿನವುಗಳು", "पसंदीदा");
