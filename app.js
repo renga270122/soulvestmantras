@@ -1140,7 +1140,7 @@ const mantras = [
     gayatriDevanagari: "ॐ ज्ञानानन्दाय विद्महे ब्रह्मनिष्ठाय धीमहि तन्नो गुरुः प्रचोदयात्॥",
     gayatriIast: "oṃ jñānānandāya vidmahe brahmaniṣṭhāya dhīmahi tanno guruḥ pracodayāt ||",
     image: "assets/Gnanananda.jfif"
-  }
+  },
   {
   name: "Dattatreya",
   type: "guru",
