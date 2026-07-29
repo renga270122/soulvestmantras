@@ -262,65 +262,7 @@
 
 
 
-    <section id="aiHub" class="mantra-info" aria-live="polite">
-      <h3>AI-Powered Enhancements</h3>
-      <div class="ai-grid">
-        <div class="ai-card">
-          <p class="script-mode">Personalized Mantra Suggestions</p>
-          <select id="aiDeitySelect" aria-label="Preferred deity for suggestions"></select>
-          <div class="ai-actions">
-            <button id="aiSuggestBtn" type="button">Suggest for me</button>
-            <button id="aiApplySuggestionBtn" type="button">Apply suggestion</button>
-          </div>
-          <p id="aiSuggestionText" class="meaning"></p>
-        </div>
-        <div class="ai-card">
-          <p class="script-mode">Voice AI Chant</p>
-          <select id="voiceAccentSelect" aria-label="Voice accent">
-            <option value="tamil">Tamil accent</option>
-            <option value="sanskrit">Sanskrit accent</option>
-            <option value="hindi">Hindi accent</option>
-          </select>
-          <label class="reminder-toggle"><input id="voiceLoopToggle" type="checkbox" checked /> Loop chant audio</label>
-          <div class="ai-actions">
-            <button id="voicePlayBtn" type="button">Play voice chant</button>
-            <button id="voiceStopBtn" type="button">Stop voice chant</button>
-          </div>
-          <p id="voiceStatus" class="meaning"></p>
-        </div>
-        <div class="ai-card">
-          <p class="script-mode">Mood-based UI</p>
-          <select id="moodSelect" aria-label="Mood selector">
-            <option value="auto">Auto (time based)</option>
-            <option value="calm">Calm</option>
-            <option value="devotional">Devotional</option>
-            <option value="festive">Festive</option>
-          </select>
-          <div id="moodIconography" class="mood-iconography" aria-live="polite">🕉️ Calm</div>
-          <label class="script-mode subtle" for="spiritualIntensityRange">Spiritual intensity</label>
-          <div class="intensity-wrap">
-            <input id="spiritualIntensityRange" type="range" min="1" max="3" step="1" value="2" aria-label="Spiritual intensity" />
-            <span id="spiritualIntensityValue" class="meaning">Medium</span>
-          </div>
-          <input id="emotionInput" type="text" placeholder="How do you feel? (e.g. calm, stressed, joyful)" />
-          <label class="reminder-toggle"><input id="visualModeToggle" type="checkbox" /> Minimal visual mode</label>
-          <div class="time-theme-controls" aria-label="Time-based visual themes">
-            <button id="morningThemeBtn" type="button">🌅 Morning</button>
-            <button id="eveningThemeBtn" type="button">🌇 Evening</button>
-            <button id="autoThemeBtn" type="button">🕒 Auto</button>
-          </div>
-          <div class="ambient-controls">
-            <button id="ambientPlayBtn" type="button">Play Ambient</button>
-            <button id="ambientStopBtn" type="button">Stop Ambient</button>
-          </div>
-          <p id="ambientStatus" class="meaning"></p>
-          <div class="ai-actions">
-            <button id="applyMoodBtn" type="button">Apply mood</button>
-          </div>
-          <p id="moodStatus" class="meaning"></p>
-        </div>
-      </div>
-    </section>
+
 
     <section id="featured" class="featured hidden" aria-live="polite">
         <!-- ...existing code... -->
