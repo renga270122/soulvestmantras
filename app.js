@@ -1146,7 +1146,6 @@ const mantras = [
       "oṃ jñānānandāya vidmahe brahmaniṣṭhāya dhīmahi tanno guruḥ pracodayāt ||",
     image: "assets/Gnanananda.jfif"
   },   // <-- **COMMA** required before the next object
-
   {
     name: "Dattatreya",
     type: "guru",
@@ -1163,10 +1162,24 @@ const mantras = [
     gayatriIast:
       "oṃ dattātreyāya vidmahe trinetrāya dhīmahi tanno dattātreyaḥ pracodayāt ||",
     image: "assets/datta.jfif"
-  }   // <-- **NO COMMA** here if this is the last entry; add a comma only if another object follows
-  // ──────────────────────────────────────────────────────────────
-  //  Closing bracket of the array is somewhere below this block: ]
-  // ──────────────────────────────────────────────────────────────
+  },
+  {
+    name: "Sripada Srivallabha",
+    type: "guru",
+    wikiQuery: "Sripada Srivallabha",
+    purpose: "For devotion, grace, and remembrance of the Guru lineage of Dattatreya.",
+    brief:
+      "Sripada Srivallabha is revered as the first complete avatar of Dattatreya in the Kali Yuga, embodying compassion, humility, and the living presence of the Guru tradition.",
+    famousTitle: "Famous Chant",
+    famousDevanagari: "दिगंबरा दिगंबरा श्रीपाद वल्लभ दिगंबरा॥",
+    famousIast: "digambarā digambarā śrīpāda vallabha digambarā ||",
+    gayatriTitle: "Gayatri Mantra",
+    gayatriDevanagari:
+      "ॐ श्रीपादवल्लभाय विद्महे दत्तात्रेयाय धीमहि तन्नो श्रीपादः प्रचोदयात्॥",
+    gayatriIast:
+      "oṃ śrīpādavallabhāya vidmahe dattātreyāya dhīmahi tanno śrīpādaḥ pracodayāt ||",
+    image: "assets/sripada.jfif"
+  }   // <-- no comma if this is the last entry; add one if more follow ──────────────────────────────────────────────────────────────
 ];
 
 const grid = document.getElementById("mantraGrid");
